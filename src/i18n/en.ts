@@ -1,5 +1,5 @@
 export default {
-  systemTitle: '🎯 Effective Cursor',
+  systemTitle: 'Effective Cursor',
   banner: {
     title: '👋 Welcome to the Cursor AI-Assisted Development Wiki!',
     more: 'Learn more',

@@ -15,6 +15,7 @@ import ThemeToggle from '@/widgets/theme-toggle'
 import { getDictionary, getDirection } from '../_dictionaries/get-dictionary'
 import { ThemeProvider } from './_components/ThemeProvider'
 import './styles/index.css'
+import Image from 'next/image'
 
 export const metadata = {
   // Define your metadata here
@@ -52,7 +53,10 @@ const CustomNavbar = async ({ lang }: I18nLangAsyncProps) => {
   return (
     <Navbar
       logo={(
-        <span>{ t('systemTitle') }</span>
+        <div className="flex items-center gap-2">
+          <Image src="/img/favicon.svg" alt="logo" width={24} height={24} />
+          <span>{ t('systemTitle') }</span>
+        </div>
       )}
       logoLink={`/${lang}`}
       projectLink={repo}

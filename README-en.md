@@ -13,25 +13,23 @@ This is a practical guide Wiki for **Cursor AI-assisted development**, based on 
 
 ## 🗂️ Content Structure
 
-This Wiki is organized into **4 core modules with 13 pages**, forming a progressive path: "Basics → Engineering → Configuration → Mastery"
+This Wiki is organized following the **Effective Cursor Methodology (Six Steps)**, forming a complete loop from tools to workflow:
 
-### 1. Basics & Getting Started
-- **Quick Start with Cursor** — UI, core features, shortcuts, project indexing
-- **Model Selection & Cost Optimization** — Model comparison, scenario selection, cost control
+| Step | Name              | Core Goal                                        |
+|------|-------------------|--------------------------------------------------|
+| 0    | Tool Setup        | Make Cursor your truly handy development environment |
+| 1    | Tech Stack        | Choose the most AI-friendly tech stack           |
+| 2    | Scaffolding       | Establish engineering foundation                 |
+| 3    | Cursor Rules      | Make AI automatically follow team standards      |
+| 4    | Workflow          | Deeply integrate AI into daily development       |
+| 5    | Feedback & Iteration | Continuously iterate to improve AI effectiveness |
 
-### 2. Engineering, Tech Stack & Adaptation
-- **AI-Era Tech Stack Selection** — AI-friendly tech stack analysis & best practices
-- **Engineering Practices: Lint, Format & CI/CD** — Quality assurance & automation
-- **AI-Assisted Automated Testing** — Test generation & TDD practices
+### Why This Order?
 
-### 3. Core Features & Configuration
-- **Cursor Rules Development Guide** — Rules writing principles & advanced techniques
-- **Rules Examples Collection** — Reusable rule templates by tech stack
-
-### 4. Prompt Engineering
-- **Prompt Engineering Principles** — From basic to advanced prompt design
-- **Structured PRD Prompting Practice** — Complete workflow from requirements to code
-- **Prompt Template Library** — Ready-to-use template collection
+- Get tools ready, choose the right tech stack, and build a solid engineering foundation first to avoid "AI writes fast, debugging is painful"
+- Rules are the highest leverage for reducing manual correction costs
+- Standardized workflow transforms AI from "occasional helper" to "full-time collaborator"
+- Feedback and iteration is key to maintaining productivity leadership
 
 ## 🛠️ Local Development
 
@@ -67,7 +65,13 @@ src/content/
 │   ├── index.mdx          # Homepage
 │   └── docs/              # Documentation content
 │       ├── _meta.tsx      # Doc navigation
-│       └── *.mdx          # Page content
+│       ├── index.mdx      # Getting Started
+│       ├── 0-tool-setup/  # Tool Setup
+│       ├── 1-tech-stack/  # Tech Stack Selection
+│       ├── 2-scaffolding/ # Scaffolding
+│       ├── 3-cursor-rules/# Cursor Rules
+│       ├── 4-workflow/    # Workflow
+│       └── 5-feedback/    # Feedback & Iteration
 └── en/                    # English docs (same structure)
 ```
 
