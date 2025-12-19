@@ -12,26 +12,26 @@ export default {
       toc: false,
     },
   },
-  introduction: {
-    type: 'page',
-    title: 'This is Introduction',
-    theme: {
-      copyPage: false,
-      navbar: true,
-      toc: false,
-    },
-  },
+  // introduction: {
+  //   type: 'page',
+  //   title: 'This is Introduction',
+  //   theme: {
+  //     copyPage: false,
+  //     navbar: true,
+  //     toc: false,
+  //   },
+  // },
   docs: {
-    title: '📦 Some Examples',
+    title: 'Docs',
     type: 'page',
   },
-  upgrade: {
-    title: (
-      <span className="flex items-center leading-[1]">
-        What's New
-        <TitleBadge />
-      </span>
-    ),
-    type: 'page',
-  },
+  // upgrade: {
+  //   title: (
+  //     <span className="flex items-center leading-[1]">
+  //       What's New
+  //       <TitleBadge />
+  //     </span>
+  //   ),
+  //   type: 'page',
+  // },
 } satisfies MetaRecord

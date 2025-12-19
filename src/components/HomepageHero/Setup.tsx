@@ -6,7 +6,6 @@ import styles from '@/components/HomepageHero/SetupHero.module.css'
 import { MotionWrapperFlash } from '@/components/MotionWrapper/Flash'
 import { Button } from '@/components/ui/button'
 import { FlipWords } from '@/components/ui/flip-words'
-import { LinkPreview } from '@/components/ui/link-preview'
 import { useLocale } from '@/hooks'
 
 interface Props {
@@ -20,7 +19,7 @@ export function SetupHero(props: Props) {
         <div className={styles.badgeContainer}>
           <a
             className={styles.badge}
-            href="https://github.com/pdsuwwz/nextjs-nextra-starter"
+            href="https://github.com/cyronlee/effective-cursor"
             target="_blank"
             rel="noopener noreferrer"
           >
@@ -32,32 +31,26 @@ export function SetupHero(props: Props) {
             disabledAnimation={false}
             className="flex items-center"
           >
-            <span className="icon-[emojione-v1--lightning-mood]"></span>
+            <span className="icon-[fluent-emoji--robot]"></span>
           </MotionWrapperFlash>
           {' '}
-          Nextra
+          Effective
           {' '}
           <br className="sm:hidden"></br>
           {' '}
-          Starter
-          <br className="sm:hidden"></br>
-          {' '}
-          Template
+          Cursor
         </h1>
 
-        <Link
-          href={`/${currentLocale}/upgrade`}
+        <div
           className={clsx([
-            'bg-linear-to-r from-yellow-400 via-orange-500 to-red-500 text-white shadow-lg',
-            'dark:bg-linear-to-r dark:from-green-400 dark:via-teal-500 dark:to-cyan-500 dark:text-white',
-            'text-sm mt-2 inline-block px-3 py-1 rounded-lg',
+            'bg-linear-to-r from-violet-500 via-purple-500 to-fuchsia-500 text-white shadow-lg',
+            'dark:bg-linear-to-r dark:from-cyan-400 dark:via-blue-500 dark:to-purple-500 dark:text-white',
+            'text-sm mt-2 inline-block px-4 py-1.5 rounded-lg',
             '[&>span]:font-bold',
-            'animate-pulse',
-            '[animation-duration:2s]',
           ])}
           dangerouslySetInnerHTML={{
             __html: t('featureSupport', {
-              feature: `<span>Tailwind CSS v4, Nextra v4</span>`,
+              feature: `<span>Cursor AI 辅助开发实践 Wiki</span>`,
             }),
           }}
         />
@@ -68,49 +61,29 @@ export function SetupHero(props: Props) {
           'text-neutral-500 dark:text-neutral-300',
         ])}
         >
-          Template made
-          {' '}
-          <FlipWords
-            words={[
-              'Fast',
-              'Simple',
-              'Modern',
-              'Flexible',
-              'Easy',
-              'Functional',
-              'Efficient',
-              'Scalable',
-              'Reusable',
-            ]}
-          />
+          {t('heroSubtitle')}
           <br />
-          With
-          {' '}
-          <LinkPreview
-            url="https://nextjs.org"
-          >
-            Next.js
-          </LinkPreview>
-          ,
-          {' '}
-          <LinkPreview
-            url="https://tailwindcss.com"
-          >
-            Tailwind CSS
-          </LinkPreview>
-          , and
-          {' '}
-          <LinkPreview
-            url="https://ui.shadcn.com"
-          >
-            Shadcn UI
-          </LinkPreview>
-          {', '}
-          <LinkPreview
-            url="https://ui.aceternity.com"
-          >
-            Aceternity UI
-          </LinkPreview>
+          <FlipWords
+            words={
+              currentLocale === 'zh'
+                ? [
+                    '高效编码',
+                    '智能补全',
+                    '快速迭代',
+                    '精准生成',
+                    '规范代码',
+                    '提升效率',
+                  ]
+                : [
+                    'Efficient Coding',
+                    'Smart Completion',
+                    'Fast Iteration',
+                    'Precise Generation',
+                    'Clean Code',
+                    'Boost Productivity',
+                  ]
+            }
+          />
         </div>
         <div className="flex justify-center pt-10">
           <div className="max-w-[500px] flex flex-wrap gap-[20px] max-sm:justify-center">
@@ -120,7 +93,7 @@ export function SetupHero(props: Props) {
               className="font-bold group max-sm:w-[100%]"
             >
               <Link
-                href={`/${currentLocale}/introduction`}
+                href={`/${currentLocale}/docs`}
               >
                 {t('getStarted')}
                 <span className="w-[20px] translate-x-[6px] transition-all group-hover:translate-x-[10px] icon-[mingcute--arrow-right-fill]"></span>
@@ -133,10 +106,10 @@ export function SetupHero(props: Props) {
               className="font-bold group max-sm:w-[100%]"
             >
               <Link
-                href="https://github.com/pdsuwwz/nextjs-nextra-starter"
+                href="https://github.com/cyronlee/effective-cursor"
                 target="_blank"
               >
-                Github
+                GitHub
                 <span className="ml-[6px] icon-[mingcute--github-line]"></span>
               </Link>
             </Button>

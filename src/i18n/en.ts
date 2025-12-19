@@ -1,8 +1,8 @@
 export default {
-  systemTitle: '🚀 My Nextra Starter',
+  systemTitle: '🎯 Effective Cursor',
   banner: {
-    title: '👋 Hey there! Welcome to the Next.js Starter.',
-    more: 'Check it out',
+    title: '👋 Welcome to the Cursor AI-Assisted Development Wiki!',
+    more: 'Learn more',
   },
   pageTitle: 'On This Page',
   backToTop: 'Back to top',
@@ -14,11 +14,12 @@ export default {
     loading: 'Loading...',
   },
 
-  badgeTitle: 'Lightweight & Easy 🎉',
-  featureSupport: `🔥 Now with {{feature}} support!`,
+  badgeTitle: 'Make AI Your Coding Partner 🤖',
+  featureSupport: `🔥 {{feature}}`,
   lastUpdated: 'Last updated on:',
 
   getStarted: 'Get Started',
+  viewDocs: 'Browse Docs',
 
   themeSwitcher: {
     light: 'Light Mode',
@@ -27,74 +28,111 @@ export default {
     darkAria: 'Switch to dark mode',
   },
 
-  featureList: [
+  heroSubtitle: 'From beginner to expert, master AI-assisted programming best practices',
+  heroDescription: 'Based on real-world experience to help you unleash the full power of Cursor',
+
+  // Four main categories
+  categories: [
     {
-      title: 'Advanced Tech Stack',
-      description: 'Leveraging efficient React (v19) and support with Next.js, Nextra(v4) and Shadcn UI to build modern applications.',
+      title: 'Basics & Getting Started',
+      description: 'Quick start with Cursor, master core features & shortcuts, understand model selection & cost optimization',
+      icon: 'rocket',
+      link: '/docs/getting-started',
     },
     {
-      title: 'internationalization (i18n)',
-      description: 'Built-in multi-language support for easy i18n of your application, expanding your user base.',
+      title: 'Engineering & Tech Stack',
+      description: 'Explore AI-friendly tech stacks, establish reliable Lint, Format & CI/CD engineering practices',
+      icon: 'code',
+      link: '/docs/engineering',
     },
     {
-      title: 'TypeScript Safety',
-      description: 'Fully integrated with TypeScript, offering static type checking to reduce runtime errors and enhance code reliability and maintainability.',
+      title: 'Core Features & Config',
+      description: 'Deep dive into Cursor Rules configuration, learn to write efficient rules, improve code generation quality',
+      icon: 'settings',
+      link: '/docs/configuration',
     },
     {
-      title: 'Iconify Icons',
-      description: 'Integrated with the Iconify icon set, offering a wide range of icons to enhance UI visual presentation.',
-    },
-    {
-      title: 'Tailwind CSS (v4)',
-      description: 'Atomic CSS integrated with Tailwind CSS, enabling efficient design and responsive UI.',
-    },
-    {
-      title: 'Code Standards',
-      description: 'Adheres to best practices with code standards and uses ESLint for quality checks and consistency.',
-    },
-    {
-      title: 'Dark Mode',
-      description: 'Supports dark mode for an enhanced nighttime experience.',
-    },
-    {
-      title: 'Rich Components & Extensible Support',
-      description: 'Offers a range of built-in components and supports flexible custom extensions.',
-    },
-    {
-      title: 'Lightweight Design',
-      description: 'Employs a lightweight design approach, streamlining project setup to focus on content creation.',
-    },
-  ],
-  featuresDesc: 'Easily build modern applications and kickstart your development process.',
-  faqs: [
-    {
-      question: 'What frameworks and tech stack does this starter template support?',
-      answer: 'This starter template supports Next.js and Nextra, with integrated modern development technologies like Tailwind CSS, Framer Motion, and Shadcn UI components.',
-    },
-    {
-      question: 'How do I start developing with this template?',
-      answer: 'Simply clone our GitHub repository and follow the steps in the documentation to run the installation commands to get started.',
-    },
-    {
-      question: 'What types of projects is this template suitable for?',
-      answer: 'This template is ideal for building fast and efficient modern web applications, including corporate sites, personal blogs, and e-commerce platforms.',
-    },
-    {
-      question: 'How do I add or modify components in the project?',
-      answer: 'You can use the provided component library and follow the instructions in the documentation to customize and extend them to suit your specific needs.',
-    },
-    {
-      question: 'Does the template support multiple languages?',
-      answer: 'Yes, the template includes built-in internationalization (i18n) support, allowing you to easily add and manage multilingual content to expand your app\'s international user base.',
-    },
-    {
-      question: 'How can I get technical support or help?',
-      answer: 'If you encounter any issues while using the template, please contact us via GitHub @pdsuwwz.',
-    },
-    {
-      question: '🐒 What does the author need most right now?',
-      answer: 'Stars! ⭐️ Coding till bald, just need Stars to heal my soul... 🥺',
+      title: 'Prompt Engineering',
+      description: 'Master prompt design principles, complete practice from PRD to code, build your Prompt template library',
+      icon: 'sparkles',
+      link: '/docs/prompt-engineering',
     },
   ],
 
+  featureList: [
+    {
+      title: 'Quick Start with Cursor',
+      description: 'UI walkthrough, core features (Chat, Composer, Cmd+K, @references), shortcut cheat sheet, project indexing optimization',
+    },
+    {
+      title: 'Model Selection & Cost Optimization',
+      description: 'Model comparison, scenario-based selection guide, benchmarks and cost control tips',
+    },
+    {
+      title: 'AI-Era Tech Stack Selection',
+      description: 'React + TS + Zod, NestJS/FastAPI, Next.js and other AI-friendly tech stack analysis & best practices',
+    },
+    {
+      title: 'Engineering Practices',
+      description: 'Cursor Rules with ESLint/Prettier integration, GitHub Actions, dual review mechanism',
+    },
+    {
+      title: 'Automated Testing Assistance',
+      description: 'AI-generated unit/integration/e2e tests, AI-variant of TDD, coverage review',
+    },
+    {
+      title: 'Cursor Rules Development',
+      description: 'Rules writing principles, conditional rules, dynamic references, toolchain integration',
+    },
+    {
+      title: 'Prompt Engineering Principles',
+      description: 'Clear expression, context provision, iterative optimization, role-playing, structured output',
+    },
+    {
+      title: 'Structured PRD Practice',
+      description: 'Complete workflow from vague requirements to technical solutions, task breakdown, and code generation',
+    },
+    {
+      title: 'Prompt Template Library',
+      description: 'Templates for PRD, new features, refactoring, debugging, test generation, documentation, and more',
+    },
+  ],
+  featuresDesc: '13 carefully crafted pages covering all aspects of AI-assisted development',
+
+  faqs: [
+    {
+      question: 'Who is this Wiki for?',
+      answer: 'For all developers looking to improve their AI-assisted programming efficiency. Whether you\'re new to Cursor or an experienced user, you\'ll find practical tips and best practices here.',
+    },
+    {
+      question: 'How is the Wiki content organized?',
+      answer: 'Content follows a progressive path: Getting Started → Engineering Practices → Configuration → Prompt Engineering, helping you master AI-assisted development step by step.',
+    },
+    {
+      question: 'Why should I learn prompt engineering?',
+      answer: 'Good prompts lead to more accurate AI-generated code, reducing time spent on revisions. Mastering prompt engineering is key to unleashing Cursor\'s full potential.',
+    },
+    {
+      question: 'What\'s the difference between Cursor Rules and regular prompts?',
+      answer: 'Cursor Rules are project-level persistent configurations that automatically apply to all conversations, ideal for defining coding standards and architectural constraints. Regular prompts are instant instructions for single conversations.',
+    },
+    {
+      question: 'How do I choose the right AI model?',
+      answer: 'Different models have different strengths: Claude excels at complex reasoning and long documents, GPT-4 is great for general tasks, while lightweight models are suitable for simple completions. The Wiki includes detailed comparison tables and selection guidelines.',
+    },
+    {
+      question: 'Can I contribute content?',
+      answer: 'Absolutely! You can submit issues on GitHub for feedback or suggestions, or directly submit PRs to contribute your practical experiences and templates.',
+    },
+  ],
+
+  quickLinks: {
+    title: 'Quick Links',
+    items: [
+      { label: 'Shortcut Cheat Sheet', link: '/docs/shortcuts' },
+      { label: 'Model Comparison', link: '/docs/models' },
+      { label: 'Rules Examples', link: '/docs/rules-examples' },
+      { label: 'Prompt Templates', link: '/docs/prompt-templates' },
+    ],
+  },
 }

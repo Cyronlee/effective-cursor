@@ -23,7 +23,7 @@ export const metadata = {
   icons: '/img/favicon.svg',
 } satisfies Metadata
 
-const repo = 'https://github.com/pdsuwwz/nextjs-nextra-starter'
+const repo = 'https://github.com/Cyronlee/effective-cursor'
 
 const CustomBanner = async ({ lang }: I18nLangAsyncProps) => {
   const { t } = await useServerLocale(lang)
@@ -132,9 +132,9 @@ export default async function RootLayout({ children, params }: LayoutProps<'/[la
         >
           <Layout
             copyPageButton={false}
-            banner={
-              <CustomBanner lang={lang} />
-            }
+            // banner={
+            //   <CustomBanner lang={lang} />
+            // }
             navbar={
               <CustomNavbar lang={lang} />
             }
@@ -144,7 +144,7 @@ export default async function RootLayout({ children, params }: LayoutProps<'/[la
               </LastUpdated>
             )}
             editLink={null}
-            docsRepositoryBase="https://github.com/pdsuwwz/nextjs-nextra-starter"
+            docsRepositoryBase="https://github.com/Cyronlee/effective-cursor"
             footer={(
               <Footer className="bg-background py-5!">
                 <CustomFooter />

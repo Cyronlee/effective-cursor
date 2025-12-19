@@ -1,7 +1,7 @@
 export default {
-  systemTitle: '🚀 Nextra 启动模板',
+  systemTitle: '🎯 Effective Cursor',
   banner: {
-    title: '👋 嘿，欢迎来到 Next.js 起步模板!',
+    title: '👋 欢迎来到 Cursor AI 辅助开发实践 Wiki！',
     more: '了解详情',
   },
   pageTitle: '当前页面',
@@ -14,11 +14,12 @@ export default {
     loading: '加载中...',
   },
 
-  badgeTitle: '轻量级、开箱即用 🎉',
-  featureSupport: `🔥 现在支持 {{feature}}！`,
+  badgeTitle: '让 AI 成为你的编程伙伴 🤖',
+  featureSupport: `🔥 {{feature}}`,
   lastUpdated: '最后更新于:',
 
-  getStarted: '开始使用',
+  getStarted: '开始学习',
+  viewDocs: '浏览文档',
 
   themeSwitcher: {
     light: '浅色模式',
@@ -27,74 +28,111 @@ export default {
     darkAria: '切换到深色模式',
   },
 
-  featureList: [
+  heroSubtitle: '从入门到精通，掌握 AI 辅助编程的最佳实践',
+  heroDescription: '基于实战经验，助你充分发挥 Cursor 的强大能力',
+
+  // 四大分类
+  categories: [
     {
-      title: '先进的技术栈',
-      description: '高效的 React (v19) 框架，使用 Next.js、Nextra(v4) 和 Shadcn UI 打造现代化应用',
+      title: '基础与上手',
+      description: '快速入门 Cursor，掌握核心功能与快捷键，了解模型选择与成本优化策略',
+      icon: 'rocket',
+      link: '/docs/getting-started',
     },
     {
-      title: '国际化支持 (i18n)',
-      description: '内置多语言支持，轻松实现应用的国际化，扩大用户群体',
+      title: '工程化与技术栈',
+      description: '探索 AI 友好的技术栈选择，建立可靠的 Lint、Format 与 CI/CD 工程体系',
+      icon: 'code',
+      link: '/docs/engineering',
     },
     {
-      title: 'TypeScript 类型安全',
-      description: '全面集成 TypeScript，提供静态类型检查，减少运行时错误，提高代码可靠性和可维护性',
+      title: '核心功能与配置',
+      description: '深入 Cursor Rules 配置，学习编写高效规则，提升代码生成质量',
+      icon: 'settings',
+      link: '/docs/configuration',
     },
     {
-      title: 'Iconify 图标集',
-      description: '纯 CSS 图标, 集成 Iconify 图标集，提供丰富的图标选择，增强 UI 视觉表现',
-    },
-    {
-      title: 'Tailwind CSS (v4)',
-      description: '使用原子化 CSS 框架 Tailwind CSS，快速构建高效设计、响应式界面 UI',
-    },
-    {
-      title: '代码规范',
-      description: '遵循最佳实践的代码规范，结合 ESLint 进行代码质量检查与一致性维护',
-    },
-    {
-      title: '暗黑模式',
-      description: '支持暗黑模式，提供更好的夜间使用体验',
-    },
-    {
-      title: '丰富组件 & 支持自由扩展',
-      description: '提供丰富的预置组件，并支持灵活的自定义扩展',
-    },
-    {
-      title: '轻量化设计',
-      description: '采用轻量化设计，精简项目设置，专注于内容编写',
-    },
-  ],
-  featuresDesc: '轻松构建现代应用，快速启动您的开发流程',
-  faqs: [
-    {
-      question: '这个启动模板支持哪些框架和技术栈？',
-      answer: '本启动模板支持 Next.js 和 Nextra，并集成了 Tailwind CSS、Framer Motion、Shadcn UI 组件等现代开发技术栈。',
-    },
-    {
-      question: '我如何开始使用这个模板进行开发？',
-      answer: '只需克隆我们的 GitHub 仓库并按照文档中的步骤运行安装命令，即可开始使用本模板进行开发。',
-    },
-    {
-      question: '这个模板适合哪些类型的项目？',
-      answer: '该模板适合用于创建快速、高效的现代 Web 应用程序，包括企业站点、个人博客、电子商务平台等。',
-    },
-    {
-      question: '如何添加或修改项目中的组件？',
-      answer: '可以使用提供的组件库，按照文档中的说明进行自定义和扩展，以适应您的具体需求。',
-    },
-    {
-      question: '模板是否提供多语言支持？',
-      answer: '是的，模板内置国际化 (i18n) 功能，可以轻松添加和管理多语言内容，扩大应用的国际用户群。',
-    },
-    {
-      question: '如何获得技术支持或帮助？',
-      answer: '如果在使用过程中遇到问题，请通过 GitHub @pdsuwwz 与我们联系。',
-    },
-    {
-      question: '🐒 作者现在最缺什么？',
-      answer: '缺 Star！⭐️ 每天写代码写到秃头，就指望这点 Star 安慰我受伤的心灵... 社畜的快乐就这么简单！',
+      title: '提示工程',
+      description: '掌握提示词设计原则，从 PRD 到代码的完整实践，构建你的 Prompt 模板库',
+      icon: 'sparkles',
+      link: '/docs/prompt-engineering',
     },
   ],
 
+  featureList: [
+    {
+      title: '快速上手 Cursor',
+      description: '界面导览、核心功能（Chat、Composer、Cmd+K、@引用）、快捷键速查、项目索引优化',
+    },
+    {
+      title: '模型选择与成本优化',
+      description: '主流模型对比、场景选型指南、实测数据与成本控制技巧',
+    },
+    {
+      title: 'AI 时代技术栈选择',
+      description: 'React + TS + Zod、NestJS/FastAPI、Next.js 等 AI 友好技术栈分析与最佳实践',
+    },
+    {
+      title: '工程化实践',
+      description: 'Cursor Rules 与 ESLint/Prettier 联动、GitHub Actions 集成、双重审查机制',
+    },
+    {
+      title: '自动化测试辅助',
+      description: 'AI 生成单元/集成/e2e 测试、测试驱动开发的 AI 变种、覆盖率审查',
+    },
+    {
+      title: 'Cursor Rules 制定',
+      description: 'Rules 编写原则、条件规则、动态引用、与工具链联动的进阶技巧',
+    },
+    {
+      title: '提示工程核心原则',
+      description: '清晰表达、上下文提供、迭代优化、角色扮演、结构化输出',
+    },
+    {
+      title: '结构化 PRD 实战',
+      description: '从模糊需求到技术方案、任务拆解、代码生成的完整链条',
+    },
+    {
+      title: 'Prompt 模板库',
+      description: 'PRD、新功能、重构、调试优化、测试生成、文档生成等模板集合',
+    },
+  ],
+  featuresDesc: '13 个精心设计的页面，覆盖 AI 辅助开发的方方面面',
+
+  faqs: [
+    {
+      question: '这个 Wiki 适合什么人阅读？',
+      answer: '适合所有想要提升 AI 辅助编程效率的开发者，无论你是 Cursor 新手还是有经验的用户，都能从中获得实用的技巧和最佳实践。',
+    },
+    {
+      question: 'Wiki 的内容是如何组织的？',
+      answer: '内容按照"基础上手 → 工程化保障 → 配置优化 → 提示工程"的进阶路径组织，帮助你循序渐进地掌握 AI 辅助开发的各个方面。',
+    },
+    {
+      question: '为什么要学习提示工程？',
+      answer: '好的提示词能让 AI 输出更精准的代码，减少反复修改的时间。掌握提示工程是发挥 Cursor 最大威力的关键。',
+    },
+    {
+      question: 'Cursor Rules 和普通提示词有什么区别？',
+      answer: 'Cursor Rules 是项目级别的持久化配置，会自动应用到所有对话中，适合定义编码规范、架构约束等。普通提示词则是单次对话的即时指令。',
+    },
+    {
+      question: '如何选择合适的 AI 模型？',
+      answer: '不同模型各有优劣：Claude 适合复杂推理和长文档，GPT-4 擅长通用任务，而轻量模型适合简单补全。Wiki 中有详细的对比表格和选型建议。',
+    },
+    {
+      question: '我可以贡献内容吗？',
+      answer: '非常欢迎！你可以通过 GitHub Issue 反馈问题或建议，也可以直接提交 PR 贡献你的实践经验和模板。',
+    },
+  ],
+
+  quickLinks: {
+    title: '快速导航',
+    items: [
+      { label: '快捷键速查', link: '/docs/shortcuts' },
+      { label: '模型对比表', link: '/docs/models' },
+      { label: 'Rules 示例', link: '/docs/rules-examples' },
+      { label: 'Prompt 模板', link: '/docs/prompt-templates' },
+    ],
+  },
 }

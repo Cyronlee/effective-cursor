@@ -1,201 +1,81 @@
-<p style="text-align:center;" align="center"><a href="https://github.com/pdsuwwz/nextjs-nextra-starter"><picture align="center">
-  <source media="(prefers-color-scheme: dark)" srcset="https://i.stardots.io/wisdom/1745917125609.png"  width="100%" align="center" style="margin-bottom:20px;">
-  <source media="(prefers-color-scheme: light)" srcset="https://i.stardots.io/wisdom/1745917153483.png" width="100%" align="center" style="margin-bottom:20px;">
-  <img alt="color mode" src="https://i.stardots.io/wisdom/1745917153483.png" width="100%" align="center" style="margin-bottom:20px;">
-</picture></a><br /><br /></p>
-
-# Nextjs Nextra Starter
+# Effective Cursor
 
 中文 | [English](README-en.md)
 
-[![Deploy](https://img.shields.io/badge/passing-black?style=flat&logo=Netlify&label=Netlify&color=3bb92c&labelColor=black)](https://github.com/pdsuwwz/nextjs-nextra-starter/deployments)
-[![GitHub Workflow Status (branch)](https://img.shields.io/badge/passing-black?style=flat&label=build&color=3bb92c)](https://github.com/pdsuwwz/nextjs-nextra-starter/deployments/Production)
-[![thanks](https://badgen.net/badge/thanks/♥/pink)](https://github.com/pdsuwwz)
-[![License](https://img.shields.io/github/license/pdsuwwz/nextjs-nextra-starter?color=466fe8)](https://github.com/pdsuwwz/nextjs-nextra-starter/blob/main/LICENSE)
+> 🎯 Cursor AI 辅助开发实践 Wiki — 从入门到精通，掌握 AI 辅助编程的最佳实践
 
-⚡️ 快速模板 Starter Template - React v19 + Next.js + Nextra (v4) + TypeScript + TailwindCSS (v4) + Shadcn UI
+## 📖 关于本项目
 
-- [🚀 Live Demo 在线体验](https://nextjs-nextra.netlify.app/zh)
-- [✨ 备用地址1](https://nextjs-nextra-starter-green.vercel.app/zh)
-- [✨ 备用地址2](https://nextra.likemashang.com/zh)
+这是一个关于 **Cursor AI 辅助开发**的实践指南 Wiki，基于真实项目经验，帮助开发者充分发挥 Cursor 的强大能力。
 
-## 🛠️ 项目维护承诺
+- 🚀 [在线阅读 (中文)](https://effective-cursor.vercel.app/zh)
+- 🚀 [在线阅读 (English)](https://effective-cursor.vercel.app/en)
 
-<div align="center">
+## 🗂️ 内容结构
 
-<table>
-  <tr>
-    <td><strong>🔄 持续更新</strong><br/>不定期更新依赖和功能</td>
-    <td><strong>🐛 快速响应</strong><br/>平均 2 小时内回复 Issue</td>
-  </tr>
-  <tr>
-    <td><strong>💎 精心打磨</strong><br/>花费 100+ 小时完善模板细节</td>
-    <td><strong>🛡️ 稳定可靠</strong><br/>确保每个功能都充分测试</td>
-  </tr>
-</table>
+本 Wiki 按照 **4 大核心模块、13 个页面** 组织内容，形成"基础 → 保障 → 配置 → 爆发"的进阶路径：
 
-</div>
+### 1. 基础与上手
+- **快速上手 Cursor** — 界面、核心功能、快捷键、项目索引优化
+- **模型选择与成本优化** — 模型对比、场景选型、成本控制
 
-<div align="center">
+### 2. 工程化、技术栈与适配
+- **AI 时代技术栈选择与适配** — AI 友好技术栈分析与最佳实践
+- **工程化实践：Lint、Format 与 CI/CD** — 质量保障与自动化
+- **自动化测试的 AI 辅助** — 测试生成与 TDD 实践
 
-<img src="https://media.giphy.com/media/a5viI92PAF89q/giphy.gif" width="400"/>
+### 3. 核心功能与配置
+- **Cursor Rules 制定指南** — Rules 编写原则与进阶技巧
+- **Rules 示例合集** — 分技术栈的可复用规则模板
 
-💝 **如果你感受到了这份用心，请用 Star ⭐ 给予支持**
+### 4. 提示工程
+- **提示工程核心原则** — 从基础到进阶的 Prompt 设计
+- **结构化 PRD 提示词实战** — 需求到代码的完整链条
+- **Prompt 模板库** — 可直接复用的模板集合
 
-</div>
+## 🛠️ 本地开发
 
-## 🚀 更新说明
-
-- **Tailwind CSS v4 升级**：全面升级至 Tailwind CSS v4，优化性能并引入新特性。
-- **Nextra v4 重构**：升级至 Nextra v4，提升文档生成效率和开发体验。
-
-👉 [点击查看详细升级说明](https://nextjs-nextra.netlify.app/zh/upgrade)
-
-## 🎉 Features
-
-- ⚡️ **Next.js + TypeScript**: 高效的 React 框架和类型安全支持
-- 🎨 **Tailwind CSS (v4)**: 原子化 CSS, 快速构建自定义、响应式界面 UI
-- 🧩 **Shadcn UI**: 高度可定制的 UI 组件集合，无需安装额外依赖
-- 📚 **Nextra v4**: 基于 Next.js 的静态站点生成器，专为文档而优化
-- 🛠️ **ESLint**: 统一编码风格和最佳实践
-- ⛅ **轻量化设计**: 精简项目设置，专注于内容编写
-
-## 前置条件
-
-- React 19.x
+### 前置条件
 - Node >= 20.x
-- Pnpm 9.x
-- **VS Code 插件 `dbaeumer.vscode-eslint` >= v3.0.5 (pre-release)**
+- pnpm 9.x
 
-## 运行效果
-
-![image](https://github.com/user-attachments/assets/f732afa6-5fce-4e4d-af1c-acadd1bf50e7)
-
-![image](https://github.com/user-attachments/assets/5cac69dc-601a-41db-a3aa-d75bad6fc4be)
-
-![image](https://github.com/user-attachments/assets/b655981c-7658-4bf4-a118-82cf96cb1d7a)
-
-![image](https://github.com/user-attachments/assets/b69a5f77-2a76-45b3-8468-11bf8fb1de89)
-
-![image](https://github.com/user-attachments/assets/a0a07f3f-a457-4521-a45f-4c0f970044f6)
-
-## 安装和运行
-
-- 安装依赖
+### 安装与运行
 
 ```bash
-pnpm i
-```
+# 安装依赖
+pnpm install
 
-- 本地开发
-
-```bash
+# 本地开发
 pnpm dev
 ```
 
-接着用浏览器打开 http://localhost:8000 即可访问服务
+打开 http://localhost:8000 即可访问
 
-🎉 **成功运行了？** 如果你喜欢这个模板的简洁配置，别忘了鼓励一下：
+## 📝 贡献指南
 
-[![Star this repo](https://img.shields.io/badge/⭐-Star%20this%20repo-yellow?style=flat&logo=github)](https://github.com/pdsuwwz/nextjs-nextra-starter)
+欢迎贡献内容！你可以：
 
-## 使用 Shadcn UI 组件
+1. 通过 [Issue](https://github.com/cyronlee/effective-cursor/issues) 反馈问题或建议
+2. 提交 PR 贡献实践经验、模板或修正错误
 
-本项目已集成 [Shadcn UI](https://ui.shadcn.com), 按照以下步骤安装/编辑组件并使用:
+### 文档结构
 
-### Shadcn 结构初始化
-
-首次执行 `pnpm dlx shadcn@latest init` 命令初始化 `Shadcn UI` 基本项目结构（如果尚未初始化）
-
-> [!IMPORTANT]
-
-> 该初始化命令用于创建 `Shadcn UI` 的基本项目结构
->
-> **本项目已完成初始化，无需再次运行此命令**
-
-### 组件安装
-
-1. 使用 `Shadcn CLI` 添加组件:
-
-   ```bash
-   pnpm dlx shadcn@latest add <组件名>
-   ```
-
-   如添加 `<Alert />` 组件，执行以下命令即可，[详见文档](https://ui.shadcn.com/docs/components/alert#installation)
-
-   ```bash
-   pnpm dlx shadcn@latest add alert
-   ```
-
-2. 使用组件
-
-```tsx
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
-
-export default function Home() {
-  return (
-    <Alert>
-      <AlertTitle>Heads up!</AlertTitle>
-      <AlertDescription>
-        You can add components and dependencies to your app using the cli.
-      </AlertDescription>
-    </Alert>
-  )
-}
+```
+src/content/
+├── zh/                    # 中文文档
+│   ├── _meta.tsx          # 导航配置
+│   ├── index.mdx          # 首页
+│   └── docs/              # 文档内容
+│       ├── _meta.tsx      # 文档导航
+│       └── *.mdx          # 各页面内容
+└── en/                    # 英文文档 (结构同上)
 ```
 
-3. 自定义组件样式（可选）
+## 📄 许可证
 
-`Shadcn UI` 组件通常已提供了流行的默认样式和功能，能满足大多数需求，若确实需要进行自定义定制，可编辑相应的组件文件，如：
+[CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/) — 署名-非商业性使用-相同方式共享
 
-打开 [`src/components/ui/alert.tsx`](src/components/ui/alert.tsx) 文件来修改 `Alert` 组件的样式
+## 🙏 致谢
 
-> 注意：在大多数情况下，`Shadcn UI` 提供的默认样式已经足够满足需求，无需进行额外修改
-
-## 🐱 说句心里话
-
-<div align="center">
-
-如果你看到这里还没有点 Star, 那我只能说...
-
-<img src="https://media.giphy.com/media/l0HlKrB02QY0f1mbm/giphy.gif" width="500"/>
-
-**求求了，给个 Star 吧！** 🥺👉👈
-
-我的 Star 数量还不如我的 Bug 数量多 😭
-
-<a href="https://github.com/pdsuwwz/nextjs-nextra-starter">
-<img src="https://img.shields.io/badge/%E8%89%AF%E5%BF%83%E5%8F%91%E7%8E%B0-%E8%B5%8F%E4%B8%AAStar%20%E2%AD%90%EF%B8%8F%EF%B8%8F-orange?style=for-the-badge&logo=github&logoColor=white" alt="给个Star"/>
-</a>
-
-</div>
-
-## 🌟 相关项目
-
-以下是一些开发者和团队正在使用、参考或受本项目启发的项目：
-
-| 项目名                                                              | 简介                                                                                                   |
-| ------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
-| [ClaudeCode101 中文教程](https://www.claudecode101.com/zh)          | 面向中文用户的 Claude Code AI 编程助手教程网站，汇集官方最佳实践与社区经验，助你高效掌握 AI 编程技能。 |
-| [EdgeOne Saas 模板](https://github.com/TencentEdgeOne/saas-starter) | [腾讯云官方模板：助你快速构建并部署下一款 SaaS 应用](https://saas-starter-docs.edgeone.app/zh)         |
-| [Talking Web3](https://talkingweb3.io/zh)                           | 一个 Web3 项目出圈加速器，致力于打造卓越的Web3项目。                                                   |
-| [面试宝典](https://www.codecrack.cn/zh)                             | 一个免费且深入的八股文网站，帮助开发者提升技术能力并应对面试。                                         |
-
-### 📢 社区贡献
-
-💡 如果您的项目也在使用或借鉴了本项目，我们诚挚欢迎您：
-
-- 通过提交 [Issue](https://github.com/pdsuwwz/nextjs-nextra-starter/issues) 分享您的项目链接
-- 提交 Pull Request (PR) 将您的项目添加到列表中
-
-## 🚨 免责声明
-
-本模板作为技术方案参考提供，使用者需知悉以下风险及义务：
-
-- **技术风险**：依赖框架（Next.js/Nextra/Tailwind CSS等）存在版本迭代风险，第三方组件（如 Shadcn UI）的行为规范以原始仓库为准，环境配置变更可能导致不可预见的构建异常
-- **使用限制**：禁止用于违反开源协议或法律法规的场景，使用者需自行完成代码安全审查及生产环境验证
-- **责任免除**：不承诺技术方案的业务适用性、安全性担保及定制支持，因使用/修改引发的直接或间接后果均由使用者自行承担
-
-## License
-
-[MIT](./LICENSE) License | Copyright © 2020-PRESENT [Wisdom](https://github.com/pdsuwwz)
+- 本项目基于 [nextjs-nextra-starter](https://github.com/Cyronlee/effective-cursor) 模板构建
+- 感谢所有贡献者的宝贵经验分享

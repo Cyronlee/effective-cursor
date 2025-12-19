@@ -1,8 +1,6 @@
 'use client'
 
-import { useTheme } from 'nextra-theme-docs'
-import { useMemo } from 'react'
-import Marquee from 'react-fast-marquee'
+import Link from 'next/link'
 import { PanelParticles } from '@/components/PanelParticles'
 import ScrollProgressBar from '@/components/ScrollProgressBar'
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion'
@@ -13,112 +11,130 @@ import { Section } from './Section'
 
 import { SetupHero } from './Setup'
 
-export const StackItem = ({
-  className,
+// Category card component for the 4 main sections
+const CategoryCard = ({
+  title,
+  description,
+  icon,
+  link,
+  currentLocale,
 }: {
-  className: string
-},
-) => {
+  title: string
+  description: string
+  icon: string
+  link: string
+  currentLocale: string
+}) => {
+  const iconMap: Record<string, string> = {
+    rocket: 'icon-[ph--rocket-launch-bold]',
+    code: 'icon-[ph--code-bold]',
+    settings: 'icon-[ph--gear-six-bold]',
+    sparkles: 'icon-[ph--sparkle-bold]',
+  }
+
   return (
-    <div className={cn(
-      'mx-6 size-[50px]',
-      'text-neutral-800 dark:text-neutral-100',
-      'transition-all duration-300 transform opacity-75',
-      'hover:scale-125 hover:opacity-100',
-      className,
-    )}
+    <Link
+      href={`/${currentLocale}${link}`}
+      className={cn(
+        'group relative flex flex-col p-6 rounded-2xl',
+        'bg-white/50 dark:bg-zinc-900/50',
+        'border border-zinc-200 dark:border-zinc-800',
+        'hover:border-violet-400 dark:hover:border-violet-500',
+        'hover:shadow-lg hover:shadow-violet-500/10',
+        'transition-all duration-300',
+        'backdrop-blur-sm',
+      )}
     >
-    </div>
+      <div className={cn(
+        'w-12 h-12 rounded-xl flex items-center justify-center mb-4',
+        'bg-gradient-to-br from-violet-500 to-purple-600',
+        'group-hover:scale-110 transition-transform duration-300',
+      )}
+      >
+        <span className={cn(iconMap[icon] || iconMap.rocket, 'text-2xl text-white')}></span>
+      </div>
+      <h3 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100 mb-2">
+        {title}
+      </h3>
+      <p className="text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed">
+        {description}
+      </p>
+      <div className="mt-4 flex items-center text-violet-600 dark:text-violet-400 text-sm font-medium">
+        <span className="group-hover:underline">
+          {currentLocale === 'zh' ? '开始学习' : 'Start Learning'}
+        </span>
+        <span className="ml-1 transition-transform group-hover:translate-x-1 icon-[mingcute--arrow-right-line]"></span>
+      </div>
+    </Link>
   )
 }
 
 export default function HomepageHero() {
-  const { t } = useLocale()
+  const { t, currentLocale } = useLocale()
 
   const featureList = t('featureList')
   const faqs = t('faqs')
+  const categories = t('categories')
 
-  const { resolvedTheme } = useTheme()
-
-  const processedFeatureList = useMemo(() => {
+  const processedFeatureList = featureList.map((item, index) => {
     const icons = [
-      'icon-[material-symbols--rocket-launch-outline]',
-      'icon-[icon-park-outline--international]',
-      'icon-[nonicons--typescript-16]',
-      'icon-[carbon--face-satisfied] hover:icon-[carbon--face-wink]',
-      'icon-[teenyicons--tailwind-outline]',
-      'icon-[tabler--calendar-code]',
-      'icon-[carbon--color-palette]',
-      'icon-[carbon--ibm-cloud-transit-gateway]',
-      'icon-[carbon--flash]',
+      'icon-[ph--cursor-click-bold]',
+      'icon-[ph--scales-bold]',
+      'icon-[ph--stack-bold]',
+      'icon-[ph--wrench-bold]',
+      'icon-[ph--test-tube-bold]',
+      'icon-[ph--file-code-bold]',
+      'icon-[ph--lightbulb-bold]',
+      'icon-[ph--list-checks-bold]',
+      'icon-[ph--files-bold]',
     ]
-    return featureList.map((item, index) => {
-      return {
-        ...item,
-        icon: <span className={icons[index] || icons[0]}></span>,
-      }
-    })
-  }, [featureList])
+    return {
+      ...item,
+      icon: <span className={icons[index] || icons[0]}></span>,
+    }
+  })
 
   return (
     <>
       <ScrollProgressBar />
       <PanelParticles />
       <SetupHero />
-      {/* <div className="relative top-[-18px] mb-[-10px] flex justify-center py-[0px] z-2">
-        <a
-          href="https://nextjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="w-[150px] h-[40px] flex flex-col items-center gap-[20px]"
-        >
-          <img
-            className="dark:invert"
-            src="/next.svg"
-            style={{ width: '100%', height: 'auto' }}
-          />
-        </a>
-      </div> */}
+
       <div className="relative z-1 pb-10 md:pb-[100px]">
+        {/* 4 Main Categories Section */}
         <Section
-          title="Tech Stack"
-          titleProps={{
-            disabledAnimation: false,
-          }}
+          title={currentLocale === 'zh' ? '四大核心模块' : 'Four Core Modules'}
+          description={currentLocale === 'zh'
+            ? '从入门到精通的完整学习路径'
+            : 'A complete learning path from beginner to expert'}
         >
-          <div className="flex justify-center w-full max-w-7xl h-[80px] my-[30px]">
-            <Marquee
-              pauseOnHover
-              autoFill
-              gradient
-              direction="right"
-              gradientColor="var(--background)"
-              speed={60}
-            >
-              <StackItem className="icon-[akar-icons--nextjs-fill]" />
-              <StackItem className="icon-[simple-icons--react]" />
-              <StackItem className="icon-[simple-icons--tailwindcss]" />
-              <StackItem className="icon-[teenyicons--framer-outline]" />
-              <StackItem className="icon-[simple-icons--shadcnui]" />
-              <StackItem className="icon-[simple-icons--typescript]" />
-              <StackItem className="icon-[fa6-brands--sass]" />
-              <StackItem className="icon-[teenyicons--eslint-outline]" />
-              <StackItem className="icon-[simple-icons--postcss]" />
-              <StackItem className="icon-[simple-icons--nextra]" />
-              <StackItem className="icon-[line-md--iconify1]" />
-            </Marquee>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-4xl my-8 px-4">
+            {categories.map((category, index) => (
+              <CategoryCard
+                key={index}
+                title={category.title}
+                description={category.description}
+                icon={category.icon}
+                link={category.link}
+                currentLocale={currentLocale}
+              />
+            ))}
           </div>
         </Section>
+
+        {/* Features Section - 9 pages overview */}
         <Section
-          title="Features"
+          title={currentLocale === 'zh' ? '内容概览' : 'Content Overview'}
           description={t('featuresDesc')}
         >
           <div className="flex justify-center w-full max-w-7xl">
             <HoverEffect items={processedFeatureList} />
           </div>
         </Section>
+
+        {/* FAQ Section */}
         <Section
-          title="Frequently Asked Questions"
+          title={currentLocale === 'zh' ? '常见问题' : 'Frequently Asked Questions'}
           tallPaddingY
         >
           <Accordion
