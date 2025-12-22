@@ -1,0 +1,84 @@
+---
+title: "前端技术栈"
+---
+
+# 前端技术栈
+
+> 构建现代前端应用的 AI 友好技术选择
+
+前端开发是 AI 辅助编程效果最显著的领域之一。以下是经过验证的、对 AI 友好的前端技术栈推荐。
+
+## 推荐技术栈
+
+### 核心框架
+
+**React + TypeScript**
+
+- React 是 AI 训练数据中最丰富的前端框架
+- TypeScript 提供类型信息，显著提升 AI 代码生成质量
+- 组件化思维与 AI 辅助开发天然契合
+
+### 元框架
+
+**Next.js**
+
+- 约定式路由，结构清晰
+- 服务端渲染支持，全栈能力
+- 社区活跃，AI 有大量参考案例
+
+**其他选择**: Nuxt (Vue)、Remix、Astro
+
+### 样式方案
+
+**Tailwind CSS**
+
+- 原子化 CSS，类名即样式
+- AI 可以直接生成完整的样式类名
+- 无需频繁切换文件
+
+```tsx
+// AI 可以直接生成带样式的组件
+export function Button({ children }: { children: React.ReactNode }) {
+  return (
+    <button className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">
+      {children}
+    </button>
+  )
+}
+```
+
+### UI 组件库
+
+**shadcn/ui**
+
+- 不是依赖，而是源码复制
+- 完全可定制和可理解
+- AI 可以直接修改组件源码
+
+**其他选择**: Radix UI、Headless UI
+
+## 开发工具
+
+- **Vite** - 快速的开发服务器和构建工具
+- **ESLint + Prettier** - 代码质量和格式化
+- **Storybook** - 组件文档和开发
+
+## 完整示例
+
+```
+my-app/
+├── src/
+│   ├── app/            # Next.js App Router
+│   ├── components/     # React 组件
+│   │   └── ui/        # shadcn/ui 组件
+│   ├── lib/           # 工具函数
+│   └── styles/        # 全局样式
+├── tailwind.config.ts
+├── tsconfig.json
+└── package.json
+```
+
+## 下一步
+
+前端技术栈确定后，接下来看看后端技术栈的推荐。
+

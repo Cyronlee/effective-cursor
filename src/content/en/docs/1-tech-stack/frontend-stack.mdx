@@ -1,0 +1,84 @@
+---
+title: "Frontend Stack"
+---
+
+# Frontend Stack
+
+> AI-friendly technology choices for building modern frontend applications
+
+Frontend development is one of the areas where AI-assisted programming shows the most significant results. Here are proven, AI-friendly frontend stack recommendations.
+
+## Recommended Stack
+
+### Core Framework
+
+**React + TypeScript**
+
+- React has the richest AI training data among frontend frameworks
+- TypeScript provides type information, significantly improving AI code generation quality
+- Component-based thinking naturally aligns with AI-assisted development
+
+### Meta Framework
+
+**Next.js**
+
+- Convention-based routing with clear structure
+- Server-side rendering support, full-stack capabilities
+- Active community, AI has plenty of reference examples
+
+**Alternatives**: Nuxt (Vue), Remix, Astro
+
+### Styling Solution
+
+**Tailwind CSS**
+
+- Atomic CSS, class names are styles
+- AI can directly generate complete style class names
+- No need to frequently switch files
+
+```tsx
+// AI can directly generate styled components
+export function Button({ children }: { children: React.ReactNode }) {
+  return (
+    <button className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">
+      {children}
+    </button>
+  )
+}
+```
+
+### UI Component Library
+
+**shadcn/ui**
+
+- Not a dependency, but source code copying
+- Fully customizable and understandable
+- AI can directly modify component source code
+
+**Alternatives**: Radix UI, Headless UI
+
+## Development Tools
+
+- **Vite** - Fast development server and build tool
+- **ESLint + Prettier** - Code quality and formatting
+- **Storybook** - Component documentation and development
+
+## Complete Example
+
+```
+my-app/
+├── src/
+│   ├── app/            # Next.js App Router
+│   ├── components/     # React components
+│   │   └── ui/        # shadcn/ui components
+│   ├── lib/           # Utility functions
+│   └── styles/        # Global styles
+├── tailwind.config.ts
+├── tsconfig.json
+└── package.json
+```
+
+## Next Steps
+
+With the frontend stack determined, let's look at backend stack recommendations.
+

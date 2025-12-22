@@ -1,0 +1,132 @@
+---
+title: "MCP 工具"
+---
+
+import { Callout } from 'nextra/components'
+
+# MCP 工具
+
+> 通过 MCP 扩展 AI 的能力边界
+
+## 什么是 MCP
+
+MCP（Model Context Protocol）是一个开放协议，允许 AI 模型与外部工具和数据源交互。通过 MCP，Cursor 获得了超越纯文本处理的能力。
+
+- 📁 读取和操作文件系统
+- 💻 执行终端命令
+- 🗄️ 访问数据库
+- 🌐 调用外部 API
+- 🔧 与其他开发工具集成
+
+<Callout type="info">
+**官方文档**：完整的 MCP 使用指南请查看 [Cursor MCP 官方文档](https://cursor.com/cn/docs/context/mcp)
+</Callout>
+
+<Callout type="warning">
+**重要提醒**：Cursor 每次打开新项目时，所有 MCP 工具默认会变成 Active 状态。
+
+请务必手动关闭不需要使用的 MCP 工具。过多的活跃 MCP 工具会：
+- 增加系统 Prompt 的长度
+- 分散大模型的注意力
+- 导致生成效果不佳
+
+**建议**：只在需要时开启特定的 MCP 工具，用完后及时关闭。
+</Callout>
+
+
+## 推荐 MCP 工具
+
+以下是一些常用且实用的 MCP 工具配置。更多工具请查看 [MCP 工具目录](https://cursor.com/cn/docs/context/mcp/directory)。
+
+### Figma MCP
+
+将 Figma 设计稿直接连接到 Cursor，AI 可以读取设计稿中的元素、样式和布局信息，帮助你快速将设计转化为代码。
+
+```json
+{
+  "mcpServers": {
+    "Figma": {
+      "url": "http://127.0.0.1:3845/sse"
+    }
+  }
+}
+```
+
+**配置说明**：参考官方文档 [Guide to the Figma MCP server](https://help.figma.com/hc/en-us/articles/32132100833559-Guide-to-the-Figma-MCP-server)
+
+---
+
+### Jira MCP
+
+连接 Jira 项目管理系统，AI 可以读取 Issue 详情、评论和状态，帮助你理解需求背景和任务要求。
+
+```json
+{
+  "mcpServers": {
+    "jira": {
+      "command": "npx",
+      "args": ["-y", "jira-mcp"],
+      "env": {
+        "JIRA_INSTANCE_URL": "https://your-company.atlassian.net",
+        "JIRA_USER_EMAIL": "your-email@example.com",
+        "JIRA_API_KEY": "your-api-key"
+      }
+    }
+  }
+}
+```
+
+**获取 API Key**：登录 Atlassian 账户，在 [API Tokens](https://id.atlassian.com/manage-profile/security/api-tokens) 页面生成
+
+---
+
+### PostgreSQL MCP
+
+直接连接 PostgreSQL 数据库，AI 可以查询表结构和数据，帮助你编写 SQL 和理解数据模型。
+
+```json
+{
+  "mcpServers": {
+    "postgres": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-postgres",
+        "postgresql://username:password@localhost:5432/database_name"
+      ]
+    }
+  }
+}
+```
+
+<Callout type="error">
+**安全提醒**：建议使用只读账户连接生产数据库，避免误操作。
+</Callout>
+
+---
+
+### Browser MCP (Playwright)
+
+控制浏览器进行自动化测试和网页交互，AI 可以模拟用户操作、截取屏幕截图。
+
+```json
+{
+  "mcpServers": {
+    "playwright": {
+      "command": "npx",
+      "args": ["-y", "@anthropic/mcp-playwright"]
+    }
+  }
+}
+```
+
+## 安全提示
+
+- **最小权限原则** - 只开启当前任务需要的 MCP 工具
+- **审查操作** - 仔细检查 AI 对危险操作的建议
+- **敏感数据** - 数据库连接等 MCP 工具注意安全，建议使用只读账户
+- **及时关闭** - 完成任务后关闭不再需要的 MCP 工具
+
+## 总结
+
+MCP 工具极大地扩展了 AI 辅助开发的可能性，让 Cursor 从代码编辑器进化为完整的开发助手。合理配置和管理 MCP 工具，可以显著提升开发效率。

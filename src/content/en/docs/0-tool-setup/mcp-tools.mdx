@@ -1,0 +1,131 @@
+---
+title: "MCP Tools"
+---
+
+import { Callout } from 'nextra/components'
+
+# MCP Tools
+
+> Extend AI's capabilities with MCP
+
+## What is MCP
+
+MCP (Model Context Protocol) is an open protocol that allows AI models to interact with external tools and data sources. Through MCP, Cursor gains capabilities beyond pure text processing.
+
+- 📁 Read and manipulate the file system
+- 💻 Execute terminal commands
+- 🗄️ Access databases
+- 🌐 Call external APIs
+- 🔧 Integrate with other development tools
+
+<Callout type="info">
+**Official Documentation**: For complete MCP usage guide, see [Cursor MCP Official Docs](https://cursor.com/docs/context/mcp)
+</Callout>
+
+<Callout type="warning">
+**Important Notice**: Every time Cursor opens a new project, all MCP tools default to Active state.
+
+Make sure to manually disable MCP tools you don't need. Too many active MCP tools will:
+- Increase system prompt length
+- Distract the AI model's attention
+- Lead to poor generation quality
+
+**Recommendation**: Only enable specific MCP tools when needed, and disable them promptly after use.
+</Callout>
+
+## Recommended MCP Tools
+
+Here are some commonly used and practical MCP tool configurations. For more tools, see the [MCP Tools Directory](https://cursor.com/docs/context/mcp/directory).
+
+### Figma MCP
+
+Connect Figma designs directly to Cursor. AI can read elements, styles, and layout information from your designs, helping you quickly transform designs into code.
+
+```json
+{
+  "mcpServers": {
+    "Figma": {
+      "url": "http://127.0.0.1:3845/sse"
+    }
+  }
+}
+```
+
+**Setup**: Refer to the official [Guide to the Figma MCP server](https://help.figma.com/hc/en-us/articles/32132100833559-Guide-to-the-Figma-MCP-server)
+
+---
+
+### Jira MCP
+
+Connect to Jira project management system. AI can read issue details, comments, and status, helping you understand requirements and task context.
+
+```json
+{
+  "mcpServers": {
+    "jira": {
+      "command": "npx",
+      "args": ["-y", "jira-mcp"],
+      "env": {
+        "JIRA_INSTANCE_URL": "https://your-company.atlassian.net",
+        "JIRA_USER_EMAIL": "your-email@example.com",
+        "JIRA_API_KEY": "your-api-key"
+      }
+    }
+  }
+}
+```
+
+**Getting API Key**: Log into your Atlassian account and generate a key at [API Tokens](https://id.atlassian.com/manage-profile/security/api-tokens)
+
+---
+
+### PostgreSQL MCP
+
+Connect directly to PostgreSQL databases. AI can query table structures and data, helping you write SQL and understand data models.
+
+```json
+{
+  "mcpServers": {
+    "postgres": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-postgres",
+        "postgresql://username:password@localhost:5432/database_name"
+      ]
+    }
+  }
+}
+```
+
+<Callout type="error">
+**Security Note**: Use read-only accounts when connecting to production databases to avoid accidental modifications.
+</Callout>
+
+---
+
+### Browser MCP (Playwright)
+
+Control the browser for automated testing and web interactions. AI can simulate user actions and take screenshots.
+
+```json
+{
+  "mcpServers": {
+    "playwright": {
+      "command": "npx",
+      "args": ["-y", "@anthropic/mcp-playwright"]
+    }
+  }
+}
+```
+
+## Security Tips
+
+- **Principle of least privilege** - Only enable MCP tools needed for the current task
+- **Review operations** - Carefully check AI suggestions for dangerous operations
+- **Sensitive data** - Use read-only accounts for database connections and similar MCP tools
+- **Disable promptly** - Turn off MCP tools you no longer need after completing tasks
+
+## Summary
+
+MCP tools greatly expand the possibilities of AI-assisted development, evolving Cursor from a code editor into a complete development assistant. Properly configuring and managing MCP tools can significantly boost your development efficiency.

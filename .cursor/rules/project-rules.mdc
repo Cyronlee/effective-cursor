@@ -17,15 +17,16 @@ src/content/
 └── en/          # 英文（结构完全同步）
 
 ### 添加新文档（必须严格执行）
-1. 在 zh/docs/ 和 en/docs/ 下创建同名 kebab-case MDX 文件
+1. 在 zh/docs/ 和 en/docs/ 下创建同名 MDX 文件
 2. 更新对应 _meta.tsx 添加导航项
 3. 确保中英文内容结构完全一致
 
-### 文档编写规范（强制）
-- 文件名：kebab-case（如 getting-started.mdx）
+### mdx文档编写规范
+- 文件名：kebab-case
 - Frontmatter：必须含 title
-- 组件：可直接导入 @/components/*
-- 图片：统一放 public/img/
+- 自定义组件：可以使用 @/components/ui 下的组件
+- 官方组件：import { ImageZoom, Callout, Cards, FileTree, Steps, Tabs, Playground } from 'nextra/components'
+- 图片：统一放 public/img/{doc-name}/
 
 ### i18n 处理
 - 页面文案：修改 src/i18n/zh.ts 和 en.ts

@@ -1,0 +1,56 @@
+---
+title: "扩展程序"
+---
+
+import { ImageZoom } from 'nextra/components'
+
+# 扩展程序
+
+> 精选扩展，提升开发效率
+
+Cursor 完全兼容 VS Code 的扩展生态系统。以下是一些推荐的扩展程序，可以与 AI 辅助开发完美配合。
+
+## 代码质量
+
+### Prettier
+
+自动格式化工具，统一代码风格。AI 生成的代码往往不符合项目的格式规范，Prettier 可以一键将其格式化为统一风格。
+
+<ImageZoom 
+  src="/img/extensions/prettier.png" 
+  alt="Prettier 扩展" 
+  width={300} 
+  style={{ borderRadius: '8px', marginTop: '16px' }}
+/>
+
+1. 将 Default Formatter 设置为 Prettier
+2. 开启 Format On Save 自动格式化
+3. 使用 `Cmd/Ctrl + S` 保存时自动格式化代码
+
+<ImageZoom 
+  src="/img/extensions/prettier-config.png" 
+  alt="Prettier 配置" 
+  width={600} 
+  style={{ borderRadius: '8px', marginTop: '16px' }}
+/>
+
+## 文档管理
+
+### Markdown All in One
+
+增强的 Markdown 编辑体验，支持快捷键、表格格式化、目录生成等功能。在编写 Prompt 和项目文档时非常实用。
+
+### Markdown Preview Mermaid Support
+
+在 Markdown 预览中支持 Mermaid 图表渲染。AI 可以帮你生成 Mermaid 语法的流程图、时序图、架构图等，安装此扩展后可以直接在编辑器中预览效果。
+
+```mermaid
+graph LR
+    A[需求] --> B[AI 生成代码]
+    B --> C[人工审核]
+    C --> D[迭代优化]
+```
+
+## 下一步
+
+扩展配置完成后，接下来了解如何选择合适的 AI 模型。

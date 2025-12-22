@@ -1,0 +1,91 @@
+---
+title: "Backend Stack"
+---
+
+# Backend Stack
+
+> Choose AI-assisted development friendly backend technologies
+
+Backend development can also benefit from AI assistance. Here are recommended backend stacks for different scenarios.
+
+## Node.js Ecosystem
+
+### Express / Fastify
+
+- Lightweight and flexible
+- AI has plenty of code references
+- Suitable for quick prototypes and small projects
+
+### NestJS
+
+- Enterprise-grade framework with clear structure
+- Decorator pattern, highly semantic code
+- Native TypeScript support
+
+```typescript
+// NestJS controller example - AI can easily understand and generate
+@Controller('users')
+export class UsersController {
+  constructor(private readonly usersService: UsersService) {}
+
+  @Get(':id')
+  findOne(@Param('id') id: string) {
+    return this.usersService.findOne(id);
+  }
+
+  @Post()
+  create(@Body() createUserDto: CreateUserDto) {
+    return this.usersService.create(createUserDto);
+  }
+}
+```
+
+## Python Ecosystem
+
+### FastAPI
+
+- Modern Python web framework
+- Automatic API documentation generation
+- Type hints support
+
+### Django
+
+- Full-featured framework
+- ORM, Admin out of the box
+- Mature and stable
+
+## Java Ecosystem
+
+### Spring Boot
+
+- Enterprise-grade choice
+- Complete ecosystem
+- AI has rich training data
+
+## Go Ecosystem
+
+### Gin / Echo
+
+- High performance
+- Clean API
+- Suitable for microservices
+
+## Database Selection
+
+| Type | Recommendation | Features |
+|------|----------------|----------|
+| Relational | PostgreSQL | Powerful, AI-friendly SQL |
+| Document | MongoDB | Flexible schema |
+| ORM | Prisma / Drizzle | TypeScript native, type-safe |
+
+## Tech Selection Tips
+
+1. **Team familiarity** - Choose technologies your team already knows
+2. **Type safety** - Prefer frameworks with type systems
+3. **Community activity** - Active community means more AI training data
+4. **Convention over configuration** - Structured frameworks are easier for AI to understand
+
+## Next Steps
+
+With the backend stack determined, let's learn about some useful collaboration tools.
+

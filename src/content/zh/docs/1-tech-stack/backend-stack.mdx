@@ -1,0 +1,91 @@
+---
+title: "后端技术栈"
+---
+
+# 后端技术栈
+
+> 选择 AI 辅助开发友好的后端技术
+
+后端开发同样可以从 AI 辅助中获益。以下是不同场景下推荐的后端技术栈。
+
+## Node.js 生态
+
+### Express / Fastify
+
+- 轻量级、灵活
+- AI 有大量代码参考
+- 适合快速原型和小型项目
+
+### NestJS
+
+- 企业级框架，结构清晰
+- 装饰器模式，代码语义化强
+- TypeScript 原生支持
+
+```typescript
+// NestJS 控制器示例 - AI 可以轻松理解和生成
+@Controller('users')
+export class UsersController {
+  constructor(private readonly usersService: UsersService) {}
+
+  @Get(':id')
+  findOne(@Param('id') id: string) {
+    return this.usersService.findOne(id);
+  }
+
+  @Post()
+  create(@Body() createUserDto: CreateUserDto) {
+    return this.usersService.create(createUserDto);
+  }
+}
+```
+
+## Python 生态
+
+### FastAPI
+
+- 现代 Python Web 框架
+- 自动 API 文档生成
+- 类型提示支持
+
+### Django
+
+- 全功能框架
+- ORM、Admin 开箱即用
+- 成熟稳定
+
+## Java 生态
+
+### Spring Boot
+
+- 企业级首选
+- 完善的生态系统
+- AI 有丰富的代码训练数据
+
+## Go 生态
+
+### Gin / Echo
+
+- 高性能
+- 简洁的 API
+- 适合微服务
+
+## 数据库选择
+
+| 类型 | 推荐 | 特点 |
+|------|------|------|
+| 关系型 | PostgreSQL | 功能强大，AI 友好的 SQL |
+| 文档型 | MongoDB | 灵活 Schema |
+| ORM | Prisma / Drizzle | TypeScript 原生，类型安全 |
+
+## 技术选型建议
+
+1. **团队熟悉度** - 选择团队已有经验的技术
+2. **类型安全** - 优先选择有类型系统的框架
+3. **社区活跃度** - 活跃社区意味着更多 AI 训练数据
+4. **约定优于配置** - 结构化框架更易于 AI 理解
+
+## 下一步
+
+后端技术栈确定后，接下来了解一些有用的协作工具。
+

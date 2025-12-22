@@ -1,0 +1,45 @@
+---
+title: "Model Selection"
+---
+
+import { ImageZoom } from 'nextra/components'
+
+# Model Selection
+
+> Choose the right AI model for your task
+
+Cursor supports multiple AI models, each with its own strengths and use cases. Choosing the right model helps balance effectiveness and cost.
+
+## Model Recommendation and Selection Strategy
+
+- **Prefer the latest Claude / Gemini models** - Strongest code generation and understanding capabilities
+- **Thinking models perform better** - Models with 🧠 symbol support Thinking but consume 2x Usage
+- **Add custom non-Thinking models** - e.g., `claude-4.5-sonnet` (1x Usage) for simple tasks to save quota
+
+<ImageZoom 
+  src="/img/model-selection/models.png" 
+  alt="Cursor Model List" 
+  width={600} 
+  style={{ borderRadius: '8px', marginTop: '16px' }}
+/>
+
+
+| Scenario | Recommended Model | Usage Multiplier | Description |
+|----------|-------------------|------------------|-------------|
+| Daily Coding | claude-4.5-opus-high | 2x | Most powerful model, cost-effective, suitable for daily coding |
+| Simple Tasks | claude-4.5-sonnet | 1x | Save quota, suitable for simple tasks |
+
+## Usage Consumption Comparison
+
+<ImageZoom 
+  src="/img/model-selection/usage.png" 
+  alt="Model Usage Comparison" 
+  width={600} 
+  style={{ borderRadius: '8px', marginTop: '16px' }}
+/>
+
+> **Tip**: Visit the [Cursor Dashboard](https://cursor.com/dashboard?tab=usage) to view detailed usage information.
+
+## Next Steps
+
+After learning about model selection, explore how MCP tools can extend AI's capabilities.

@@ -1,0 +1,69 @@
+---
+title: "AI-Friendly Languages"
+---
+
+# AI-Friendly Languages
+
+> What languages and technologies work best with AI-assisted development?
+
+AI models are trained on vast amounts of code, so different programming languages and frameworks have varying degrees of "AI-friendliness." Understanding these differences can help you choose a tech stack more suitable for AI-assisted development.
+
+## Strongly-Typed Languages First
+
+Strongly-typed languages are more AI-friendly for several reasons:
+
+- **Type information provides context** - AI can infer variable purposes and function intentions from types
+- **Less ambiguity** - Type constraints reduce ambiguity in code understanding
+- **Better code completion** - Both IDEs and AI can provide more accurate suggestions
+
+**Recommended**: TypeScript, Go, Rust, Java, C#
+
+## Well-Structured Code
+
+AI can more easily understand and generate structured code:
+
+- Clear directory structure
+- Consistent naming conventions
+- Modular organization
+
+## Semantic Design
+
+Semantic code helps AI understand intent more easily:
+
+```typescript
+// ✅ Semantic - Easy for AI to understand
+function calculateOrderTotal(items: CartItem[]): Money {
+  return items.reduce((total, item) => total.add(item.price), Money.zero())
+}
+
+// ❌ Non-semantic - Hard for AI to infer intent
+function calc(arr: any[]): number {
+  return arr.reduce((a, b) => a + b.p, 0)
+}
+```
+
+## Markdown's AI-Friendliness
+
+Markdown plays an important role in AI-assisted development:
+
+- **Documentation as code** - AI can understand the relationship between docs and code
+- **Structured expression** - Headings, lists, code blocks provide clear structure
+- **Prompt-friendly** - Most AI tools natively support Markdown format
+
+Good use of Markdown in your project enables:
+- Clear README and documentation
+- Comments and JSDoc to describe code intent
+- Structured prompt templates
+
+## Mature Ecosystem
+
+Choose tech stacks with mature ecosystems:
+
+- **Rich training data** - AI has seen more related code
+- **Community best practices** - AI can give advice that follows conventions
+- **Complete toolchain** - Better development experience
+
+## Next Steps
+
+Now that you understand AI-friendly language characteristics, let's look at specific frontend stack recommendations.
+

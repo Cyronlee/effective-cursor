@@ -1,0 +1,45 @@
+---
+title: "模型选择"
+---
+
+import { ImageZoom } from 'nextra/components'
+
+# 模型选择
+
+> 根据任务场景选择最合适的 AI 模型
+
+Cursor 支持多种 AI 模型，每种模型都有其特点和适用场景。选择合适的模型可以在效果和成本之间取得平衡。
+
+## 模型推荐与选择策略
+
+- **优先选择 Claude / Gemini 的最新模型** - 代码生成和理解能力最强
+- **Thinking 模型效果更好** - 带🧠符号的模型支持Thinking，但会消耗 2x Usage
+- **自定义添加非 Thinking 模型** - 例如 `claude-4.5-sonnet`（1x Usage），用于简单任务节省配额
+
+<ImageZoom 
+  src="/img/model-selection/models.png" 
+  alt="Cursor 模型列表" 
+  width={600} 
+  style={{ borderRadius: '8px', marginTop: '16px' }}
+/>
+
+
+| 场景 | 推荐模型 | Usage 倍率 | 说明 |
+|------|----------|-----------|------|
+| 日常编码 | claude-4.5-opus-high | 2x | 最强的模型，性价比高，适合日常编码 |
+| 简单任务 | claude-4.5-sonnet | 1x | 节省配额，适合简单任务 |
+
+## Usage 消耗对比
+
+<ImageZoom 
+  src="/img/model-selection/usage.png" 
+  alt="模型 Usage 对比" 
+  width={600} 
+  style={{ borderRadius: '8px', marginTop: '16px' }}
+/>
+
+> **提示**：访问 [Cursor Dashboard](https://cursor.com/dashboard?tab=usage) 查看详细的 Usage 使用情况。
+
+## 下一步
+
+了解完模型选择后，接下来探索 MCP 工具如何扩展 AI 的能力边界。
