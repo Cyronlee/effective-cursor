@@ -1,0 +1,202 @@
+---
+title: "Rules 编写最佳实践"
+---
+
+import { Callout } from 'nextra/components'
+
+# Cursor Rules 编写最佳实践
+
+> 让 AI 严格执行你项目的独特要求
+
+## 核心理念
+
+Cursor Rules 的唯一使命是：**让 AI 生成的代码符合你项目的独特规范**。
+
+很多人误以为 Rules 应该包含各种"最佳实践"和通用知识。实际上，大模型已经知道这些内容。你需要告诉 AI 的是：**在这个项目里，我们这样做**。
+
+<Callout type="warning" emoji="⚠️">
+**反面教材：GitHub 上的"规则大全"**
+
+[awesome-cursorrules](https://github.com/PatrickJS/awesome-cursorrules) 是 GitHub 上的热门项目，但其中大量规则都是废话。例如它的 [react.mdc](https://github.com/PatrickJS/awesome-cursorrules/blob/main/rules-new/react.mdc)：
+
+- "Use functional components with hooks" - AI 早就知道这是现代 React 的标准
+- "Write clean, readable code" - 这种空话对 AI 毫无价值
+- "Follow React best practices" - 太模糊，等于没说
+
+这些通用建议不仅浪费 token，还会稀释你真正需要的项目独特规则。**不要照抄这些模板，只写你项目里独有的硬性规定。**
+</Callout>
+
+| 常见误区 | 正确做法 |
+|---------|---------|
+| ❌ "使用有意义的变量名" | ✅ "变量命名使用 camelCase，组件使用 PascalCase" |
+| ❌ "遵循 React 最佳实践" | ✅ "所有页面组件放在 `src/pages/`，使用默认导出" |
+| ❌ "写干净的代码" | ✅ "使用 `@/` 作为导入路径前缀，避免 barrel exports" |
+
+## 六大核心原则 <a id="core-principles"></a>
+
+| 原则 | 核心要点 | 反面示例 | 正确示例 |
+|------|---------|---------|---------|
+| [1. 极度具体](#specific) | 只写项目独有的强制规范 | "使用 TypeScript" | "避免 any，用 unknown" |
+| [2. 短小精悍](#concise) | 1-3 行/条，不超过 200 行 | 冗长的日期格式化说明 | formatDate() from @/lib/date-time-utils.ts |
+| [3. 分文件匹配](#split-files) | 按主题拆分，用 globs 限定作用域 | 所有规则塞在一个文件 | api-rules.mdc 只管 src/clients/** |
+| [4. 提供示例](#examples) | 附上 import 和代码示例 | "使用 SWR 获取数据" | 完整的 useSWR 代码片段 |
+| [5. 快速迭代](#iterate) | 从 3-5 条痛点规则开始 | 一次性写 500 行"完美规则" | 发现问题立即补充 |
+| [6. 工具链验证](#toolchain) | 让 AI 自动执行 lint/test | 没有验证步骤 | 要求 npm run build 通过 |
+
+---
+
+### 1. 极度具体、可直接执行 <a id="specific"></a>
+
+只写项目独有的强制规范，避免泛泛的描述。
+
+```markdown
+// ❌ 模糊的规则
+- 使用 TypeScript 进行类型安全开发
+- 遵循组件化设计原则
+
+// ✅ 具体的规则
+- 避免使用 `any`，不确定类型时使用 `unknown`
+- 使用 interface 定义对象形状，使用 type 定义联合类型
+- 导出函数必须指定返回类型
+```
+
+### 2. 短小精悍，狠砍废话 <a id="concise"></a>
+
+每条规则 1-3 行，单个 `.mdc` 文件控制在 100-200 行以内。
+
+大模型已知的常识不需要重复。比如 "函数应该职责单一" 这种，AI 早就知道了。
+
+```markdown
+// ❌ 冗长的说明
+日期格式化说明：在本项目中，我们统一使用特定的日期格式化方法来确保
+所有日期显示的一致性。当您需要格式化日期时，请务必使用我们封装的
+工具函数，而不是直接使用原生 API 或第三方库...
+
+// ✅ 简洁的规则
+- 日期格式化使用 `formatDate()` from `@/lib/date-time-utils.ts`
+- 金额格式化使用 `formatMoney()` from `@/lib/money-utils.ts`
+```
+
+### 3. 分文件、精准匹配 <a id="split-files"></a>
+
+在 `.cursor/rules/` 目录下按主题拆分规则文件，使用 `globs` 限定作用域。
+
+| 规则文件 | 作用范围 | 何时触发 |
+|---------|---------|---------|
+| `global-rules.mdc` | `alwaysApply: true` | 始终生效 |
+| `routing-rules.mdc` | `globs: src/pages/**` | 编辑页面文件时 |
+| `api-rules.mdc` | `globs: src/clients/**` | 编辑 API 客户端时 |
+| `ui-rules.mdc` | `globs: *.tsx` | 编辑组件文件时 |
+
+```yaml
+# global-rules.mdc - 核心规范始终生效
+---
+alwaysApply: true
+---
+
+# api-rules.mdc - 只在编辑 API 相关文件时生效
+---
+globs: src/clients/**
+alwaysApply: false
+---
+```
+
+### 4. 提供具体示例 <a id="examples"></a>
+
+附上 import 位置和示例代码，减少 AI 猜测，统一项目规范。
+
+```markdown
+// ❌ 只说不做
+- 使用 SWR 进行数据获取
+
+// ✅ 给出完整示例
+## SWR Integration
+
+import useSWR from 'swr'
+import { getUserInfo, getUserInfoKey } from '@/clients/user/get-user-info'
+
+const { data, error, isLoading } = useSWR(
+  getUserInfoKey(id),
+  () => getUserInfo(id)
+)
+```
+
+### 5. 从少到多，快速迭代 <a id="iterate"></a>
+
+不要试图一开始就写完美的规则。
+
+| 阶段 | 做法 |
+|-----|------|
+| **起步** | 添加 3-5 条当前最痛的规则 |
+| **测试** | 立即测试 AI 输出效果 |
+| **迭代** | 根据问题补充或调整 |
+
+当你发现 AI 反复犯同一个错误时，就是添加新规则的时机。
+
+### 6. 工具链配置 <a id="toolchain"></a>
+
+让 AI 在完成任务后自动执行工具链验证。
+
+```markdown
+## Quality Standards
+
+- Ensure `npm run lint` and `npm run build` passes before commits
+- Run `npm test` to verify changes don't break existing functionality
+```
+
+## 规则结构模板
+
+一个完整的规则文件通常包含以下部分：
+
+```markdown
+---
+globs: src/components/**
+alwaysApply: false
+---
+
+# [规则名称]
+
+## [分类1]
+- 具体规则条目
+- 另一条规则
+
+## [分类2]
+
+### 示例
+代码示例...
+
+## 相关文件
+- `@/lib/xxx.ts` - 描述
+- `@/types/xxx.ts` - 描述
+```
+
+## 团队协作
+
+项目规则必须提交到 Git，这样可以：
+
+- 确保团队所有成员使用相同的规则
+- 规则变更有历史记录可追溯
+- 新成员能快速了解项目规范
+
+```
+.cursor/
+└── rules/
+    ├── global-rules.mdc
+    ├── routing-rules.mdc
+    ├── ui-rules.mdc
+    └── api-rules.mdc
+```
+
+## 参考示例
+
+查看我们收集的完整规则示例：
+
+- [全局规则示例](/zh/rules/vite-shadcnui/global-rules) - 技术栈、目录结构、TypeScript 规范
+- [API 规则示例](/zh/rules/vite-shadcnui/api-rules) - API 客户端架构、SWR 集成
+- [路由规则示例](/zh/rules/vite-shadcnui/routing-rules) - 页面结构、路由保护
+- [UI 规则示例](/zh/rules/vite-shadcnui/ui-rules) - 组件使用、图标系统
+
+## 下一步
+
+了解了编写原则后，接下来我们看看[在开发过程中何时编写这些规则](./development-sequence)。
+

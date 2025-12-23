@@ -2,16 +2,67 @@
 title: "制定 Cursor Rules"
 ---
 
+import { Cards } from 'nextra/components'
+
 # 制定 Cursor Rules
 
-> 让 AI 自动遵守团队规范
+> 让 AI 生成的代码被控制在可控范围内
+
+在前面的章节中，我们完成了工具配置、技术选型和工程架构。现在项目骨架已经搭建完成，是时候**让 AI 理解并遵循你的项目规范**了。
+
+## 核心理念：规则即约束
+
+Cursor Rules 是你与 AI 之间的"契约"。通过明确的规则定义，你可以：
+
+| 目标 | 没有规则时 | 有规则后 |
+|-----|-----------|---------|
+| **代码风格** | AI 随机选择风格 | 统一遵循项目规范 |
+| **架构遵循** | 代码可能放错位置 | 自动放入正确目录 |
+| **技术选择** | 可能使用错误的库 | 使用指定的技术栈 |
+| **最佳实践** | 每次实现方式不同 | 一致的实现模式 |
 
 ## 本章目标
 
-- 编写项目级/个人级 Rules
-- 约束编码风格、架构、分层、依赖等关键规则
+通过本章学习，你将掌握：
 
-## 内容待完善
+- Cursor Rules 的**编写原则**和最佳实践
+- 在项目开发的**不同阶段**编写什么规则
+- 使用**元提示词**快速生成规则框架
 
-本章节内容正在编写中，敬请期待...
+## 规则的分层设计
 
+一个完善的规则体系通常包含以下层次：
+
+```
+.cursor/rules/
+├── global-rules.mdc      # 🌍 全局规则（始终生效）
+│                         #    技术栈、目录结构、TypeScript 规范
+│
+├── routing-rules.mdc     # 🛣️ 路由规则（pages/** 生效）
+│                         #    页面结构、路由保护、认证流程
+│
+├── api-rules.mdc         # 🔌 API 规则（clients/** 生效）
+│                         #    HTTP 客户端、数据获取、错误处理
+│
+└── ui-rules.mdc          # 🎨 UI 规则（*.tsx 生效）
+                          #    组件使用、图标系统、主题配置
+```
+
+## 本章内容
+
+<Cards>
+  <Cards.Card title="⚙️ Rules 的工作原理" href="./how-rules-work" />
+  <Cards.Card title="✍️ Rules 编写最佳实践" href="./best-practices" />
+  <Cards.Card title="🚀 Rules 编写实战顺序" href="./development-sequence" />
+  <Cards.Card title="🤖 生成 Rules 的元提示词" href="./meta-prompt" />
+</Cards>
+
+## 参考规则集
+
+我们收集了一些经过验证的规则示例，可以作为你编写规则的参考：
+
+- [Vite + Shadcn/UI 规则集](/zh/rules/vite-shadcnui) - 完整的前端项目规则示例
+
+## 下一步
+
+准备好了吗？让我们先从 [Rules 的工作原理](./how-rules-work) 开始，理解规则如何影响 AI 的行为。

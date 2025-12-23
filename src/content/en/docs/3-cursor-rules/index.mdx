@@ -2,16 +2,67 @@
 title: "Cursor Rules"
 ---
 
+import { Cards } from 'nextra/components'
+
 # Cursor Rules
 
-> Make AI automatically follow team standards
+> Keep AI-generated code within controllable boundaries
+
+In previous chapters, we completed tool setup, tech stack selection, and scaffolding. Now that the project skeleton is in place, it's time to **make AI understand and follow your project standards**.
+
+## Core Concept: Rules as Constraints
+
+Cursor Rules are the "contract" between you and AI. Through clear rule definitions, you can:
+
+| Goal | Without Rules | With Rules |
+|------|---------------|------------|
+| **Code Style** | AI randomly chooses styles | Consistently follows project standards |
+| **Architecture** | Code may be misplaced | Automatically placed in correct directories |
+| **Tech Choices** | May use wrong libraries | Uses specified tech stack |
+| **Best Practices** | Different implementations each time | Consistent implementation patterns |
 
 ## Chapter Goals
 
-- Write project-level and personal-level Rules
-- Constrain coding style, architecture, layering, dependencies, and other key rules
+Through this chapter, you will master:
 
-## Content Coming Soon
+- **Writing principles** and best practices for Cursor Rules
+- What rules to write at **different stages** of project development
+- Using **meta prompts** to quickly generate rule frameworks
 
-This chapter is under development, stay tuned...
+## Layered Rule Design
 
+A complete rule system typically includes the following layers:
+
+```
+.cursor/rules/
+├── global-rules.mdc      # 🌍 Global Rules (always active)
+│                         #    Tech stack, directory structure, TypeScript standards
+│
+├── routing-rules.mdc     # 🛣️ Routing Rules (active for pages/**)
+│                         #    Page structure, route protection, auth flow
+│
+├── api-rules.mdc         # 🔌 API Rules (active for clients/**)
+│                         #    HTTP client, data fetching, error handling
+│
+└── ui-rules.mdc          # 🎨 UI Rules (active for *.tsx)
+                          #    Component usage, icon system, theme config
+```
+
+## Chapter Contents
+
+<Cards>
+  <Cards.Card title="⚙️ How Rules Work" href="./how-rules-work" />
+  <Cards.Card title="✍️ Rules Writing Best Practices" href="./best-practices" />
+  <Cards.Card title="🚀 Rules Development Sequence" href="./development-sequence" />
+  <Cards.Card title="🤖 Meta Prompts for Generating Rules" href="./meta-prompt" />
+</Cards>
+
+## Reference Rule Sets
+
+We've collected some verified rule examples that can serve as references for writing your rules:
+
+- [Vite + Shadcn/UI Rule Set](/en/rules/vite-shadcnui) - Complete frontend project rule examples
+
+## Next Steps
+
+Ready? Let's start with [How Rules Work](./how-rules-work) to understand how rules influence AI behavior.

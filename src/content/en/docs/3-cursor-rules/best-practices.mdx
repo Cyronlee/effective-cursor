@@ -1,0 +1,178 @@
+---
+title: "Rules Writing Best Practices"
+---
+
+# Cursor Rules Writing Best Practices
+
+> Make AI strictly follow your project's unique requirements
+
+## Core Philosophy
+
+The sole mission of Cursor Rules is: **Make AI-generated code conform to your project's unique standards**.
+
+Many people mistakenly think Rules should contain various "best practices" and general knowledge. In reality, large language models already know these. What you need to tell AI is: **In this project, we do it this way**.
+
+| Common Mistake | Correct Approach |
+|----------------|------------------|
+| ❌ "Use meaningful variable names" | ✅ "Use camelCase for variables, PascalCase for components" |
+| ❌ "Follow React best practices" | ✅ "All page components go in `src/pages/`, use default exports" |
+| ❌ "Write clean code" | ✅ "Use `@/` as import path prefix, avoid barrel exports" |
+
+## Six Core Principles
+
+### 1. Be Extremely Specific and Actionable
+
+Only write mandatory standards unique to your project, avoid vague descriptions.
+
+```markdown
+// ❌ Vague rules
+- Use TypeScript for type-safe development
+- Follow component design principles
+
+// ✅ Specific rules
+- Avoid `any`, use `unknown` for uncertain types
+- Use interface for object shapes, type for unions
+- Exported functions must specify return types
+```
+
+### 2. Keep It Short, Cut the Fluff
+
+Each rule should be 1-3 lines, single `.mdc` file should be 100-200 lines max.
+
+Common knowledge that LLMs already know doesn't need repeating. Things like "functions should have single responsibility" - AI already knows this.
+
+```markdown
+// ❌ Verbose explanation
+Date Formatting Guidelines: In this project, we use a unified date formatting 
+approach to ensure consistency across all date displays. When you need to 
+format dates, please make sure to use our wrapper utility function instead 
+of native APIs or third-party libraries directly...
+
+// ✅ Concise rule
+- Use `formatDate()` from `@/lib/date-time-utils.ts` for date formatting
+- Use `formatMoney()` from `@/lib/money-utils.ts` for money formatting
+```
+
+### 3. Split Files, Match Precisely
+
+Split rule files by topic in `.cursor/rules/` directory, use `globs` to limit scope.
+
+| Rule File | Scope | When Triggered |
+|-----------|-------|----------------|
+| `global-rules.mdc` | `alwaysApply: true` | Always active |
+| `routing-rules.mdc` | `globs: src/pages/**` | When editing page files |
+| `api-rules.mdc` | `globs: src/clients/**` | When editing API clients |
+| `ui-rules.mdc` | `globs: *.tsx` | When editing component files |
+
+```yaml
+# global-rules.mdc - Core standards always active
+---
+alwaysApply: true
+---
+
+# api-rules.mdc - Only active when editing API-related files
+---
+globs: src/clients/**
+alwaysApply: false
+---
+```
+
+### 4. Provide Concrete Examples
+
+Include import locations and code examples to reduce AI guessing and unify project standards.
+
+```markdown
+// ❌ Just telling
+- Use SWR for data fetching
+
+// ✅ Complete example
+## SWR Integration
+
+import useSWR from 'swr'
+import { getUserInfo, getUserInfoKey } from '@/clients/user/get-user-info'
+
+const { data, error, isLoading } = useSWR(
+  getUserInfoKey(id),
+  () => getUserInfo(id)
+)
+```
+
+### 5. Start Small, Iterate Fast
+
+Don't try to write perfect rules from the start.
+
+| Phase | Action |
+|-------|--------|
+| **Start** | Add 3-5 rules for current pain points |
+| **Test** | Immediately test AI output |
+| **Iterate** | Supplement or adjust based on issues |
+
+When you find AI repeatedly making the same mistake, that's the time to add a new rule.
+
+### 6. Configure Toolchain
+
+Let AI automatically run toolchain verification after completing tasks.
+
+```markdown
+## Quality Standards
+
+- Ensure `npm run lint` and `npm run build` passes before commits
+- Run `npm test` to verify changes don't break existing functionality
+```
+
+## Rule Structure Template
+
+A complete rule file typically contains these sections:
+
+```markdown
+---
+globs: src/components/**
+alwaysApply: false
+---
+
+# [Rule Name]
+
+## [Category 1]
+- Specific rule item
+- Another rule
+
+## [Category 2]
+
+### Example
+Code example...
+
+## Related Files
+- `@/lib/xxx.ts` - Description
+- `@/types/xxx.ts` - Description
+```
+
+## Team Collaboration
+
+Project rules must be committed to Git, this ensures:
+
+- All team members use the same rules
+- Rule changes have traceable history
+- New members can quickly understand project standards
+
+```
+.cursor/
+└── rules/
+    ├── global-rules.mdc
+    ├── routing-rules.mdc
+    ├── ui-rules.mdc
+    └── api-rules.mdc
+```
+
+## Reference Examples
+
+Check out our collected complete rule examples:
+
+- [Global Rules Example](/en/rules/vite-shadcnui/global-rules) - Tech stack, directory structure, TypeScript standards
+- [API Rules Example](/en/rules/vite-shadcnui/api-rules) - API client architecture, SWR integration
+- [Routing Rules Example](/en/rules/vite-shadcnui/routing-rules) - Page structure, route protection
+- [UI Rules Example](/en/rules/vite-shadcnui/ui-rules) - Component usage, icon system
+
+## Next Steps
+
+Now that you understand the writing principles, let's see [when to write these rules during development](./development-sequence).
+

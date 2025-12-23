@@ -21,11 +21,11 @@ export default {
   //   },
   // },
   docs: {
-    title: '文档',
+    title: '使用手册',
     type: 'page',
   },
   rules: {
-    title: 'Cursor Rules',
+    title: 'Cursor Rules 规则集合',
     type: 'page',
   },
   // upgrade: {
