@@ -1,0 +1,83 @@
+---
+title: "API Rules"
+---
+
+# API Rules
+
+This rule targets API client files in the `src/clients/**` directory, defining best practices for API architecture, SWR data fetching, HTTP method usage, and error handling. Through unified API calling patterns, it ensures consistency and maintainability at the data layer.
+
+````mdc filename="api-rules.mdc"
+---
+globs: src/clients/**
+alwaysApply: false
+---
+
+# API Client Rules
+
+## API Client Architecture
+
+- Singleton pattern: Use single `apiClient` instance exported from `@/lib/api-client`
+- Method organization: Create separate client functions in `/src/clients/` organized by feature
+- Generic typing: Use TypeScript generics for type-safe API responses
+- Interceptor setup: Handle auth tokens and errors globally in ApiClient class
+
+```ts
+import { apiClient, isMockResponse } from '@/lib/api-client'
+import type { UserInfo } from '@/types/user'
+
+const mockResponse: UserInfo = {...}
+
+export const getUserInfoKey = ...
+
+export const getUserInfo = async (): Promise<UserInfo> => {
+  if (isMockResponse()) {
+    return mockResponse
+  }
+  return apiClient.get<UserInfo>('/api/user-info')
+}
+```
+
+## SWR Integration
+
+```ts
+import useSWR, { mutate } from 'swr'
+import { getUserInfo, getUserInfoKey } from '@/clients/user/get-user-info'
+
+// In component
+const { data, error, isLoading } = useSWR(
+  getUserInfoKey(id),
+  () => getUserInfo(id)
+  // DO NOT add custom options, already added in the global config
+)
+// Refresh: mutate(getUserInfoKey(id))
+```
+
+## HTTP Methods
+
+```ts
+// ✅ HTTP method usage
+const user = await apiClient.get<UserInfo>('/api/user/123')
+const { data, pagination } =
+  await apiClient.getPaginated<Project>('/api/projects')
+const created = await apiClient.post<Project>('/api/projects', projectData)
+```
+
+## Error Handling
+
+```ts
+// ✅ Error handling pattern
+import { toast } from 'sonner'
+
+try {
+  const data = await getUserInfo()
+  toast.success('Data loaded successfully')
+} catch (error) {
+  if (error instanceof ApiError) {
+    toast.error(error.message, {
+      description: 'Please try again later.',
+    })
+  }
+}
+```
+````
+

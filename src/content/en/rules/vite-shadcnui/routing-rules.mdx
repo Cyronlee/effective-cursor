@@ -1,0 +1,51 @@
+---
+title: "Routing Rules"
+---
+
+# Routing Rules
+
+This rule targets route page files in the `src/pages/**` directory, defining best practices for page structure, route protection, and user authentication. Working with React Router and Okta authentication, it ensures code standards and security at the routing layer.
+
+````mdc filename="routing-rules.mdc"
+---
+globs: src/pages/**
+alwaysApply: false
+---
+
+# Routing & Page Rules
+
+## Page Structure
+
+- File naming: `page.tsx` for routes, `[id].tsx` for dynamic routes
+- All pages in `/src/pages/` with nested folders
+- Default exports with descriptive names
+- Define all routes in `App.tsx`
+
+## Route Protection
+
+- Wrap authenticated routes with `<ProtectedRoute>`
+- Handles Okta auth check and user info fetching
+- Auto-redirect unauthenticated users to login
+- Show loading UI during auth initialization
+
+```tsx
+<Route
+  path="/dashboard"
+  element={
+    <ProtectedRoute>
+      <DashboardPage />
+    </ProtectedRoute>
+  }
+/>
+```
+
+## Current User Access
+
+```tsx
+import { useAuthStore } from '@/stores/auth'
+
+const { user, isLoading } = useAuthStore()
+if (!user) return <LoadingComponent />
+```
+````
+

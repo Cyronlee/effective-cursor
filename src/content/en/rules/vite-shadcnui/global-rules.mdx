@@ -1,0 +1,75 @@
+---
+title: "Global Rules"
+---
+
+# Global Rules
+
+This rule defines the core tech stack, directory structure, and development standards for Vite + React + TypeScript projects. By setting `alwaysApply: true`, these rules are always active throughout the project, providing a foundation for code quality and consistency.
+
+````mdc filename="global-rules.mdc"
+---
+alwaysApply: true
+---
+
+# Global Rules
+
+## Tech Stack
+
+- Vite
+- React
+- TypeScript
+- Tailwind CSS
+- Shadcn/ui
+- React Router
+- Zustand
+- Okta Auth
+
+## Directory Structure
+
+```
+/src/
+├── pages/                # Route pages (page.tsx, [id].tsx)
+├── components/
+├── lib/                  # Core utilities
+│   ├── api-client.ts     # HTTP client setup
+│   ├── api-error.ts      # Error handling
+│   ├── date-time-utils.ts # Date formatting utilities
+│   ├── env.ts            # Environment config
+│   ├── okta.ts           # Okta configuration
+│   └── utils.ts          # General utilities
+├── stores/               # Zustand stores
+│   └── auth.ts           # Authentication state
+├── types/                # TypeScript definitions
+│   ├── api.ts            # API response types
+│   └── user.ts           # User data types
+├── clients/              # API client functions
+│   └── {group}/
+│       └── {single-api-client}.ts
+└── hooks/                # Custom React hooks
+    └── {useXxx}.ts
+```
+
+## TypeScript Standards
+
+- Avoid `any`, use `unknown` for uncertain types
+- Use interfaces for object shapes, types for unions
+- Start with base interface, use `extends`, `Pick`, `Omit`, and `Partial` for detailed variants
+- Specify return types for exported functions
+
+## Import Conventions
+
+- Use `@/` prefix for internal imports
+- Use `import type` for type-only imports
+- Import directly from source files, avoid barrel exports
+
+## Formatting Standards
+
+- Use `formatDate()` from `@/lib/date-time-utils.ts` for consistent date formatting
+- Use `formatMoney()` from `@/lib/money-utils.ts` for consistent money formatting
+
+## Quality Standards
+
+- Ensure `npm run lint` and `npm run build` passes before commits
+- All in English
+````
+

@@ -1,0 +1,50 @@
+---
+title: "路由规则"
+---
+
+# 路由规则
+
+本规则针对 `src/pages/**` 目录下的路由页面文件，定义了页面结构、路由保护和用户认证的最佳实践。配合 React Router 和 Okta 认证，确保路由层的代码规范和安全性。
+
+````mdc filename="routing-rules.mdc"
+---
+globs: src/pages/**
+alwaysApply: false
+---
+
+# Routing & Page Rules
+
+## Page Structure
+
+- File naming: `page.tsx` for routes, `[id].tsx` for dynamic routes
+- All pages in `/src/pages/` with nested folders
+- Default exports with descriptive names
+- Define all routes in `App.tsx`
+
+## Route Protection
+
+- Wrap authenticated routes with `<ProtectedRoute>`
+- Handles Okta auth check and user info fetching
+- Auto-redirect unauthenticated users to login
+- Show loading UI during auth initialization
+
+```tsx
+<Route
+  path="/dashboard"
+  element={
+    <ProtectedRoute>
+      <DashboardPage />
+    </ProtectedRoute>
+  }
+/>
+```
+
+## Current User Access
+
+```tsx
+import { useAuthStore } from '@/stores/auth'
+
+const { user, isLoading } = useAuthStore()
+if (!user) return <LoadingComponent />
+```
+````

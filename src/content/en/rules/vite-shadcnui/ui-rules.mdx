@@ -1,0 +1,53 @@
+---
+title: "UI Rules"
+---
+
+# UI Rules
+
+This rule targets all `*.tsx` component files, standardizing the use of Shadcn/UI components, icon library selection, and notification system implementation. Through unified UI standards, it ensures interface style consistency and smooth user experience.
+
+````mdc filename="ui-rules.mdc"
+---
+globs: *.tsx
+alwaysApply: false
+---
+
+# UI & Component Rules
+
+## Shadcn/UI Base Components
+
+- Color theme: Use `zinc` color palette
+- Base Component: Choose proper ui components from `@/components/ui/`
+- Do not use Card component unless I request it
+
+## Custom Components
+
+- Class combination: Always provide `className` prop and use `cn()` utility to merge Tailwind classes
+
+## Icon Standards
+
+- Iconify React: Use `import { Icon } from "@iconify/react"` for all icons
+- Lucide preference: Default to Lucide icons: `<Icon icon="lucide:circle-user" />`
+- Custom SVGs: Store custom SVG icons as separate `.tsx` files in `@/components/icon/`
+
+## Toast Notifications
+
+- Sonner library: Use `import { toast } from 'sonner'` for all notifications
+- Toast types: Use semantic methods: `toast.success()`, `toast.error()`, `toast.info()`, `toast.warning()`
+
+## ui/calendar default
+
+Add `timeZone`, `defaultMonth`, `startMonth`, `endMonth` props as default:
+
+```
+<Calendar
+  ...
+  timeZone="UTC"
+  defaultMonth={defaultMonth}
+  startMonth={new Date(2000, 1)}
+  endMonth={new Date(new Date().getFullYear() + 10, 12)}
+  ...
+/>
+```
+````
+

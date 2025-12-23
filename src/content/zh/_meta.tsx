@@ -24,6 +24,10 @@ export default {
     title: '文档',
     type: 'page',
   },
+  rules: {
+    title: 'Cursor Rules',
+    type: 'page',
+  },
   // upgrade: {
   //   title: (
   //     <span className="flex items-center leading-[1]">

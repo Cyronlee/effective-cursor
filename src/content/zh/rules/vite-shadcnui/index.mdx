@@ -1,0 +1,52 @@
+---
+title: "Vite + Shadcn/UI 规则集"
+---
+
+import { FileTree } from 'nextra/components'
+
+# Vite + Shadcn/UI 规则集
+
+这是一套针对 Vite + React + TypeScript + Shadcn/UI 技术栈的 Cursor Rules 规则集合。通过将项目规范转化为 AI 可理解的规则，让 Cursor 在开发过程中自动遵循团队的技术标准和最佳实践。
+
+## 规则概览
+
+| 规则文件 | 适用范围 | 核心内容 | 作用 |
+|---------|---------|---------|------|
+| **全局规则**<br/>`global-rules.mdc` | 整个项目<br/>`alwaysApply: true` | 技术栈定义、目录结构<br/>TypeScript 规范、导入约定 | 确保项目的基础架构<br/>和代码风格保持一致 |
+| **路由规则**<br/>`routing-rules.mdc` | `src/pages/**` | 页面文件结构、路由保护<br/>用户认证 | 规范路由层的代码组织<br/>和安全实践 |
+| **UI 规则**<br/>`ui-rules.mdc` | `*.tsx` | Shadcn/UI 组件使用<br/>图标系统、通知系统 | 统一 UI 组件的使用方式<br/>和界面风格 |
+| **API 规则**<br/>`api-rules.mdc` | `src/clients/**` | API 客户端架构、SWR 集成<br/>HTTP 方法、错误处理 | 规范 API 调用方式<br/>和数据获取模式 |
+
+## 使用方法
+
+将这些规则文件添加到项目的 `.cursor/rules/` 目录中，Cursor 会根据文件路径和 `globs` 配置自动应用相应的规则：
+
+<FileTree>
+  <FileTree.Folder name=".cursor" defaultOpen>
+    <FileTree.Folder name="rules" defaultOpen>
+      <FileTree.File name="global-rules.mdc" />
+      <FileTree.File name="routing-rules.mdc" />
+      <FileTree.File name="ui-rules.mdc" />
+      <FileTree.File name="api-rules.mdc" />
+    </FileTree.Folder>
+  </FileTree.Folder>
+</FileTree>
+
+## 规则特点
+
+- **分层设计**: 通过 `alwaysApply` 和 `globs` 实现规则的精确作用域控制
+- **技术栈绑定**: 专门针对 Vite + React + Shadcn/UI 生态系统优化
+- **最佳实践**: 包含 TypeScript 规范、代码组织和安全认证等最佳实践
+- **团队协作**: 将隐性知识显性化，降低新成员的学习成本
+
+## 扩展建议
+
+根据项目需求，可以继续添加其他规则文件：
+
+- **状态管理规则**: 针对 `src/stores/**` 的 Zustand store 规范
+- **测试规则**: 针对测试文件的编写规范
+- **样式规则**: 针对 Tailwind CSS 的使用规范
+- **表单规则**: 针对 React Hook Form 的表单处理规范
+
+这样可以构建一个完整的、分层的规则体系，让 AI 助手更好地理解和遵循项目规范。
+

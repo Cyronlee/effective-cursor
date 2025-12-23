@@ -1,0 +1,39 @@
+---
+title: "Cursor Rules"
+---
+
+import { Callout } from 'nextra/components'
+
+# Cursor Rules Collection
+
+<Callout type="info">
+This collection contains Cursor Rules configurations for different project types, serving as reference templates for your projects.
+</Callout>
+
+## What are Cursor Rules?
+
+Cursor Rules are project-level configuration rules in Cursor AI editor. By defining specifications in the `.cursorrules` file, you can help AI better understand your project structure, tech stack, and coding style, resulting in code that better matches your project requirements.
+
+## How to Use?
+
+1. **Browse Rule Sets**: Select your project type from the left navigation (e.g., Next.js + shadcn/ui)
+2. **View Rule Details**: Each project type contains multiple rule files covering different aspects
+3. **Copy to Project**: Use the copy button in the Playground component to copy rules to your `.cursorrules` file
+4. **Customize as Needed**: Modify and customize these rules based on your actual project requirements
+
+## Rule Categories
+
+### Global Rules
+- Universal specifications applicable to the entire project
+- Includes tech stack, directory structure, coding standards, etc.
+- Typically set with `alwaysApply: true`
+
+### Specific Rules
+- Rules targeting specific file types or directories
+- Specify application scope through the `globs` field
+- Such as routing rules, UI component rules, etc.
+
+## Contribute Rules
+
+If you have quality Cursor Rules to share, feel free to submit a PR to our [GitHub repository](https://github.com/cyronlee/effective-cursor).
+

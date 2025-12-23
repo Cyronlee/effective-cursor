@@ -1,0 +1,52 @@
+---
+title: "Vite + Shadcn/UI Rules"
+---
+
+import { FileTree } from 'nextra/components'
+
+# Vite + Shadcn/UI Rules
+
+This is a comprehensive Cursor Rules collection for Vite + React + TypeScript + Shadcn/UI stack. By transforming project conventions into AI-understandable rules, Cursor automatically follows your team's technical standards and best practices during development.
+
+## Rules Overview
+
+| Rule File | Scope | Content | Purpose |
+|-----------|-------|---------|---------|
+| **Global Rules**<br/>`global-rules.mdc` | Entire project<br/>`alwaysApply: true` | Tech stack definition, directory structure<br/>TypeScript standards, import conventions | Ensure consistency in project<br/>architecture and code style |
+| **Routing Rules**<br/>`routing-rules.mdc` | `src/pages/**` | Page file structure, route protection<br/>User authentication | Standardize code organization<br/>and security practices at routing layer |
+| **UI Rules**<br/>`ui-rules.mdc` | `*.tsx` | Shadcn/UI component usage<br/>Icon system, notification system | Unify UI component usage<br/>and interface style |
+| **API Rules**<br/>`api-rules.mdc` | `src/clients/**` | API client architecture, SWR integration<br/>HTTP methods, error handling | Standardize API calling patterns<br/>and data fetching practices |
+
+## How to Use
+
+Add these rule files to your project's `.cursor/rules/` directory, and Cursor will automatically apply the corresponding rules based on file paths and `globs` configuration:
+
+<FileTree>
+  <FileTree.Folder name=".cursor" defaultOpen>
+    <FileTree.Folder name="rules" defaultOpen>
+      <FileTree.File name="global-rules.mdc" />
+      <FileTree.File name="routing-rules.mdc" />
+      <FileTree.File name="ui-rules.mdc" />
+      <FileTree.File name="api-rules.mdc" />
+    </FileTree.Folder>
+  </FileTree.Folder>
+</FileTree>
+
+## Key Features
+
+- **Layered Design**: Precise scope control through `alwaysApply` and `globs`
+- **Stack-Specific**: Optimized specifically for Vite + React + Shadcn/UI ecosystem
+- **Best Practices**: Includes TypeScript standards, code organization, and security authentication
+- **Team Collaboration**: Makes implicit knowledge explicit, reducing onboarding time for new members
+
+## Extension Suggestions
+
+You can add more rule files based on project needs:
+
+- **State Management Rules**: Zustand store conventions for `src/stores/**`
+- **Testing Rules**: Test file writing standards
+- **Style Rules**: Tailwind CSS usage conventions
+- **Form Rules**: React Hook Form handling standards
+
+This approach builds a complete, layered rule system that helps AI assistants better understand and follow project conventions.
+
