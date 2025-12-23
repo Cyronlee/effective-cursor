@@ -1,0 +1,322 @@
+---
+title: "静态分析工具"
+---
+
+# 静态分析工具
+
+> 让成熟的 Linter 为 AI 生成的代码把关
+
+## 核心理念
+
+在 AI 辅助开发中，成熟的静态分析工具（如 ESLint、Ruff、SpotBugs 等）的作用**并非被 AI 取代**，而是作为可靠的外部校验机制，融入 Agent 的反馈循环。
+
+### 分工协作模型
+
+```
+┌─────────────────────────────────────────────────────────┐
+│                    AI + Linter 协作闭环                   │
+├─────────────────────────────────────────────────────────┤
+│                                                         │
+│   AI Agent ──生成代码──> Linter ──反馈报告──> AI Agent   │
+│      │                                          │       │
+│      │                                          │       │
+│      └────────────── 修复并重试 ─────────────────┘       │
+│                                                         │
+│                   直至所有检查通过                        │
+│                                                         │
+└─────────────────────────────────────────────────────────┘
+```
+
+| 角色 | 擅长的事 |
+|-----|---------|
+| **AI** | 快速生成代码、实现新功能、探索多种方案 |
+| **Linter** | 精准捕捉风格不一致、潜在 bug、安全漏洞、性能问题 |
+
+这种分工比 "全交给 AI 自我检查" 更高效、更可靠：
+
+- Linter 提供**确定性、高覆盖率**的反馈
+- 避免 AI 的幻觉或主观偏差
+- 符合现代工程实践（CI/CD、预提交钩子）
+
+## JavaScript / TypeScript
+
+### ESLint + Prettier
+
+```bash
+# 安装
+npm install -D eslint prettier eslint-config-prettier @typescript-eslint/parser @typescript-eslint/eslint-plugin
+
+# 或使用 bun
+bun add -D eslint prettier eslint-config-prettier @typescript-eslint/parser @typescript-eslint/eslint-plugin
+```
+
+**eslint.config.js (Flat Config)**
+
+```javascript
+import eslint from '@eslint/js';
+import tseslint from 'typescript-eslint';
+import prettier from 'eslint-config-prettier';
+
+export default tseslint.config(
+  eslint.configs.recommended,
+  ...tseslint.configs.recommended,
+  prettier,
+  {
+    rules: {
+      '@typescript-eslint/no-unused-vars': 'error',
+      '@typescript-eslint/no-explicit-any': 'warn',
+      '@typescript-eslint/explicit-function-return-type': 'off',
+    },
+  },
+  {
+    ignores: ['node_modules', 'dist', '.next'],
+  }
+);
+```
+
+**与 AI 协作的关键配置**
+
+```javascript
+{
+  rules: {
+    // 这些规则对 AI 生成代码特别有用
+    'no-console': 'warn',           // AI 常留下调试代码
+    'no-unused-vars': 'error',      // AI 可能生成未使用变量
+    'prefer-const': 'error',        // 保持代码一致性
+    'no-duplicate-imports': 'error' // AI 可能重复导入
+  }
+}
+```
+
+### Biome（新一代工具）
+
+更快的替代方案，集成 lint 和 format：
+
+```bash
+bun add -D @biomejs/biome
+```
+
+**biome.json**
+
+```json
+{
+  "$schema": "https://biomejs.dev/schemas/1.4.1/schema.json",
+  "organizeImports": { "enabled": true },
+  "linter": {
+    "enabled": true,
+    "rules": { "recommended": true }
+  },
+  "formatter": {
+    "enabled": true,
+    "indentStyle": "space",
+    "indentWidth": 2
+  }
+}
+```
+
+## Python
+
+### Ruff（推荐）
+
+Ruff 是 Python 生态中最快的 linter，兼容 Flake8、isort 等规则：
+
+```bash
+pip install ruff
+```
+
+**pyproject.toml**
+
+```toml
+[tool.ruff]
+target-version = "py311"
+line-length = 88
+select = [
+    "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings
+    "F",   # Pyflakes
+    "I",   # isort
+    "B",   # flake8-bugbear
+    "C4",  # flake8-comprehensions
+    "UP",  # pyupgrade
+]
+ignore = ["E501"]  # line too long (handled by formatter)
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+```
+
+### MyPy（类型检查）
+
+```bash
+pip install mypy
+```
+
+**pyproject.toml**
+
+```toml
+[tool.mypy]
+python_version = "3.11"
+strict = true
+warn_return_any = true
+warn_unused_ignores = true
+disallow_untyped_defs = true
+```
+
+## Java
+
+### SpotBugs + Checkstyle
+
+**pom.xml (Maven)**
+
+```xml
+<build>
+  <plugins>
+    <!-- SpotBugs -->
+    <plugin>
+      <groupId>com.github.spotbugs</groupId>
+      <artifactId>spotbugs-maven-plugin</artifactId>
+      <version>4.8.2.0</version>
+      <configuration>
+        <effort>Max</effort>
+        <threshold>Low</threshold>
+      </configuration>
+    </plugin>
+    
+    <!-- Checkstyle -->
+    <plugin>
+      <groupId>org.apache.maven.plugins</groupId>
+      <artifactId>maven-checkstyle-plugin</artifactId>
+      <version>3.3.1</version>
+      <configuration>
+        <configLocation>checkstyle.xml</configLocation>
+      </configuration>
+    </plugin>
+  </plugins>
+</build>
+```
+
+## 预提交钩子
+
+使用 Git Hooks 在提交前自动运行检查：
+
+### Husky + lint-staged (JS/TS)
+
+```bash
+npm install -D husky lint-staged
+npx husky init
+```
+
+**.husky/pre-commit**
+
+```bash
+npx lint-staged
+```
+
+**package.json**
+
+```json
+{
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": ["eslint --fix", "prettier --write"],
+    "*.{json,md}": ["prettier --write"]
+  }
+}
+```
+
+### pre-commit (Python)
+
+```bash
+pip install pre-commit
+```
+
+**.pre-commit-config.yaml**
+
+```yaml
+repos:
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.1.9
+    hooks:
+      - id: ruff
+        args: [--fix]
+      - id: ruff-format
+  
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.8.0
+    hooks:
+      - id: mypy
+```
+
+## 编辑器集成
+
+确保静态分析工具与 Cursor 集成，实现**实时反馈**：
+
+### VS Code / Cursor 设置
+
+```json
+{
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit",
+    "source.organizeImports": "explicit"
+  },
+  "eslint.validate": ["javascript", "typescript", "javascriptreact", "typescriptreact"],
+  "[python]": {
+    "editor.defaultFormatter": "charliermarsh.ruff",
+    "editor.codeActionsOnSave": {
+      "source.fixAll.ruff": "explicit",
+      "source.organizeImports.ruff": "explicit"
+    }
+  }
+}
+```
+
+## AI 协作最佳实践
+
+### 1. 将 Lint 错误反馈给 AI
+
+当 AI 生成的代码有 lint 错误时，将完整报告提供给它：
+
+```
+ESLint 报告了以下错误：
+1. 'useState' is defined but never used (@typescript-eslint/no-unused-vars)
+2. 'any' type is not allowed (@typescript-eslint/no-explicit-any)
+
+请修复这些问题。
+```
+
+### 2. 在 Cursor Rules 中声明工具链
+
+```markdown
+## 代码质量
+
+- ESLint 和 Prettier 已配置
+- 所有代码必须通过 `npm run lint` 检查
+- 提交前会自动运行 lint-staged
+```
+
+### 3. 自动修复流程
+
+```bash
+# 让 AI 生成的代码自动修复
+npm run lint -- --fix
+
+# 或 Python
+ruff check --fix .
+ruff format .
+```
+
+## 工具选择速查表
+
+| 语言 | Linter | Formatter | 类型检查 |
+|-----|--------|-----------|---------|
+| TypeScript | ESLint / Biome | Prettier / Biome | TypeScript |
+| Python | Ruff | Ruff / Black | MyPy / Pyright |
+| Java | SpotBugs | Google Java Format | Java Compiler |
+| Go | golangci-lint | gofmt | Go Compiler |
+| Rust | Clippy | rustfmt | Rust Compiler |
+
+## 下一步
+
+静态分析工具配置完成后，接下来设置[自动化测试框架](./automated-testing)来验证功能正确性。
+

@@ -1,19 +1,56 @@
 ---
-title: "Scaffolding"
+title: "Engineering Foundation"
 ---
 
-# Scaffolding
+# Engineering Foundation
 
-> Establish engineering foundation
+> Establish engineering foundation to lay a solid architecture for AI development
 
 ## Chapter Goals
 
-- Configure Lint/Format
-- Set up automated testing framework
-- CI/CD pipeline
-- Ensure AI-generated code is trustworthy and deployable
+In the era of AI-assisted development, many believe they can let AI "freely explore" to build systems. However, practice has shown that **without a solid engineering foundation, AI tends to introduce deviations, technical debt, or low-quality output**.
 
-## Content Coming Soon
+This chapter introduces how to establish engineering foundations for AI development:
 
-This chapter is under development, stay tuned...
+| Section | Content | Core Concept |
+|---------|---------|--------------|
+| [Engineering Architecture](./engineering-architecture) | Architecture first, modular design | Humans lay foundation, AI builds |
+| [Architecture Design](./architecture-design) | Directory structure, strong typing, interface contracts | Constraints are freedom |
+| [Static Analysis Tools](./static-analysis) | ESLint, Ruff, SpotBugs | Deterministic feedback |
+| [Automated Testing](./automated-testing) | Vitest, PyTest, Playwright | Verify correctness |
+| [CI/CD Pipeline](./ci-cd) | GitHub Actions, pipelines | Automated loop |
 
+## Core Concepts
+
+### 🏗️ Architecture First
+
+Imagine a restaurant: the kitchen layout (system architecture) must be carefully planned by humans before the culinary team (AI) can operate efficiently.
+
+**Humans must manually establish a solid architectural foundation** for AI to run efficiently on safe tracks.
+
+### 🔄 Feedback Loop
+
+```
+AI generates code → Tools detect issues → Feedback to AI → AI fixes → Re-check → Pass
+```
+
+Traditional tools (Linters, tests) provide **deterministic, high-coverage** feedback, avoiding AI hallucinations or subjective bias.
+
+### 📏 Constraints Are Freedom
+
+Architecture designed for AI development is not about letting AI "freely explore," but building:
+
+- **Strict Rules**: Clear type definitions, interface contracts, code standards
+- **Fast Feedback**: Real-time lint checks, type validation, test runs
+- **Small Iterations**: Modular design, handling one small task at a time
+
+## Key Principles
+
+1. **Humans handle architecture, AI handles implementation** — Architecture decisions require global perspective and long-term thinking
+2. **Tools provide feedback, AI responds with fixes** — Create a continuous improvement loop
+3. **Clearer constraints, more efficient AI** — Clear rules beat vague guidance
+4. **Small iterations, frequent validation** — Every change should be testable and reversible
+
+## Next Steps
+
+Ready? Let's start with [Engineering Architecture](./engineering-architecture) to understand how to lay a solid architectural foundation for AI development.

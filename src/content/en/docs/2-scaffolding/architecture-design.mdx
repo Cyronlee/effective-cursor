@@ -1,0 +1,272 @@
+---
+title: "Architecture Design"
+---
+
+# Architecture Design
+
+> Providing a solid architectural foundation for AI development
+
+Architecture designed for AI development is not about letting AI "freely explore," but building a **strict rules + fast feedback + small iterations** constrained environment, allowing AI Agents to run efficiently on safe tracks.
+
+## Modular Design
+
+Modularity is the cornerstone of AI-friendly architecture. Each module should:
+
+- **Single Responsibility**: Do one thing and do it well
+- **Clear Boundaries**: Explicit inputs and outputs
+- **Explicit Dependencies**: Clear dependency graph
+
+### Frontend Modular Example
+
+```
+src/
+├── features/              # Feature modules (by business domain)
+│   ├── auth/
+│   │   ├── components/    # Module components
+│   │   │   ├── LoginForm.tsx
+│   │   │   └── SignupForm.tsx
+│   │   ├── hooks/         # Module hooks
+│   │   │   └── useAuth.ts
+│   │   ├── api/           # Module API calls
+│   │   │   └── authApi.ts
+│   │   ├── types.ts       # Module type definitions
+│   │   └── index.ts       # Module public interface
+│   └── dashboard/
+│       └── ...
+├── shared/                # Cross-module shared
+│   ├── ui/               # Common UI components
+│   ├── hooks/            # Common hooks
+│   └── utils/            # Utility functions
+└── core/                  # Core infrastructure
+    ├── api/              # API client configuration
+    ├── config/           # App configuration
+    └── providers/        # Context Providers
+```
+
+### Backend Modular Example
+
+```
+src/
+├── modules/              # Business modules
+│   ├── user/
+│   │   ├── user.controller.ts
+│   │   ├── user.service.ts
+│   │   ├── user.repository.ts
+│   │   ├── user.entity.ts
+│   │   ├── user.dto.ts
+│   │   └── user.module.ts
+│   └── order/
+│       └── ...
+├── common/               # Common modules
+│   ├── decorators/
+│   ├── guards/
+│   ├── interceptors/
+│   └── filters/
+└── infrastructure/       # Infrastructure
+    ├── database/
+    ├── cache/
+    └── messaging/
+```
+
+## Directory Structure Standards
+
+### Naming Conventions
+
+| Type | Convention | Example |
+|------|-----------|---------|
+| Folders | kebab-case | `user-management/` |
+| Component Files | PascalCase | `UserProfile.tsx` |
+| Utility Functions | camelCase | `formatDate.ts` |
+| Type Files | kebab-case | `user.types.ts` |
+| Test Files | Original name + .test | `UserProfile.test.tsx` |
+
+### Entry File Convention
+
+Each module uses `index.ts` as its public interface:
+
+```typescript
+// features/auth/index.ts
+export { LoginForm } from './components/LoginForm';
+export { useAuth } from './hooks/useAuth';
+export type { User, AuthState } from './types';
+
+// Don't export internal implementation details
+```
+
+## Strong Type System
+
+Types are the best guide for AI to understand code.
+
+### TypeScript Best Practices
+
+```typescript
+// ✅ Good practice: Explicit type definitions
+interface CreateUserInput {
+  email: string;
+  password: string;
+  name: string;
+  role?: UserRole;
+}
+
+interface User {
+  id: string;
+  email: string;
+  name: string;
+  role: UserRole;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+type UserRole = 'admin' | 'user' | 'guest';
+
+// AI can accurately understand function signatures
+async function createUser(input: CreateUserInput): Promise<User> {
+  // implementation...
+}
+
+// ❌ Avoid: any types
+async function createUser(input: any): Promise<any> {
+  // AI cannot understand expected behavior
+}
+```
+
+### Type-Driven Development
+
+```typescript
+// 1. Define type contracts first
+interface OrderService {
+  createOrder(items: OrderItem[]): Promise<Order>;
+  getOrder(id: string): Promise<Order | null>;
+  cancelOrder(id: string): Promise<void>;
+}
+
+// 2. AI implements based on contracts
+class OrderServiceImpl implements OrderService {
+  async createOrder(items: OrderItem[]): Promise<Order> {
+    // AI can implement accurately because types are clear
+  }
+  // ...
+}
+```
+
+## Interfaces and Contracts
+
+### API Contract Definition
+
+Use OpenAPI/Swagger or tRPC to define clear API contracts:
+
+```typescript
+// tRPC example: Type-safe API
+import { z } from 'zod';
+import { router, publicProcedure } from './trpc';
+
+const userRouter = router({
+  getUser: publicProcedure
+    .input(z.object({ id: z.string() }))
+    .output(z.object({
+      id: z.string(),
+      name: z.string(),
+      email: z.string(),
+    }))
+    .query(async ({ input }) => {
+      // Types are fully inferred
+    }),
+
+  createUser: publicProcedure
+    .input(z.object({
+      name: z.string().min(2),
+      email: z.string().email(),
+    }))
+    .mutation(async ({ input }) => {
+      // AI knows the exact type of input
+    }),
+});
+```
+
+### Database Schema Contract
+
+```typescript
+// Prisma Schema example
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String
+  posts     Post[]
+  profile   Profile?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// Auto-generated types can be used directly
+import { User, Post } from '@prisma/client';
+```
+
+## Documentation and Self-Description
+
+### Self-Describing Code
+
+```typescript
+// Use JSDoc to enhance AI understanding
+/**
+ * Creates a new user account
+ * @param input - User registration information
+ * @returns Created user object (without password)
+ * @throws {ConflictError} When email is already registered
+ * @example
+ * const user = await createUser({
+ *   email: 'user@example.com',
+ *   password: 'securePassword123',
+ *   name: 'John Doe'
+ * });
+ */
+async function createUser(input: CreateUserInput): Promise<User> {
+  // AI can understand boundary conditions and expected behavior from docs
+}
+```
+
+### README-Driven Development
+
+Each module should have a concise README:
+
+```markdown
+# Auth Module
+
+## Responsibility
+Handles user authentication, authorization, and session management.
+
+## Main Exports
+- `LoginForm` - Login form component
+- `useAuth` - Authentication state hook
+- `authApi` - Authentication API client
+
+## Dependencies
+- `@/core/api` - API infrastructure
+- `@/shared/ui` - Common UI components
+
+## Usage Example
+\```tsx
+import { LoginForm, useAuth } from '@/features/auth';
+
+function App() {
+  const { user, isLoading } = useAuth();
+  // ...
+}
+\```
+```
+
+## Architecture Checklist
+
+Before starting AI-assisted development, ensure:
+
+- [ ] Directory structure is planned, following modularity principles
+- [ ] TypeScript strict mode is enabled
+- [ ] Core types and interfaces are defined
+- [ ] API contracts are clear
+- [ ] Database schema is designed
+- [ ] Shared modules and utility functions are organized
+- [ ] Code standards are configured (ESLint, Prettier)
+
+## Next Steps
+
+After completing architecture design, configure [Static Analysis Tools](./static-analysis) to provide real-time feedback.
+

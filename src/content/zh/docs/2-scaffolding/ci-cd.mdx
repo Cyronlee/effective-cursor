@@ -1,0 +1,362 @@
+---
+title: "CI/CD 流程"
+---
+
+# CI/CD 流程
+
+> 构建多层防护 + 智能修复的自动化闭环
+
+## 核心理念
+
+在 CI/CD 管道中，将成熟的工程工具链与 AI Agent 深度集成，能构建一个**多层防护 + 智能修复**的自动化闭环，显著降低 AI 生成代码的风险，确保交付物始终保持生产级质量。
+
+### AI 增强的 CI/CD 模型
+
+```
+┌──────────────────────────────────────────────────────────────────┐
+│                     AI 增强的 CI/CD 流水线                         │
+├──────────────────────────────────────────────────────────────────┤
+│                                                                  │
+│   Push/PR ──> Lint ──> Type Check ──> Unit Tests ──> E2E Tests  │
+│      │         │           │              │              │       │
+│      │         ▼           ▼              ▼              ▼       │
+│      │    [失败报告] ──────────────> AI Agent 自动修复            │
+│      │                                    │                      │
+│      │                                    ▼                      │
+│      └──────────────── 重新提交 PR <─────┘                       │
+│                                                                  │
+│                  Security Scan ──> Coverage Gate ──> Deploy      │
+│                                                                  │
+└──────────────────────────────────────────────────────────────────┘
+```
+
+**核心优势：**
+
+- **AI 不取代工具链，而是增强工具链**：传统工具提供确定性反馈，AI 负责快速修复
+- **形成真正的自我修复管道**：代码问题几乎在几分钟内自动解决
+- **风险可控**：多层 gate 确保即使 AI 偶尔失误，也不会流入生产
+
+## CI/CD 关键阶段
+
+| 阶段 | 检查内容 | 工具示例 | 与 AI 协作方式 |
+|-----|---------|---------|---------------|
+| **Code Lint** | 静态分析、风格统一 | ESLint、Ruff、SpotBugs | 失败后反馈给 AI 自动修复 |
+| **Type Check** | 静态类型检测 | TypeScript、MyPy | 类型错误反馈给 AI 修复 |
+| **Unit Tests** | 单元测试、组件测试 | Vitest、PyTest、JUnit | 失败用例喂给 AI 针对性修复 |
+| **E2E Tests** | 端到端测试 | Playwright、Cypress | 失败场景交给 AI 修复 |
+| **Security Scan** | 依赖漏洞、秘密泄露 | Snyk、Dependabot | 高危问题 AI 修复依赖 |
+| **Coverage Gate** | 测试覆盖率阈值 | Istanbul、Coverage.py | AI 生成缺失测试用例 |
+
+## GitHub Actions 实战
+
+### 基础 CI 流程
+
+```yaml
+# .github/workflows/ci.yml
+name: CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  lint-and-test:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Type Check
+        run: npm run type-check
+      
+      - name: Lint
+        run: npm run lint
+      
+      - name: Unit Tests
+        run: npm run test -- --coverage
+      
+      - name: Upload coverage
+        uses: codecov/codecov-action@v3
+        with:
+          file: ./coverage/lcov.info
+
+  e2e:
+    runs-on: ubuntu-latest
+    needs: lint-and-test
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Install Playwright
+        run: npx playwright install --with-deps
+      
+      - name: Build
+        run: npm run build
+      
+      - name: Run E2E Tests
+        run: npm run test:e2e
+      
+      - name: Upload test results
+        if: failure()
+        uses: actions/upload-artifact@v3
+        with:
+          name: playwright-report
+          path: playwright-report/
+```
+
+### 安全扫描集成
+
+```yaml
+# .github/workflows/security.yml
+name: Security Scan
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: '0 0 * * *'  # 每日扫描
+
+jobs:
+  security:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Run Snyk
+        uses: snyk/actions/node@master
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          args: --severity-threshold=high
+      
+      - name: Run CodeQL
+        uses: github/codeql-action/analyze@v2
+        with:
+          languages: javascript, typescript
+```
+
+### 覆盖率门禁
+
+```yaml
+# 在 CI 中添加覆盖率检查
+- name: Check coverage threshold
+  run: |
+    COVERAGE=$(cat coverage/coverage-summary.json | jq '.total.lines.pct')
+    if (( $(echo "$COVERAGE < 80" | bc -l) )); then
+      echo "Coverage $COVERAGE% is below threshold 80%"
+      exit 1
+    fi
+```
+
+## Python 项目 CI
+
+```yaml
+# .github/workflows/python-ci.yml
+name: Python CI
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.10', '3.11', '3.12']
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      
+      - name: Install dependencies
+        run: |
+          pip install -e ".[dev]"
+      
+      - name: Lint with Ruff
+        run: |
+          ruff check .
+          ruff format --check .
+      
+      - name: Type check with MyPy
+        run: mypy src
+      
+      - name: Test with PyTest
+        run: pytest --cov=src --cov-report=xml
+      
+      - name: Upload coverage
+        uses: codecov/codecov-action@v3
+```
+
+## AI 自动修复流程
+
+### 手动触发 AI 修复
+
+```yaml
+# .github/workflows/ai-fix.yml
+name: AI Auto-Fix
+
+on:
+  workflow_dispatch:
+    inputs:
+      issue_number:
+        description: 'Issue number to fix'
+        required: true
+
+jobs:
+  ai-fix:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Get lint errors
+        id: lint
+        run: |
+          npm run lint 2>&1 | tee lint-output.txt
+          echo "errors=$(cat lint-output.txt)" >> $GITHUB_OUTPUT
+      
+      - name: AI Fix (placeholder)
+        run: |
+          # 这里可以集成 AI Agent API
+          # 例如调用 Cursor API 或自建的 AI 服务
+          echo "AI would fix: ${{ steps.lint.outputs.errors }}"
+```
+
+### 集成 AI 服务的示例架构
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    AI 自动修复架构                           │
+├─────────────────────────────────────────────────────────────┤
+│                                                             │
+│   GitHub Actions ──> Webhook ──> AI Service ──> PR Update  │
+│                                                             │
+│   1. CI 失败触发 Webhook                                     │
+│   2. AI Service 接收失败报告                                 │
+│   3. 调用 LLM API 生成修复代码                               │
+│   4. 创建 PR 或更新现有 PR                                   │
+│   5. 重新触发 CI                                            │
+│                                                             │
+└─────────────────────────────────────────────────────────────┘
+```
+
+## 分支保护规则
+
+确保所有检查通过才能合并：
+
+```yaml
+# 在 GitHub 仓库设置中配置 Branch Protection Rules
+
+# main 分支保护规则：
+# - Require status checks to pass
+#   - lint-and-test
+#   - e2e
+#   - security
+# - Require branches to be up to date
+# - Require pull request reviews
+```
+
+## 最佳实践
+
+### 1. 快速失败原则
+
+```yaml
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - run: npm run lint  # 最快的检查先运行
+
+  test:
+    needs: lint  # 只有 lint 通过才运行测试
+    runs-on: ubuntu-latest
+    steps:
+      - run: npm test
+```
+
+### 2. 并行化执行
+
+```yaml
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    # ...
+  
+  type-check:
+    runs-on: ubuntu-latest  # 与 lint 并行
+    # ...
+  
+  test:
+    needs: [lint, type-check]  # 等待上述两个任务
+    # ...
+```
+
+### 3. 缓存优化
+
+```yaml
+- name: Cache dependencies
+  uses: actions/cache@v3
+  with:
+    path: ~/.npm
+    key: ${{ runner.OS }}-node-${{ hashFiles('**/package-lock.json') }}
+    restore-keys: |
+      ${{ runner.OS }}-node-
+```
+
+### 4. 错误报告格式化
+
+```yaml
+- name: Format test output for AI
+  if: failure()
+  run: |
+    # 生成 AI 友好的错误报告
+    echo "## Test Failures" > ai-report.md
+    cat test-results.json | jq -r '.testResults[] | select(.status=="failed") | "- \(.name): \(.message)"' >> ai-report.md
+```
+
+## 完整 CI/CD 流程检查清单
+
+- [ ] **代码质量**
+  - [ ] ESLint / Ruff 配置
+  - [ ] Prettier / Black 格式化
+  - [ ] 类型检查 (TypeScript / MyPy)
+- [ ] **测试**
+  - [ ] 单元测试框架配置
+  - [ ] 覆盖率报告
+  - [ ] E2E 测试 (可选)
+- [ ] **安全**
+  - [ ] 依赖漏洞扫描
+  - [ ] 敏感信息检测
+- [ ] **自动化**
+  - [ ] PR 自动检查
+  - [ ] 主分支保护
+  - [ ] 自动部署 (可选)
+
+## 总结
+
+**把成熟的 Linter、测试、安全扫描等工具作为"铁律守门人"，把 AI Agent 作为"智能修理工"**——两者深度协作，才能真正实现高质量、高速度的 AI 驱动开发交付。这正是当前最务实、最有效的生产级 AI 工程实践。
+

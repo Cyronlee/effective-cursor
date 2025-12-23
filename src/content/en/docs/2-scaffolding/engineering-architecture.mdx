@@ -1,0 +1,102 @@
+---
+title: "Engineering Architecture"
+---
+
+# Engineering Architecture
+
+> Architecture first, laying a solid foundation for AI development
+
+## Why Architecture First?
+
+In the era of AI-assisted development, many believe they can let AI "freely explore" to build systems. However, practice has shown that **without a solid architectural foundation, AI tends to introduce deviations, technical debt, or low-quality output**.
+
+Imagine a restaurant:
+
+| Restaurant Element | Software Architecture | Role in AI Development |
+|-------------------|----------------------|------------------------|
+| Kitchen Layout | System Architecture | Must be carefully planned by humans |
+| Menu Design | API Design | Humans define contracts |
+| Cooking Process | Business Logic | AI implements efficiently |
+| Ingredient Prep | Data Processing | AI generates quickly |
+| Quality Control | Testing & Validation | Tools + AI collaboration |
+
+Just as an excellent executive chef must first design the kitchen layout and workflow to enable the culinary team to operate efficiently, **humans must manually establish a solid architectural foundation** for AI to run efficiently on safe tracks.
+
+## Core Principles
+
+### 1. Constraints Are Freedom
+
+Designing architecture for AI development is not about letting AI "freely explore," but building:
+
+- **Strict Rules**: Clear type definitions, interface contracts, code standards
+- **Fast Feedback**: Real-time lint checks, type validation, test runs
+- **Small Iterations**: Modular design, handling one small task at a time
+
+This constrained environment actually enables AI Agents to perform at maximum efficiency.
+
+### 2. Modular Design
+
+```
+project/
+├── src/
+│   ├── features/       # Organized by feature modules
+│   │   ├── auth/
+│   │   │   ├── components/
+│   │   │   ├── hooks/
+│   │   │   ├── api/
+│   │   │   └── types.ts
+│   │   └── dashboard/
+│   ├── shared/         # Shared modules
+│   │   ├── ui/
+│   │   ├── utils/
+│   │   └── types/
+│   └── core/           # Core infrastructure
+│       ├── api/
+│       ├── config/
+│       └── providers/
+```
+
+Modularity enables AI to:
+- **Focus Context**: Understand only one module at a time
+- **Reduce Conflicts**: Different features don't interfere
+- **Easy Testing**: Independent modules can be verified independently
+
+### 3. Interfaces and Contracts
+
+```typescript
+// Define clear interface contracts
+interface UserService {
+  getUser(id: string): Promise<User>;
+  createUser(data: CreateUserInput): Promise<User>;
+  updateUser(id: string, data: UpdateUserInput): Promise<User>;
+  deleteUser(id: string): Promise<void>;
+}
+
+// AI only needs to implement the interface, no guessing
+class UserServiceImpl implements UserService {
+  // AI can efficiently implement each method
+}
+```
+
+## Chapter Overview
+
+This chapter details how to build engineering foundations for AI development:
+
+| Section | Content | Goal |
+|---------|---------|------|
+| [Architecture Design](./architecture-design) | Modularity, directory structure, strong typing | Establish clear code organization |
+| [Static Analysis Tools](./static-analysis) | ESLint, Ruff, SpotBugs | Provide deterministic feedback |
+| [Automated Testing](./automated-testing) | Jest, PyTest, Playwright | Verify functional correctness |
+| [CI/CD Pipeline](./ci-cd) | GitHub Actions, pipelines | Build automated feedback loops |
+
+## Key Principles
+
+1. **Humans handle architecture, AI handles implementation** - Architecture decisions require global perspective and long-term thinking
+2. **Tools provide feedback, AI responds with fixes** - Create a continuous improvement loop
+3. **Clearer constraints, more efficient AI** - Clear rules beat vague guidance
+4. **Small iterations, frequent validation** - Every change should be testable and reversible
+
+## Next Steps
+
+Next, let's dive into the specific principles and practices of [Architecture Design](./architecture-design).
+
