@@ -1,0 +1,302 @@
+---
+title: "Database Schema"
+---
+
+# Database Schema Management
+
+> Let AI understand your entire data model through a single file
+
+## The Core Problem
+
+When AI needs to understand a project's data model, it faces a challenge:
+
+| Project Type | Data Model Definition | AI's Difficulty |
+|-------------|----------------------|-----------------|
+| **Prisma/Node.js** | Single `schema.prisma` file | ✅ One file contains all info |
+| **Spring Boot** | Scattered Entity class files | ❌ Needs to read 20+ files |
+| **Django** | Scattered Models files | ❌ Needs to search across multiple apps |
+| **Rails** | Scattered Model + migrations | ❌ Needs to read many files |
+
+**Problem: When Entities/Models are scattered across dozens of files, AI cannot efficiently read all files to understand complete data relationships.**
+
+## Solution: Unified Schema File
+
+Regardless of tech stack, maintain a **unified data model overview file** that lets AI understand the entire ERD by reading a single file.
+
+### Option 1: Schema-First (Recommended)
+
+If your tech stack supports it, prefer schema-first tools:
+
+#### Prisma (Node.js/TypeScript)
+
+Prisma is a great example, using a single `schema.prisma` file to define all data models:
+
+```prisma
+// prisma/schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  createdAt DateTime @default(now())
+  
+  // Relations
+  posts     Post[]
+  profile   Profile?
+  orders    Order[]
+}
+
+model Profile {
+  id     String @id @default(cuid())
+  bio    String?
+  avatar String?
+  
+  // Relations
+  user   User   @relation(fields: [userId], references: [id])
+  userId String @unique
+}
+
+model Post {
+  id        String   @id @default(cuid())
+  title     String
+  content   String?
+  published Boolean  @default(false)
+  
+  // Relations
+  author    User     @relation(fields: [authorId], references: [id])
+  authorId  String
+  
+  categories Category[]
+}
+
+model Category {
+  id    String @id @default(cuid())
+  name  String @unique
+  posts Post[]
+}
+
+model Order {
+  id        String      @id @default(cuid())
+  status    OrderStatus @default(PENDING)
+  total     Decimal
+  createdAt DateTime    @default(now())
+  
+  // Relations
+  user      User        @relation(fields: [userId], references: [id])
+  userId    String
+  items     OrderItem[]
+}
+
+model OrderItem {
+  id       String @id @default(cuid())
+  quantity Int
+  price    Decimal
+  
+  // Relations
+  order    Order  @relation(fields: [orderId], references: [id])
+  orderId  String
+}
+
+enum OrderStatus {
+  PENDING
+  PAID
+  SHIPPED
+  DELIVERED
+  CANCELLED
+}
+```
+
+**Advantages:**
+- All models, relations, and enums in one file
+- AI reads once and understands the entire data structure
+- Type generation and migrations are based on this file
+
+### Option 2: Maintain ERD Documentation
+
+For projects using ORM Entities (like Spring Boot, Django), you need to **manually maintain an ERD overview file**:
+
+#### Using Mermaid ERD
+
+Create `erd.md` under `docs/database/`:
+
+```markdown
+# Database ERD
+
+## Entity Relationship Diagram
+
+​```mermaid
+erDiagram
+    User ||--o{ Post : writes
+    User ||--|| Profile : has
+    User ||--o{ Order : places
+    
+    Post }o--o{ Category : belongs_to
+    
+    Order ||--|{ OrderItem : contains
+    
+    User {
+        string id PK
+        string email UK
+        string name
+        datetime created_at
+    }
+    
+    Profile {
+        string id PK
+        string user_id FK
+        string bio
+        string avatar
+    }
+    
+    Post {
+        string id PK
+        string author_id FK
+        string title
+        string content
+        boolean published
+    }
+    
+    Category {
+        string id PK
+        string name UK
+    }
+    
+    Order {
+        string id PK
+        string user_id FK
+        enum status
+        decimal total
+        datetime created_at
+    }
+    
+    OrderItem {
+        string id PK
+        string order_id FK
+        int quantity
+        decimal price
+    }
+​```
+
+## Enum Definitions
+
+### OrderStatus
+- `PENDING` - Awaiting payment
+- `PAID` - Payment received
+- `SHIPPED` - Shipped
+- `DELIVERED` - Delivered
+- `CANCELLED` - Cancelled
+```
+
+## Exporting ERD from IntelliJ IDEA
+
+For Java projects like Spring Boot, you can use IntelliJ IDEA's database tools to export Mermaid ERD:
+
+### Step 1: Connect to Database
+
+1. Open IntelliJ IDEA
+2. Click the **Database** panel on the right
+3. Click **+** → **Data Source** → Select database type
+4. Configure connection info and test connection
+
+### Step 2: Generate ERD
+
+1. In the Database panel, right-click on **database/schema**
+2. Select **Diagrams** → **Show Diagram**
+3. IDEA will generate a visual ERD diagram
+
+### Step 3: Export as Mermaid
+
+1. Right-click on the ERD diagram
+2. Select **Export Diagram** → **Mermaid**
+3. Save the generated Mermaid code to `docs/database/erd.md`
+
+### Step 4: Enhance Documentation
+
+After export, manually add the following information:
+
+```markdown
+# Database ERD
+
+> Last updated: 2024-01-15
+> Export tool: IntelliJ IDEA 2024.1
+
+## Business Overview
+
+This system is an e-commerce platform with core business flow:
+1. Users register and complete their profile
+2. Users browse product categories and place orders
+3. Order status progresses until completion
+
+## Entity Relationship Diagram
+
+[Paste exported Mermaid code]
+
+## Key Business Rules
+
+- One user can only have one Profile
+- Orders are auto-cancelled if unpaid within 30 minutes
+- Shipped orders cannot be cancelled
+```
+
+## Schema File Maintenance
+
+### File Location
+
+```
+project-root/
+├── docs/
+│   └── database/
+│       ├── erd.md           # ERD documentation (Mermaid)
+│       ├── migrations.md    # Migration history notes
+│       └── conventions.md   # Naming conventions
+├── prisma/
+│   └── schema.prisma        # Prisma projects
+└── src/
+    └── entities/            # Entity files (ORM projects)
+```
+
+### When to Update
+
+| Event | Action |
+|-------|--------|
+| New table/entity added | Update ERD documentation |
+| Field modified | Update ERD documentation |
+| New relation added | Update ERD documentation |
+| After migration executed | Verify ERD is in sync |
+
+### Using in AI Workflow
+
+When having AI handle data-related tasks, reference the Schema file:
+
+```
+Please refer to the data model in docs/database/erd.md,
+add "order refund" functionality to the Order module:
+
+1. Analyze what new fields or tables are needed
+2. Generate migration script
+3. Update related Service layer code
+```
+
+## Key Principles
+
+| Principle | Description |
+|-----------|-------------|
+| **Single Source of Truth** | All data model information in one place |
+| **Keep In Sync** | Update ERD documentation immediately after Entity changes |
+| **Include Relations** | Not just fields, but also table relationships |
+| **Include Constraints** | Mark PK, FK, UK and other constraints |
+| **Business Comments** | Add business meaning for fields and enums |
+
+## Next Steps
+
+Next, we'll dive into [Architecture Design](./architecture-design) to learn how to design modular, strongly-typed code architecture.
+

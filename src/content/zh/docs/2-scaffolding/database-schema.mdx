@@ -1,0 +1,159 @@
+---
+title: "数据库 Schema"
+---
+
+import { ImageZoom } from 'nextra/components'
+
+# 数据库 Schema 管理
+
+> 让 AI 通过一个文件理解整个数据模型
+
+## 核心问题
+
+当 AI 需要理解项目的数据模型时：
+
+| 项目类型 | 数据模型定义方式 | AI 的困难 |
+|---------|----------------|----------|
+| **Prisma** | 单一 `schema.prisma` 文件 | ✅ 一个文件包含所有信息 |
+| **Spring Boot** | 分散的 Entity 类文件 | ❌ 需要读取 20+ 个文件 |
+| **Django/Rails** | 分散的 Models 文件 | ❌ 需要在多个模块中查找 |
+
+**问题：当 Entity/Model 分散在数十个文件中时，AI 无法高效地理解完整的数据关系。**
+
+## 解决方案：统一 Schema 文件
+
+无论使用什么技术栈，都应该维护一个**统一的数据模型概览文件**。
+
+### 方案一：Schema-First（推荐）
+
+如果技术栈支持，优先使用 schema-first 的工具。Prisma 是一个很好的例子：
+
+```prisma
+// prisma/schema.prisma
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  posts     Post[]
+  profile   Profile?
+}
+
+model Profile {
+  id     String @id @default(cuid())
+  bio    String?
+  user   User   @relation(fields: [userId], references: [id])
+  userId String @unique
+}
+
+model Post {
+  id        String     @id @default(cuid())
+  title     String
+  published Boolean    @default(false)
+  author    User       @relation(fields: [authorId], references: [id])
+  authorId  String
+  categories Category[]
+}
+
+enum OrderStatus {
+  PENDING
+  PAID
+  SHIPPED
+  DELIVERED
+}
+```
+
+**优点：** 所有模型、关系、枚举都在一个文件中，AI 读取一次就能理解整个数据结构。
+
+### 方案二：维护 ERD 文档
+
+对于使用 ORM Entity 的项目（如 Spring Boot、Django），需要**手动维护一个 ERD 概览文件**：
+
+```markdown
+# 数据库 ERD (docs/database/erd.md)
+
+​```mermaid
+erDiagram
+    User ||--o{ Post : writes
+    User ||--|| Profile : has
+    User ||--o{ Order : places
+    
+    User {
+        string id PK
+        string email UK
+        string name
+    }
+    
+    Profile {
+        string id PK
+        string user_id FK
+        string bio
+    }
+    
+    Post {
+        string id PK
+        string author_id FK
+        string title
+        boolean published
+    }
+​```
+
+## 枚举定义
+- OrderStatus: PENDING, PAID, SHIPPED, DELIVERED
+```
+
+## 从 IntelliJ IDEA 导出 ERD
+
+对于 Java 项目，可以使用 IntelliJ IDEA 的数据库工具导出 Mermaid ERD：
+
+1. **连接数据库**：Database 面板 → **+** → Data Source → 选择数据库类型
+2. **生成 ERD**：右键数据库/Schema → **Diagrams** → **Show Diagram**
+3. **导出 Mermaid**：在 ERD 图上右键 → **Export to File** → **Mermaid .md**
+
+<ImageZoom src="/img/database-schema/export-to-mermaid.png" alt="IntelliJ IDEA 导出 Mermaid ERD" />
+
+导出后，在文件中补充业务说明和关键规则。
+
+## Schema 文件的维护
+
+### 放置位置
+
+```
+项目根目录/
+├── docs/database/
+│   ├── erd.md           # ERD 文档（Mermaid）
+│   └── conventions.md   # 命名约定
+├── prisma/
+│   └── schema.prisma    # Prisma 项目
+└── src/entities/        # ORM Entity 文件
+```
+
+### 更新时机
+
+| 事件 | 动作 |
+|-----|------|
+| 新增表/实体 | 更新 ERD 文档 |
+| 修改字段/关系 | 更新 ERD 文档 |
+| 执行迁移后 | 验证 ERD 是否同步 |
+
+### 在 AI 工作流中使用
+
+```
+请参考 docs/database/erd.md 中的数据模型，
+为 Order 模块添加"订单退款"功能：
+1. 分析需要哪些新字段或新表
+2. 生成迁移脚本
+3. 更新相关的 Service 层代码
+```
+
+## 关键原则
+
+| 原则 | 说明 |
+|-----|------|
+| **单一数据源** | 所有数据模型信息集中在一处 |
+| **保持同步** | Entity 修改后立即更新 ERD 文档 |
+| **包含关系** | 不仅有字段，还要有表间关系 |
+| **业务注释** | 添加字段和枚举的业务含义 |
+
+## 下一步
+
+接下来，我们将了解[静态分析工具](./static-analysis)，如何为 AI 提供确定性反馈。

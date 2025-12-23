@@ -1,0 +1,199 @@
+---
+title: "Project Structure Optimization"
+---
+
+# Project Structure Optimization
+
+> AI-optimized project organization: read less, understand faster
+
+## Core Concept: Keep Files Small
+
+AI has an important limitation when reading code: **limited context window**. When AI reads a file, the larger the file and the more irrelevant information it contains, the less efficient AI becomes at understanding core logic.
+
+### Large Files vs Small Files
+
+| Approach | AI Reading Experience | Problem |
+|----------|----------------------|---------|
+| 📄 **Large File** (1000+ lines) | AI needs to read lots of irrelevant code to find the target | Context pollution, low comprehension efficiency |
+| 📁 **Small Files** (100-300 lines) | AI can precisely read the needed module | Clear context, precise modifications |
+
+**Principle: One file does one thing, keep it within 100-300 lines.**
+
+## Recommended Directory Structure
+
+### Frontend Projects (React/Next.js)
+
+```
+src/
+├── app/                    # Page routes
+│   ├── (auth)/            # Route groups
+│   │   ├── login/
+│   │   └── register/
+│   └── dashboard/
+├── components/            # UI components
+│   ├── ui/               # Base components (Button, Input...)
+│   └── features/         # Business components
+│       ├── UserCard/
+│       │   ├── index.tsx      # Component entry
+│       │   ├── UserCard.tsx   # Main component
+│       │   ├── Avatar.tsx     # Sub-component
+│       │   └── types.ts       # Type definitions
+│       └── OrderList/
+├── hooks/                 # Custom Hooks
+├── lib/                   # Utility functions
+├── types/                 # Global type definitions
+├── docs/                  # 📚 Project documentation
+│   ├── architecture.md   # Architecture overview
+│   ├── api-contracts.md  # API contracts
+│   └── decisions/        # Architecture Decision Records
+└── prompts/              # 🤖 AI Prompts management
+    ├── features/         # Feature development prompts
+    └── templates/        # General templates
+```
+
+### Backend Projects (Node.js/NestJS)
+
+```
+src/
+├── modules/               # Business modules
+│   ├── user/
+│   │   ├── user.controller.ts
+│   │   ├── user.service.ts
+│   │   ├── user.repository.ts
+│   │   ├── dto/              # Data Transfer Objects
+│   │   │   ├── create-user.dto.ts
+│   │   │   └── update-user.dto.ts
+│   │   └── entities/
+│   │       └── user.entity.ts
+│   └── order/
+├── common/                # Common modules
+│   ├── decorators/
+│   ├── filters/
+│   ├── guards/
+│   └── interceptors/
+├── config/               # Configuration management
+├── docs/                 # 📚 Project documentation
+└── prompts/              # 🤖 AI Prompts management
+```
+
+## 📚 Managing Project Documentation
+
+Maintaining clear documentation in your project helps AI quickly understand project context:
+
+### Recommended Documentation Structure
+
+```
+docs/
+├── README.md             # Project overview (AI reads first)
+├── architecture.md       # System architecture
+├── tech-stack.md         # Technology stack
+├── api-contracts/        # API contract documents
+│   ├── user-api.md
+│   └── order-api.md
+├── database/             # Database related
+│   ├── schema.prisma     # Or erd.md
+│   └── migrations.md
+└── decisions/            # Architecture Decision Records (ADR)
+    ├── 001-use-nextjs.md
+    └── 002-auth-strategy.md
+```
+
+### Documentation Writing Principles
+
+| Principle | Description |
+|-----------|-------------|
+| **Concise and Clear** | AI doesn't need detailed usage instructions, just needs to know "what" and "why" |
+| **Structured** | Use tables, lists, code blocks for easy AI parsing |
+| **Keep Updated** | Outdated documentation is worse than no documentation |
+
+## 🤖 Managing Prompts
+
+Manage commonly used AI Prompts as project assets for team reuse and iteration:
+
+### Recommended Prompts Structure
+
+```
+prompts/
+├── README.md              # Prompts usage guide
+├── features/              # Feature development related
+│   ├── new-api-endpoint.md
+│   ├── new-component.md
+│   └── add-database-table.md
+├── refactoring/           # Refactoring related
+│   ├── extract-hook.md
+│   └── split-component.md
+└── templates/             # General templates
+    ├── code-review.md
+    └── bug-fix.md
+```
+
+### Prompt File Example
+
+```markdown
+# Add New API Endpoint
+
+## Use Case
+Use when adding a new REST API endpoint to a module
+
+## Prompt Template
+Please add a new API endpoint under `src/modules/{module}`:
+
+1. Add route handler in controller
+2. Add business logic in service
+3. Create corresponding DTO files
+4. Add unit tests
+
+Requirements:
+- Follow existing code style
+- Add Swagger documentation annotations
+- Handle common error cases
+```
+
+> 📖 For detailed content on Prompts management, see [Chapter 4: Workflow](../4-workflow).
+
+## File Splitting Practices
+
+### Splitting Components
+
+```tsx
+// ❌ Bad: All logic in one large file
+// components/UserDashboard.tsx (500+ lines)
+
+// ✅ Good: Split into multiple small files
+// components/UserDashboard/
+//   ├── index.tsx           # Export entry
+//   ├── UserDashboard.tsx   # Main component (~100 lines)
+//   ├── UserStats.tsx       # Stats card (~80 lines)
+//   ├── RecentActivity.tsx  # Recent activity (~100 lines)
+//   ├── hooks.ts            # Component-specific hooks
+//   └── types.ts            # Type definitions
+```
+
+### Splitting Services
+
+```typescript
+// ❌ Bad: One giant service
+// services/user.service.ts (800+ lines)
+
+// ✅ Good: Split by responsibility
+// services/user/
+//   ├── index.ts                 # Export entry
+//   ├── user-auth.service.ts     # Auth related (~150 lines)
+//   ├── user-profile.service.ts  # Profile management (~120 lines)
+//   └── user-settings.service.ts # Settings management (~100 lines)
+```
+
+## Key Principles Summary
+
+| Principle | Practice |
+|-----------|----------|
+| **Single Responsibility** | Each file handles only one functional module |
+| **File Size** | Keep within 100-300 lines |
+| **Clear Naming** | File name directly reflects its content |
+| **Proximity Principle** | Keep related files in the same directory |
+| **Docs Alongside Code** | Version control project docs with code |
+
+## Next Steps
+
+Next, we'll explore [Database Schema Management](./database-schema) to learn how to help AI efficiently understand your data models.
+

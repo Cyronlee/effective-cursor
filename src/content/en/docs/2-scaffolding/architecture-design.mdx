@@ -2,6 +2,8 @@
 title: "Architecture Design"
 ---
 
+import { Steps } from 'nextra/components'
+
 # Architecture Design
 
 > Providing a solid architectural foundation for AI development
@@ -10,263 +12,129 @@ Architecture designed for AI development is not about letting AI "freely explore
 
 ## Modular Design
 
-Modularity is the cornerstone of AI-friendly architecture. Each module should:
+Modularity is the cornerstone of AI-friendly architecture. Each module should follow these principles:
 
-- **Single Responsibility**: Do one thing and do it well
-- **Clear Boundaries**: Explicit inputs and outputs
-- **Explicit Dependencies**: Clear dependency graph
+| Principle | Description | Benefit for AI |
+|-----------|-------------|----------------|
+| **Single Responsibility** | Do one thing and do it well | AI can understand and implement more easily |
+| **Clear Boundaries** | Explicit inputs and outputs | Reduce ambiguity and side effects |
+| **Explicit Dependencies** | Clear dependency graph | AI can accurately handle imports/exports |
 
-### Frontend Modular Example
+### Recommended Directory Organization
 
-```
-src/
-├── features/              # Feature modules (by business domain)
-│   ├── auth/
-│   │   ├── components/    # Module components
-│   │   │   ├── LoginForm.tsx
-│   │   │   └── SignupForm.tsx
-│   │   ├── hooks/         # Module hooks
-│   │   │   └── useAuth.ts
-│   │   ├── api/           # Module API calls
-│   │   │   └── authApi.ts
-│   │   ├── types.ts       # Module type definitions
-│   │   └── index.ts       # Module public interface
-│   └── dashboard/
-│       └── ...
-├── shared/                # Cross-module shared
-│   ├── ui/               # Common UI components
-│   ├── hooks/            # Common hooks
-│   └── utils/            # Utility functions
-└── core/                  # Core infrastructure
-    ├── api/              # API client configuration
-    ├── config/           # App configuration
-    └── providers/        # Context Providers
-```
+| Directory Type | Purpose | Examples |
+|---------------|---------|----------|
+| **features/** | Feature modules by business domain | auth, dashboard, settings |
+| **shared/** | Cross-module shared code | ui components, hooks, utils |
+| **core/** | Core infrastructure | api client, config, providers |
 
-### Backend Modular Example
+### Module Internal Structure
 
-```
-src/
-├── modules/              # Business modules
-│   ├── user/
-│   │   ├── user.controller.ts
-│   │   ├── user.service.ts
-│   │   ├── user.repository.ts
-│   │   ├── user.entity.ts
-│   │   ├── user.dto.ts
-│   │   └── user.module.ts
-│   └── order/
-│       └── ...
-├── common/               # Common modules
-│   ├── decorators/
-│   ├── guards/
-│   ├── interceptors/
-│   └── filters/
-└── infrastructure/       # Infrastructure
-    ├── database/
-    ├── cache/
-    └── messaging/
-```
+Each feature module should contain:
 
-## Directory Structure Standards
+| File/Directory | Purpose |
+|---------------|---------|
+| `components/` | Module UI components |
+| `hooks/` | Module state and logic hooks |
+| `api/` | Module API calls |
+| `types.ts` | Module type definitions |
+| `index.ts` | Module public interface (export only what needs to be exposed) |
 
-### Naming Conventions
+## Naming Conventions
+
+Consistent naming helps AI understand code structure:
 
 | Type | Convention | Example |
-|------|-----------|---------|
+|------|------------|---------|
 | Folders | kebab-case | `user-management/` |
 | Component Files | PascalCase | `UserProfile.tsx` |
 | Utility Functions | camelCase | `formatDate.ts` |
-| Type Files | kebab-case | `user.types.ts` |
+| Type Files | kebab-case or .types | `user.types.ts` |
 | Test Files | Original name + .test | `UserProfile.test.tsx` |
-
-### Entry File Convention
-
-Each module uses `index.ts` as its public interface:
-
-```typescript
-// features/auth/index.ts
-export { LoginForm } from './components/LoginForm';
-export { useAuth } from './hooks/useAuth';
-export type { User, AuthState } from './types';
-
-// Don't export internal implementation details
-```
 
 ## Strong Type System
 
-Types are the best guide for AI to understand code.
+Types are the best guide for AI to understand code:
 
-### TypeScript Best Practices
+| Practice | Description | Avoid |
+|----------|-------------|-------|
+| Explicit type definitions | Define interface/type for all data structures | Using `any` type |
+| Complete function signatures | All parameters and return values have types | Implicit `any` inference |
+| Use union types | Clearly define possible values | Broad string/number types |
+| Strict mode | Enable TypeScript strict | Loose type checking |
 
-```typescript
-// ✅ Good practice: Explicit type definitions
-interface CreateUserInput {
-  email: string;
-  password: string;
-  name: string;
-  role?: UserRole;
-}
+### Type-Driven Development Flow
 
-interface User {
-  id: string;
-  email: string;
-  name: string;
-  role: UserRole;
-  createdAt: Date;
-  updatedAt: Date;
-}
+<Steps>
 
-type UserRole = 'admin' | 'user' | 'guest';
+### Define Type Contracts
 
-// AI can accurately understand function signatures
-async function createUser(input: CreateUserInput): Promise<User> {
-  // implementation...
-}
+Define interfaces and types first, clarifying data structures and function signatures.
 
-// ❌ Avoid: any types
-async function createUser(input: any): Promise<any> {
-  // AI cannot understand expected behavior
-}
-```
+### AI Implementation
 
-### Type-Driven Development
+Let AI implement concrete logic based on defined contracts.
 
-```typescript
-// 1. Define type contracts first
-interface OrderService {
-  createOrder(items: OrderItem[]): Promise<Order>;
-  getOrder(id: string): Promise<Order | null>;
-  cancelOrder(id: string): Promise<void>;
-}
+### Type Validation
 
-// 2. AI implements based on contracts
-class OrderServiceImpl implements OrderService {
-  async createOrder(items: OrderItem[]): Promise<Order> {
-    // AI can implement accurately because types are clear
-  }
-  // ...
-}
-```
+TypeScript compiler automatically checks if implementation matches contracts.
+
+</Steps>
 
 ## Interfaces and Contracts
 
-### API Contract Definition
+### API Contract Tools
 
-Use OpenAPI/Swagger or tRPC to define clear API contracts:
+| Tool | Use Case | Features |
+|------|----------|----------|
+| **tRPC** | TypeScript fullstack projects | End-to-end type safety |
+| **OpenAPI/Swagger** | Cross-language REST APIs | Standardized, can generate clients |
+| **GraphQL** | Complex data queries | Flexible data fetching |
+| **Zod** | Runtime validation | Type inference + runtime checks |
 
-```typescript
-// tRPC example: Type-safe API
-import { z } from 'zod';
-import { router, publicProcedure } from './trpc';
+### Database Contract Tools
 
-const userRouter = router({
-  getUser: publicProcedure
-    .input(z.object({ id: z.string() }))
-    .output(z.object({
-      id: z.string(),
-      name: z.string(),
-      email: z.string(),
-    }))
-    .query(async ({ input }) => {
-      // Types are fully inferred
-    }),
-
-  createUser: publicProcedure
-    .input(z.object({
-      name: z.string().min(2),
-      email: z.string().email(),
-    }))
-    .mutation(async ({ input }) => {
-      // AI knows the exact type of input
-    }),
-});
-```
-
-### Database Schema Contract
-
-```typescript
-// Prisma Schema example
-model User {
-  id        String   @id @default(cuid())
-  email     String   @unique
-  name      String
-  posts     Post[]
-  profile   Profile?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-// Auto-generated types can be used directly
-import { User, Post } from '@prisma/client';
-```
+| Tool | Language | Features |
+|------|----------|----------|
+| **Prisma** | TypeScript | Type-safe ORM, auto-generates types |
+| **Drizzle** | TypeScript | Lightweight, SQL-like |
+| **SQLAlchemy** | Python | Mature ORM |
+| **TypeORM** | TypeScript | Decorator style |
 
 ## Documentation and Self-Description
 
-### Self-Describing Code
+### Make Code Self-Explanatory
 
-```typescript
-// Use JSDoc to enhance AI understanding
-/**
- * Creates a new user account
- * @param input - User registration information
- * @returns Created user object (without password)
- * @throws {ConflictError} When email is already registered
- * @example
- * const user = await createUser({
- *   email: 'user@example.com',
- *   password: 'securePassword123',
- *   name: 'John Doe'
- * });
- */
-async function createUser(input: CreateUserInput): Promise<User> {
-  // AI can understand boundary conditions and expected behavior from docs
-}
-```
+| Practice | Purpose |
+|----------|---------|
+| **JSDoc Comments** | Describe function purpose, parameters, return values, exceptions |
+| **@example Examples** | Show correct usage |
+| **@throws Declarations** | Clarify possible exceptions |
+| **Module README** | Explain module responsibilities, exports, dependencies |
 
-### README-Driven Development
+### Module README Should Include
 
-Each module should have a concise README:
-
-```markdown
-# Auth Module
-
-## Responsibility
-Handles user authentication, authorization, and session management.
-
-## Main Exports
-- `LoginForm` - Login form component
-- `useAuth` - Authentication state hook
-- `authApi` - Authentication API client
-
-## Dependencies
-- `@/core/api` - API infrastructure
-- `@/shared/ui` - Common UI components
-
-## Usage Example
-\```tsx
-import { LoginForm, useAuth } from '@/features/auth';
-
-function App() {
-  const { user, isLoading } = useAuth();
-  // ...
-}
-\```
-```
+| Content | Description |
+|---------|-------------|
+| Responsibilities | What the module does |
+| Main Exports | Components/functions/types exposed externally |
+| Dependencies | Which other modules it depends on |
+| Usage Examples | Simple usage code |
 
 ## Architecture Checklist
 
 Before starting AI-assisted development, ensure:
 
-- [ ] Directory structure is planned, following modularity principles
-- [ ] TypeScript strict mode is enabled
-- [ ] Core types and interfaces are defined
-- [ ] API contracts are clear
-- [ ] Database schema is designed
-- [ ] Shared modules and utility functions are organized
-- [ ] Code standards are configured (ESLint, Prettier)
+| Category | Check Item |
+|----------|------------|
+| **Structure** | ✅ Directory structure planned, following modularity principles |
+| **Types** | ✅ TypeScript strict mode enabled |
+| **Contracts** | ✅ Core types and interfaces defined |
+| **API** | ✅ API contracts clear (tRPC/OpenAPI) |
+| **Data** | ✅ Database schema designed |
+| **Shared** | ✅ Shared modules and utility functions organized |
+| **Standards** | ✅ Code standards configured (ESLint, Prettier) |
 
 ## Next Steps
 
 After completing architecture design, configure [Static Analysis Tools](./static-analysis) to provide real-time feedback.
-

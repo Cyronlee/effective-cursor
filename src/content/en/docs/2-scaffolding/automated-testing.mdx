@@ -2,6 +2,8 @@
 title: "Automated Testing"
 ---
 
+import { Steps } from 'nextra/components'
+
 # Automated Testing
 
 > Let automated tests verify the correctness of AI-generated code
@@ -10,22 +12,33 @@ title: "Automated Testing"
 
 In AI-assisted development, automated testing tools are **not replaced by AI**, but serve as reliable verification mechanisms integrated into the Agent's feedback loop.
 
-### Collaboration Model
+### AI + Testing Collaboration Loop
 
-```
-┌─────────────────────────────────────────────────────────┐
-│                   AI + Testing Collaboration Loop        │
-├─────────────────────────────────────────────────────────┤
-│                                                         │
-│   AI Agent ──generates code──> Test Suite ──report──> AI│
-│      │                                          │       │
-│      │         (specific cases + expected vs actual)    │
-│      └────────────── targeted fixes ────────────┘       │
-│                                                         │
-│                   Until all tests pass                  │
-│                                                         │
-└─────────────────────────────────────────────────────────┘
-```
+<Steps>
+
+### AI Generates Code
+
+AI Agent quickly generates functional code
+
+### Run Test Suite
+
+Automated tests check functional correctness
+
+### Get Failure Report
+
+Extract failed cases, expected vs actual values
+
+### AI Targeted Fixes
+
+AI fixes based on specific error messages
+
+### Repeat Until Passing
+
+Loop until all tests pass
+
+</Steps>
+
+### Division of Work
 
 | Role | Strengths |
 |------|-----------|
@@ -38,347 +51,6 @@ This division is more efficient and reliable than "letting AI self-verify":
 - Avoids AI hallucinations, self-consistent bias, or missed edge cases
 - Naturally fits existing engineering practices (CI/CD, TDD/BDD)
 
-## JavaScript / TypeScript Testing
-
-### Vitest (Recommended)
-
-Modern, fast testing framework, perfectly integrated with Vite ecosystem:
-
-```bash
-npm install -D vitest @testing-library/react @testing-library/jest-dom jsdom
-```
-
-**vitest.config.ts**
-
-```typescript
-import { defineConfig } from 'vitest/config';
-import react from '@vitejs/plugin-react';
-
-export default defineConfig({
-  plugins: [react()],
-  test: {
-    environment: 'jsdom',
-    globals: true,
-    setupFiles: './src/test/setup.ts',
-    coverage: {
-      provider: 'v8',
-      reporter: ['text', 'json', 'html'],
-    },
-  },
-});
-```
-
-**Unit Test Example**
-
-```typescript
-// utils/formatDate.test.ts
-import { describe, it, expect } from 'vitest';
-import { formatDate } from './formatDate';
-
-describe('formatDate', () => {
-  it('should format date correctly', () => {
-    const date = new Date('2024-01-15');
-    expect(formatDate(date)).toBe('2024-01-15');
-  });
-
-  it('should handle invalid date', () => {
-    expect(() => formatDate(new Date('invalid'))).toThrow();
-  });
-});
-```
-
-**Component Test Example**
-
-```typescript
-// components/Button.test.tsx
-import { render, screen, fireEvent } from '@testing-library/react';
-import { describe, it, expect, vi } from 'vitest';
-import { Button } from './Button';
-
-describe('Button', () => {
-  it('should render children', () => {
-    render(<Button>Click me</Button>);
-    expect(screen.getByText('Click me')).toBeInTheDocument();
-  });
-
-  it('should call onClick when clicked', () => {
-    const handleClick = vi.fn();
-    render(<Button onClick={handleClick}>Click</Button>);
-    fireEvent.click(screen.getByRole('button'));
-    expect(handleClick).toHaveBeenCalledOnce();
-  });
-
-  it('should be disabled when disabled prop is true', () => {
-    render(<Button disabled>Click</Button>);
-    expect(screen.getByRole('button')).toBeDisabled();
-  });
-});
-```
-
-### Jest (Traditional Choice)
-
-```bash
-npm install -D jest @types/jest ts-jest @testing-library/react @testing-library/jest-dom
-```
-
-**jest.config.js**
-
-```javascript
-module.exports = {
-  preset: 'ts-jest',
-  testEnvironment: 'jsdom',
-  setupFilesAfterEnv: ['<rootDir>/src/test/setup.ts'],
-  moduleNameMapper: {
-    '^@/(.*)$': '<rootDir>/src/$1',
-  },
-};
-```
-
-## Python Testing
-
-### PyTest (Recommended)
-
-```bash
-pip install pytest pytest-cov pytest-asyncio
-```
-
-**pytest.ini**
-
-```ini
-[pytest]
-testpaths = tests
-python_files = test_*.py
-python_functions = test_*
-addopts = -v --cov=src --cov-report=term-missing
-asyncio_mode = auto
-```
-
-**Test Example**
-
-```python
-# tests/test_user_service.py
-import pytest
-from src.services.user_service import UserService, UserNotFoundError
-
-class TestUserService:
-    @pytest.fixture
-    def user_service(self):
-        return UserService()
-
-    def test_create_user_success(self, user_service):
-        user = user_service.create_user(
-            email="test@example.com",
-            name="Test User"
-        )
-        assert user.email == "test@example.com"
-        assert user.name == "Test User"
-        assert user.id is not None
-
-    def test_create_user_duplicate_email(self, user_service):
-        user_service.create_user(email="test@example.com", name="User 1")
-        with pytest.raises(ValueError, match="Email already exists"):
-            user_service.create_user(email="test@example.com", name="User 2")
-
-    def test_get_user_not_found(self, user_service):
-        with pytest.raises(UserNotFoundError):
-            user_service.get_user("non-existent-id")
-
-    @pytest.mark.asyncio
-    async def test_async_operation(self, user_service):
-        result = await user_service.fetch_user_data("user-123")
-        assert result is not None
-```
-
-## Java Testing
-
-### JUnit 5 + Mockito
-
-**pom.xml**
-
-```xml
-<dependencies>
-  <dependency>
-    <groupId>org.junit.jupiter</groupId>
-    <artifactId>junit-jupiter</artifactId>
-    <version>5.10.1</version>
-    <scope>test</scope>
-  </dependency>
-  <dependency>
-    <groupId>org.mockito</groupId>
-    <artifactId>mockito-junit-jupiter</artifactId>
-    <version>5.8.0</version>
-    <scope>test</scope>
-  </dependency>
-  <dependency>
-    <groupId>org.assertj</groupId>
-    <artifactId>assertj-core</artifactId>
-    <version>3.24.2</version>
-    <scope>test</scope>
-  </dependency>
-</dependencies>
-```
-
-**Test Example**
-
-```java
-@ExtendWith(MockitoExtension.class)
-class UserServiceTest {
-    
-    @Mock
-    private UserRepository userRepository;
-    
-    @InjectMocks
-    private UserService userService;
-    
-    @Test
-    void createUser_shouldReturnCreatedUser() {
-        // Given
-        CreateUserRequest request = new CreateUserRequest("test@example.com", "Test");
-        User savedUser = new User("123", "test@example.com", "Test");
-        when(userRepository.save(any(User.class))).thenReturn(savedUser);
-        
-        // When
-        User result = userService.createUser(request);
-        
-        // Then
-        assertThat(result.getId()).isEqualTo("123");
-        assertThat(result.getEmail()).isEqualTo("test@example.com");
-        verify(userRepository).save(any(User.class));
-    }
-    
-    @Test
-    void getUser_whenNotFound_shouldThrowException() {
-        // Given
-        when(userRepository.findById("999")).thenReturn(Optional.empty());
-        
-        // When/Then
-        assertThatThrownBy(() -> userService.getUser("999"))
-            .isInstanceOf(UserNotFoundException.class)
-            .hasMessage("User not found: 999");
-    }
-}
-```
-
-## E2E Testing
-
-### Playwright (Recommended)
-
-```bash
-npm init playwright@latest
-```
-
-**playwright.config.ts**
-
-```typescript
-import { defineConfig, devices } from '@playwright/test';
-
-export default defineConfig({
-  testDir: './e2e',
-  fullyParallel: true,
-  forbidOnly: !!process.env.CI,
-  retries: process.env.CI ? 2 : 0,
-  workers: process.env.CI ? 1 : undefined,
-  reporter: 'html',
-  use: {
-    baseURL: 'http://localhost:3000',
-    trace: 'on-first-retry',
-  },
-  projects: [
-    { name: 'chromium', use: { ...devices['Desktop Chrome'] } },
-    { name: 'firefox', use: { ...devices['Desktop Firefox'] } },
-    { name: 'webkit', use: { ...devices['Desktop Safari'] } },
-  ],
-  webServer: {
-    command: 'npm run dev',
-    url: 'http://localhost:3000',
-    reuseExistingServer: !process.env.CI,
-  },
-});
-```
-
-**E2E Test Example**
-
-```typescript
-// e2e/auth.spec.ts
-import { test, expect } from '@playwright/test';
-
-test.describe('Authentication', () => {
-  test('user can login successfully', async ({ page }) => {
-    await page.goto('/login');
-    
-    await page.fill('[data-testid="email-input"]', 'user@example.com');
-    await page.fill('[data-testid="password-input"]', 'password123');
-    await page.click('[data-testid="login-button"]');
-    
-    await expect(page).toHaveURL('/dashboard');
-    await expect(page.locator('[data-testid="welcome-message"]'))
-      .toContainText('Welcome');
-  });
-
-  test('shows error for invalid credentials', async ({ page }) => {
-    await page.goto('/login');
-    
-    await page.fill('[data-testid="email-input"]', 'wrong@example.com');
-    await page.fill('[data-testid="password-input"]', 'wrongpassword');
-    await page.click('[data-testid="login-button"]');
-    
-    await expect(page.locator('[data-testid="error-message"]'))
-      .toContainText('Invalid credentials');
-  });
-});
-```
-
-## AI Collaboration Best Practices
-
-### 1. Provide Detailed Test Failure Feedback to AI
-
-When tests fail, provide complete context:
-
-```
-Test Failure Report:
-
-Test Case: UserService.createUser should validate email format
-Expected: Throw ValidationError
-Actual: No error thrown, returned User object
-
-Related code:
-- src/services/userService.ts:23-35
-
-Please fix the createUser function to add email format validation.
-```
-
-### 2. Test-Driven AI Development (TDD)
-
-Write tests first, let AI implement:
-
-```typescript
-// 1. Human writes tests first
-describe('calculateDiscount', () => {
-  it('should return 0 for orders under $50', () => {
-    expect(calculateDiscount(49)).toBe(0);
-  });
-  
-  it('should return 10% for orders $50-$100', () => {
-    expect(calculateDiscount(75)).toBe(7.5);
-  });
-  
-  it('should return 20% for orders over $100', () => {
-    expect(calculateDiscount(150)).toBe(30);
-  });
-});
-
-// 2. Let AI implement the function based on tests
-```
-
-### 3. Coverage-Driven
-
-```bash
-# Generate coverage report
-npm run test -- --coverage
-
-# Let AI write tests for uncovered branches
-```
-
 ## Testing Framework Quick Reference
 
 | Language | Unit Testing | Component/Integration | E2E Testing |
@@ -388,7 +60,89 @@ npm run test -- --coverage
 | Java | JUnit 5 | Spring Boot Test | Selenium |
 | Go | testing | testify | chromedp |
 
+## JavaScript / TypeScript Testing
+
+### Recommended Frameworks
+
+| Framework | Type | Features | Recommendation |
+|-----------|------|----------|----------------|
+| **Vitest** | Unit Testing | Fast, integrates with Vite | ⭐⭐⭐ |
+| **Jest** | Unit Testing | Mature, rich ecosystem | ⭐⭐ |
+| **Testing Library** | Component Testing | User-perspective testing | ⭐⭐⭐ |
+| **Playwright** | E2E Testing | Cross-browser, reliable | ⭐⭐⭐ |
+| **Cypress** | E2E Testing | Great developer experience | ⭐⭐ |
+
+## Python Testing
+
+### Recommended Frameworks
+
+| Framework | Type | Features | Recommendation |
+|-----------|------|----------|----------------|
+| **PyTest** | Unit/Integration | Flexible, rich plugins | ⭐⭐⭐ |
+| **unittest** | Unit Testing | Standard library, stable | ⭐⭐ |
+| **pytest-asyncio** | Async Testing | Async code support | ⭐⭐⭐ |
+| **pytest-cov** | Coverage | Coverage reporting | ⭐⭐⭐ |
+
+## Java Testing
+
+| Framework | Type | Features |
+|-----------|------|----------|
+| **JUnit 5** | Unit Testing | Modern, feature-rich |
+| **Mockito** | Mock Framework | Easy-to-use mocking |
+| **AssertJ** | Assertion Library | Fluent assertion API |
+| **Spring Boot Test** | Integration Testing | Spring ecosystem integration |
+
+## Test Types Explained
+
+| Type | Purpose | Speed | Coverage Scope |
+|------|---------|-------|----------------|
+| **Unit Tests** | Test single functions/methods | 🚀 Fastest | Fine-grained |
+| **Component Tests** | Test UI component behavior | ⚡ Fast | Component level |
+| **Integration Tests** | Test module interactions | 🏃 Medium | Module level |
+| **E2E Tests** | Test complete user flows | 🐢 Slower | Global |
+
+## AI Collaboration Best Practices
+
+### Test-Driven AI Development (TDD)
+
+| Step | Actor | Description |
+|------|-------|-------------|
+| 1. Write Tests | Human | Define expected behavior first |
+| 2. Implement Code | AI | Implement based on tests |
+| 3. Run Tests | Automation | Verify implementation |
+| 4. Fix | AI | Fix based on failure reports |
+
+### Feeding Test Failures to AI
+
+Effective feedback should include:
+
+| Information | Description |
+|-------------|-------------|
+| **Test Case Name** | Which test failed |
+| **Expected Value** | What was expected |
+| **Actual Value** | What was actually received |
+| **Related Code Location** | File and line number |
+| **Stack Trace** | Error stack (if available) |
+
+### Coverage-Driven
+
+| Practice | Description |
+|----------|-------------|
+| Generate coverage reports | Understand which code isn't tested |
+| Set coverage thresholds | e.g., 80% line coverage |
+| Have AI supplement tests | Generate tests for uncovered branches |
+
+## Configuration Checklist
+
+| Category | Check Item |
+|----------|------------|
+| **Framework** | ✅ Test framework installed and configured |
+| **Environment** | ✅ Test environment isolated (e.g., jsdom) |
+| **Coverage** | ✅ Coverage tool configured |
+| **CI Integration** | ✅ Tests run automatically in CI |
+| **Mocking** | ✅ Mock tools ready (e.g., vi.fn/Mock) |
+| **Data** | ✅ Test data/fixtures organized |
+
 ## Next Steps
 
 After configuring the testing framework, set up [CI/CD Pipeline](./ci-cd) to automate the entire development process.
-

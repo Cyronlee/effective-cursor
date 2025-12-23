@@ -2,6 +2,8 @@
 title: "CI/CD Pipeline"
 ---
 
+import { Steps } from 'nextra/components'
+
 # CI/CD Pipeline
 
 > Build a multi-layer protection + intelligent repair automated loop
@@ -10,31 +12,13 @@ title: "CI/CD Pipeline"
 
 In the CI/CD pipeline, deeply integrating mature engineering toolchains with AI Agents creates a **multi-layer protection + intelligent repair** automated loop, significantly reducing the risk of AI-generated code and ensuring deliverables maintain production-grade quality.
 
-### AI-Enhanced CI/CD Model
+### Core Advantages
 
-```
-┌──────────────────────────────────────────────────────────────────┐
-│                     AI-Enhanced CI/CD Pipeline                    │
-├──────────────────────────────────────────────────────────────────┤
-│                                                                  │
-│   Push/PR ──> Lint ──> Type Check ──> Unit Tests ──> E2E Tests  │
-│      │         │           │              │              │       │
-│      │         ▼           ▼              ▼              ▼       │
-│      │    [Failure Report] ──────────> AI Agent Auto-Fix         │
-│      │                                    │                      │
-│      │                                    ▼                      │
-│      └──────────────── Resubmit PR <─────┘                       │
-│                                                                  │
-│                  Security Scan ──> Coverage Gate ──> Deploy      │
-│                                                                  │
-└──────────────────────────────────────────────────────────────────┘
-```
-
-**Core Advantages:**
-
-- **AI doesn't replace the toolchain, it enhances it**: Traditional tools provide deterministic feedback, AI handles rapid fixes
-- **True self-healing pipeline**: Code issues are resolved automatically within minutes
-- **Controlled risk**: Multiple gates ensure even occasional AI mistakes don't reach production
+| Advantage | Description |
+|-----------|-------------|
+| **Enhance, Not Replace** | AI doesn't replace the toolchain; traditional tools provide deterministic feedback, AI handles rapid fixes |
+| **Self-Healing Pipeline** | Code issues resolved automatically within minutes; humans only intervene for complex decisions |
+| **Controlled Risk** | Multiple gates ensure even occasional AI mistakes don't reach production |
 
 ## CI/CD Key Stages
 
@@ -47,316 +31,120 @@ In the CI/CD pipeline, deeply integrating mature engineering toolchains with AI 
 | **Security Scan** | Dependency vulnerabilities, secret leaks | Snyk, Dependabot | AI fixes high-risk dependencies |
 | **Coverage Gate** | Test coverage threshold | Istanbul, Coverage.py | AI generates missing test cases |
 
-## GitHub Actions in Practice
+## AI-Enhanced CI/CD Flow
 
-### Basic CI Pipeline
+<Steps>
 
-```yaml
-# .github/workflows/ci.yml
-name: CI
+### Trigger Pipeline
 
-on:
-  push:
-    branches: [main, develop]
-  pull_request:
-    branches: [main, develop]
+Push or Pull Request triggers CI/CD
 
-jobs:
-  lint-and-test:
-    runs-on: ubuntu-latest
-    
-    steps:
-      - uses: actions/checkout@v4
-      
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: 'npm'
-      
-      - name: Install dependencies
-        run: npm ci
-      
-      - name: Type Check
-        run: npm run type-check
-      
-      - name: Lint
-        run: npm run lint
-      
-      - name: Unit Tests
-        run: npm run test -- --coverage
-      
-      - name: Upload coverage
-        uses: codecov/codecov-action@v3
-        with:
-          file: ./coverage/lcov.info
+### Lint + Type Check
 
-  e2e:
-    runs-on: ubuntu-latest
-    needs: lint-and-test
-    
-    steps:
-      - uses: actions/checkout@v4
-      
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: 'npm'
-      
-      - name: Install dependencies
-        run: npm ci
-      
-      - name: Install Playwright
-        run: npx playwright install --with-deps
-      
-      - name: Build
-        run: npm run build
-      
-      - name: Run E2E Tests
-        run: npm run test:e2e
-      
-      - name: Upload test results
-        if: failure()
-        uses: actions/upload-artifact@v3
-        with:
-          name: playwright-report
-          path: playwright-report/
-```
+Static analysis and type checking (parallel execution)
 
-### Security Scan Integration
+### Unit & Integration Tests
 
-```yaml
-# .github/workflows/security.yml
-name: Security Scan
+Run test suite, collect failure reports
 
-on:
-  push:
-    branches: [main]
-  schedule:
-    - cron: '0 0 * * *'  # Daily scan
+### Security Scan
 
-jobs:
-  security:
-    runs-on: ubuntu-latest
-    
-    steps:
-      - uses: actions/checkout@v4
-      
-      - name: Run Snyk
-        uses: snyk/actions/node@master
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-        with:
-          args: --severity-threshold=high
-      
-      - name: Run CodeQL
-        uses: github/codeql-action/analyze@v2
-        with:
-          languages: javascript, typescript
-```
+Detect dependency vulnerabilities and sensitive information leaks
+
+### E2E Tests
+
+Run end-to-end tests to verify user flows
 
 ### Coverage Gate
 
-```yaml
-# Add coverage check in CI
-- name: Check coverage threshold
-  run: |
-    COVERAGE=$(cat coverage/coverage-summary.json | jq '.total.lines.pct')
-    if (( $(echo "$COVERAGE < 80" | bc -l) )); then
-      echo "Coverage $COVERAGE% is below threshold 80%"
-      exit 1
-    fi
-```
+Check if test coverage meets threshold
 
-## Python Project CI
+### Deploy (Optional)
 
-```yaml
-# .github/workflows/python-ci.yml
-name: Python CI
+Auto-deploy after all checks pass
 
-on: [push, pull_request]
+</Steps>
 
-jobs:
-  test:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-version: ['3.10', '3.11', '3.12']
-    
-    steps:
-      - uses: actions/checkout@v4
-      
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: ${{ matrix.python-version }}
-      
-      - name: Install dependencies
-        run: |
-          pip install -e ".[dev]"
-      
-      - name: Lint with Ruff
-        run: |
-          ruff check .
-          ruff format --check .
-      
-      - name: Type check with MyPy
-        run: mypy src
-      
-      - name: Test with PyTest
-        run: pytest --cov=src --cov-report=xml
-      
-      - name: Upload coverage
-        uses: codecov/codecov-action@v3
-```
+## Pipeline Design Principles
 
-## AI Auto-Fix Pipeline
+### Fail Fast
 
-### Manual Trigger AI Fix
+| Principle | Description |
+|-----------|-------------|
+| **Run fastest checks first** | Lint is usually fastest, run first |
+| **Dependencies** | Only run subsequent checks if prerequisites pass |
+| **Early termination** | Stop immediately on failure, save resources |
 
-```yaml
-# .github/workflows/ai-fix.yml
-name: AI Auto-Fix
+### Parallel Execution
 
-on:
-  workflow_dispatch:
-    inputs:
-      issue_number:
-        description: 'Issue number to fix'
-        required: true
+| Strategy | Description |
+|----------|-------------|
+| **Independent tasks parallel** | Lint and Type Check can run in parallel |
+| **Dependent tasks serial** | Tests need to wait for prerequisite checks |
+| **Matrix builds** | Multi-version/multi-platform parallel testing |
 
-jobs:
-  ai-fix:
-    runs-on: ubuntu-latest
-    
-    steps:
-      - uses: actions/checkout@v4
-      
-      - name: Get lint errors
-        id: lint
-        run: |
-          npm run lint 2>&1 | tee lint-output.txt
-          echo "errors=$(cat lint-output.txt)" >> $GITHUB_OUTPUT
-      
-      - name: AI Fix (placeholder)
-        run: |
-          # Integrate AI Agent API here
-          # e.g., call Cursor API or self-hosted AI service
-          echo "AI would fix: ${{ steps.lint.outputs.errors }}"
-```
+### Cache Optimization
 
-### AI Service Integration Architecture Example
+| Cache Content | Purpose |
+|---------------|---------|
+| **Dependency cache** | npm/pip package cache, speed up installation |
+| **Build cache** | Incremental builds, reduce compile time |
+| **Test cache** | Only run affected tests |
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│                    AI Auto-Fix Architecture                  │
-├─────────────────────────────────────────────────────────────┤
-│                                                             │
-│   GitHub Actions ──> Webhook ──> AI Service ──> PR Update  │
-│                                                             │
-│   1. CI failure triggers Webhook                            │
-│   2. AI Service receives failure report                     │
-│   3. Call LLM API to generate fix code                      │
-│   4. Create PR or update existing PR                        │
-│   5. Re-trigger CI                                          │
-│                                                             │
-└─────────────────────────────────────────────────────────────┘
-```
+## CI Platform Selection
 
-## Branch Protection Rules
+| Platform | Features | Recommendation |
+|----------|----------|----------------|
+| **GitHub Actions** | GitHub native, rich community | ⭐⭐⭐ |
+| **GitLab CI** | GitLab native, comprehensive features | ⭐⭐⭐ |
+| **CircleCI** | Fast, flexible | ⭐⭐ |
+| **Jenkins** | Self-hosted, customizable | ⭐⭐ |
 
-Ensure all checks pass before merging:
+## AI Auto-Fix Architecture
 
-```yaml
-# Configure Branch Protection Rules in GitHub repo settings
+### Auto-Fix Flow
 
-# main branch protection rules:
-# - Require status checks to pass
-#   - lint-and-test
-#   - e2e
-#   - security
-# - Require branches to be up to date
-# - Require pull request reviews
-```
+| Step | Description |
+|------|-------------|
+| 1. CI failure triggers | Detect lint/test failure |
+| 2. Collect error report | Extract failure details and context |
+| 3. AI analyzes and fixes | Call AI to generate fix code |
+| 4. Update PR | Push fix to branch |
+| 5. Re-run CI | Verify if fix is effective |
 
-## Best Practices
+### Implementation Approaches
 
-### 1. Fail Fast Principle
+| Approach | Complexity | Description |
+|----------|------------|-------------|
+| **Manual trigger** | Low | Manually copy errors for AI to fix |
+| **Webhook + AI API** | Medium | Auto-send failure reports to AI service |
+| **Dedicated AI Agent** | High | Integrate SWE-agent or similar for auto-fix |
 
-```yaml
-jobs:
-  lint:
-    runs-on: ubuntu-latest
-    steps:
-      - run: npm run lint  # Run fastest checks first
+## Branch Protection Strategy
 
-  test:
-    needs: lint  # Only run tests if lint passes
-    runs-on: ubuntu-latest
-    steps:
-      - run: npm test
-```
-
-### 2. Parallel Execution
-
-```yaml
-jobs:
-  lint:
-    runs-on: ubuntu-latest
-    # ...
-  
-  type-check:
-    runs-on: ubuntu-latest  # Runs parallel with lint
-    # ...
-  
-  test:
-    needs: [lint, type-check]  # Wait for both above jobs
-    # ...
-```
-
-### 3. Cache Optimization
-
-```yaml
-- name: Cache dependencies
-  uses: actions/cache@v3
-  with:
-    path: ~/.npm
-    key: ${{ runner.OS }}-node-${{ hashFiles('**/package-lock.json') }}
-    restore-keys: |
-      ${{ runner.OS }}-node-
-```
-
-### 4. Error Report Formatting
-
-```yaml
-- name: Format test output for AI
-  if: failure()
-  run: |
-    # Generate AI-friendly error report
-    echo "## Test Failures" > ai-report.md
-    cat test-results.json | jq -r '.testResults[] | select(.status=="failed") | "- \(.name): \(.message)"' >> ai-report.md
-```
+| Strategy | Description |
+|----------|-------------|
+| **Require status checks to pass** | lint, test, security must all be green |
+| **Require branches to be up to date** | Must rebase before merging |
+| **Require PR reviews** | At least 1 approval (optional) |
+| **No direct push** | All changes must go through PR |
 
 ## Complete CI/CD Checklist
 
-- [ ] **Code Quality**
-  - [ ] ESLint / Ruff configured
-  - [ ] Prettier / Black formatting
-  - [ ] Type checking (TypeScript / MyPy)
-- [ ] **Testing**
-  - [ ] Unit test framework configured
-  - [ ] Coverage reporting
-  - [ ] E2E tests (optional)
-- [ ] **Security**
-  - [ ] Dependency vulnerability scanning
-  - [ ] Secret detection
-- [ ] **Automation**
-  - [ ] PR auto-checks
-  - [ ] Main branch protection
-  - [ ] Auto-deployment (optional)
+| Category | Check Item |
+|----------|------------|
+| **Code Quality** | ✅ Linter configured (ESLint/Ruff) |
+| | ✅ Formatter configured (Prettier/Black) |
+| | ✅ Type checking (TypeScript/MyPy) |
+| **Testing** | ✅ Unit test framework configured |
+| | ✅ Coverage reporting and thresholds |
+| | ✅ E2E tests (optional) |
+| **Security** | ✅ Dependency vulnerability scanning (Snyk/Dependabot) |
+| | ✅ Sensitive information detection |
+| **Automation** | ✅ PR auto-checks |
+| | ✅ Main branch protection rules |
+| | ✅ Auto-deployment (optional) |
 
 ## Summary
 
 **Use mature Linters, tests, and security scanners as "iron gatekeepers," and AI Agent as "intelligent repairman"**—deep collaboration between both truly achieves high-quality, high-velocity AI-driven development delivery. This is the most practical and effective production-grade AI engineering practice today.
-

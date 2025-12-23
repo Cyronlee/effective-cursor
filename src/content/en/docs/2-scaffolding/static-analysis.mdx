@@ -2,6 +2,8 @@
 title: "Static Analysis Tools"
 ---
 
+import { Steps } from 'nextra/components'
+
 # Static Analysis Tools
 
 > Let mature linters guard AI-generated code
@@ -10,22 +12,33 @@ title: "Static Analysis Tools"
 
 In AI-assisted development, mature static analysis tools (like ESLint, Ruff, SpotBugs, etc.) are **not replaced by AI**, but serve as reliable external validation mechanisms integrated into the Agent's feedback loop.
 
-### Collaboration Model
+### AI + Linter Collaboration Loop
 
-```
-┌─────────────────────────────────────────────────────────┐
-│                   AI + Linter Collaboration Loop         │
-├─────────────────────────────────────────────────────────┤
-│                                                         │
-│   AI Agent ──generates code──> Linter ──feedback──> AI  │
-│      │                                          │       │
-│      │                                          │       │
-│      └────────────── fix and retry ─────────────┘       │
-│                                                         │
-│                   Until all checks pass                 │
-│                                                         │
-└─────────────────────────────────────────────────────────┘
-```
+<Steps>
+
+### AI Generates Code
+
+AI Agent quickly generates functional code
+
+### Linter Detects Issues
+
+Static analysis tools find style, bug, and security issues
+
+### Feedback to AI
+
+Provide linter report to AI
+
+### AI Fixes
+
+AI fixes based on specific error messages
+
+### Repeat Until Passing
+
+Loop until all checks pass
+
+</Steps>
+
+### Division of Work
 
 | Role | Strengths |
 |------|-----------|
@@ -38,285 +51,97 @@ This division is more efficient and reliable than "letting AI self-check":
 - Avoids AI hallucinations or subjective bias
 - Aligns with modern engineering practices (CI/CD, pre-commit hooks)
 
-## JavaScript / TypeScript
-
-### ESLint + Prettier
-
-```bash
-# Installation
-npm install -D eslint prettier eslint-config-prettier @typescript-eslint/parser @typescript-eslint/eslint-plugin
-
-# Or using bun
-bun add -D eslint prettier eslint-config-prettier @typescript-eslint/parser @typescript-eslint/eslint-plugin
-```
-
-**eslint.config.js (Flat Config)**
-
-```javascript
-import eslint from '@eslint/js';
-import tseslint from 'typescript-eslint';
-import prettier from 'eslint-config-prettier';
-
-export default tseslint.config(
-  eslint.configs.recommended,
-  ...tseslint.configs.recommended,
-  prettier,
-  {
-    rules: {
-      '@typescript-eslint/no-unused-vars': 'error',
-      '@typescript-eslint/no-explicit-any': 'warn',
-      '@typescript-eslint/explicit-function-return-type': 'off',
-    },
-  },
-  {
-    ignores: ['node_modules', 'dist', '.next'],
-  }
-);
-```
-
-**Key Configuration for AI Collaboration**
-
-```javascript
-{
-  rules: {
-    // These rules are particularly useful for AI-generated code
-    'no-console': 'warn',           // AI often leaves debug code
-    'no-unused-vars': 'error',      // AI may generate unused variables
-    'prefer-const': 'error',        // Maintain code consistency
-    'no-duplicate-imports': 'error' // AI may duplicate imports
-  }
-}
-```
-
-### Biome (Next-Gen Tool)
-
-A faster alternative that integrates linting and formatting:
-
-```bash
-bun add -D @biomejs/biome
-```
-
-**biome.json**
-
-```json
-{
-  "$schema": "https://biomejs.dev/schemas/1.4.1/schema.json",
-  "organizeImports": { "enabled": true },
-  "linter": {
-    "enabled": true,
-    "rules": { "recommended": true }
-  },
-  "formatter": {
-    "enabled": true,
-    "indentStyle": "space",
-    "indentWidth": 2
-  }
-}
-```
-
-## Python
-
-### Ruff (Recommended)
-
-Ruff is the fastest linter in the Python ecosystem, compatible with Flake8, isort, and other rules:
-
-```bash
-pip install ruff
-```
-
-**pyproject.toml**
-
-```toml
-[tool.ruff]
-target-version = "py311"
-line-length = 88
-select = [
-    "E",   # pycodestyle errors
-    "W",   # pycodestyle warnings
-    "F",   # Pyflakes
-    "I",   # isort
-    "B",   # flake8-bugbear
-    "C4",  # flake8-comprehensions
-    "UP",  # pyupgrade
-]
-ignore = ["E501"]  # line too long (handled by formatter)
-
-[tool.ruff.format]
-quote-style = "double"
-indent-style = "space"
-```
-
-### MyPy (Type Checking)
-
-```bash
-pip install mypy
-```
-
-**pyproject.toml**
-
-```toml
-[tool.mypy]
-python_version = "3.11"
-strict = true
-warn_return_any = true
-warn_unused_ignores = true
-disallow_untyped_defs = true
-```
-
-## Java
-
-### SpotBugs + Checkstyle
-
-**pom.xml (Maven)**
-
-```xml
-<build>
-  <plugins>
-    <!-- SpotBugs -->
-    <plugin>
-      <groupId>com.github.spotbugs</groupId>
-      <artifactId>spotbugs-maven-plugin</artifactId>
-      <version>4.8.2.0</version>
-      <configuration>
-        <effort>Max</effort>
-        <threshold>Low</threshold>
-      </configuration>
-    </plugin>
-    
-    <!-- Checkstyle -->
-    <plugin>
-      <groupId>org.apache.maven.plugins</groupId>
-      <artifactId>maven-checkstyle-plugin</artifactId>
-      <version>3.3.1</version>
-      <configuration>
-        <configLocation>checkstyle.xml</configLocation>
-      </configuration>
-    </plugin>
-  </plugins>
-</build>
-```
-
-## Pre-commit Hooks
-
-Use Git Hooks to automatically run checks before commits:
-
-### Husky + lint-staged (JS/TS)
-
-```bash
-npm install -D husky lint-staged
-npx husky init
-```
-
-**.husky/pre-commit**
-
-```bash
-npx lint-staged
-```
-
-**package.json**
-
-```json
-{
-  "lint-staged": {
-    "*.{js,jsx,ts,tsx}": ["eslint --fix", "prettier --write"],
-    "*.{json,md}": ["prettier --write"]
-  }
-}
-```
-
-### pre-commit (Python)
-
-```bash
-pip install pre-commit
-```
-
-**.pre-commit-config.yaml**
-
-```yaml
-repos:
-  - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.1.9
-    hooks:
-      - id: ruff
-        args: [--fix]
-      - id: ruff-format
-  
-  - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.8.0
-    hooks:
-      - id: mypy
-```
-
-## Editor Integration
-
-Ensure static analysis tools integrate with Cursor for **real-time feedback**:
-
-### VS Code / Cursor Settings
-
-```json
-{
-  "editor.formatOnSave": true,
-  "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": "explicit",
-    "source.organizeImports": "explicit"
-  },
-  "eslint.validate": ["javascript", "typescript", "javascriptreact", "typescriptreact"],
-  "[python]": {
-    "editor.defaultFormatter": "charliermarsh.ruff",
-    "editor.codeActionsOnSave": {
-      "source.fixAll.ruff": "explicit",
-      "source.organizeImports.ruff": "explicit"
-    }
-  }
-}
-```
-
-## AI Collaboration Best Practices
-
-### 1. Feed Lint Errors Back to AI
-
-When AI-generated code has lint errors, provide the complete report:
-
-```
-ESLint reported the following errors:
-1. 'useState' is defined but never used (@typescript-eslint/no-unused-vars)
-2. 'any' type is not allowed (@typescript-eslint/no-explicit-any)
-
-Please fix these issues.
-```
-
-### 2. Declare Toolchain in Cursor Rules
-
-```markdown
-## Code Quality
-
-- ESLint and Prettier are configured
-- All code must pass `npm run lint` check
-- lint-staged runs automatically before commits
-```
-
-### 3. Auto-Fix Workflow
-
-```bash
-# Auto-fix AI-generated code
-npm run lint -- --fix
-
-# Or Python
-ruff check --fix .
-ruff format .
-```
-
 ## Tool Selection Quick Reference
 
 | Language | Linter | Formatter | Type Checking |
 |----------|--------|-----------|---------------|
-| TypeScript | ESLint / Biome | Prettier / Biome | TypeScript |
+| TypeScript | ESLint / Biome | Prettier / Biome | TypeScript Compiler |
 | Python | Ruff | Ruff / Black | MyPy / Pyright |
-| Java | SpotBugs | Google Java Format | Java Compiler |
+| Java | SpotBugs + Checkstyle | Google Java Format | Java Compiler |
 | Go | golangci-lint | gofmt | Go Compiler |
 | Rust | Clippy | rustfmt | Rust Compiler |
+
+## JavaScript / TypeScript Tools
+
+### Recommended Configuration
+
+| Tool | Purpose | Recommendation |
+|------|---------|----------------|
+| **ESLint** | Code quality checking | ⭐⭐⭐ Mature and stable |
+| **Prettier** | Code formatting | ⭐⭐⭐ Industry standard |
+| **Biome** | Lint + Format all-in-one | ⭐⭐ Emerging, fast |
+| **TypeScript** | Type checking | ⭐⭐⭐ Essential |
+
+### Rules Particularly Useful for AI
+
+| Rule | Purpose |
+|------|---------|
+| `no-console` | AI often leaves debug code |
+| `no-unused-vars` | AI may generate unused variables |
+| `prefer-const` | Maintain code consistency |
+| `no-duplicate-imports` | AI may duplicate imports |
+| `no-explicit-any` | Enforce type safety |
+
+## Python Tools
+
+### Recommended Configuration
+
+| Tool | Purpose | Recommendation |
+|------|---------|----------------|
+| **Ruff** | Lint + Format | ⭐⭐⭐ Extremely fast, compatible with many rules |
+| **Black** | Code formatting | ⭐⭐ Opinionated but consistent |
+| **MyPy** | Static type checking | ⭐⭐⭐ Essential for type safety |
+| **Pyright** | Type checking | ⭐⭐ Faster alternative |
+
+## Java Tools
+
+| Tool | Purpose |
+|------|---------|
+| **SpotBugs** | Find potential bugs |
+| **Checkstyle** | Code style checking |
+| **PMD** | Code quality checking |
+| **Error Prone** | Compile-time bug detection |
+
+## Pre-commit Hooks
+
+Automatically run checks before code commits, preventing problematic code from entering the repository:
+
+| Tool | Languages | Description |
+|------|-----------|-------------|
+| **Husky + lint-staged** | JS/TS | Only checks staged files, fast |
+| **pre-commit** | Python/General | Multi-language support, flexible configuration |
+| **lefthook** | General | Written in Go, extremely fast |
+
+## Editor Integration
+
+Ensure tools integrate with Cursor for **real-time feedback**:
+
+| Setting | Purpose |
+|---------|---------|
+| `editor.formatOnSave` | Auto-format on save |
+| `source.fixAll.eslint` | Auto-fix ESLint issues on save |
+| `source.organizeImports` | Auto-organize imports on save |
+
+## AI Collaboration Best Practices
+
+| Practice | Description |
+|----------|-------------|
+| **Feed errors back to AI** | Copy linter report for AI to fix |
+| **Declare in Cursor Rules** | Inform AI of project toolchain |
+| **Use auto-fix** | Run `--fix` to auto-fix simple issues |
+| **Focus on high priority** | Errors > Warnings, Security > Style |
+
+## Configuration Checklist
+
+| Category | Check Item |
+|----------|------------|
+| **Linter** | ✅ ESLint/Ruff/SpotBugs configured |
+| **Formatter** | ✅ Prettier/Ruff/gofmt configured |
+| **Type Checking** | ✅ TypeScript/MyPy strict mode enabled |
+| **Editor** | ✅ Auto-format and fix on save |
+| **Git Hooks** | ✅ Pre-commit hooks configured |
+| **CI** | ✅ Pipeline includes lint checks |
 
 ## Next Steps
 
 After configuring static analysis tools, set up [Automated Testing Frameworks](./automated-testing) to verify functional correctness.
-

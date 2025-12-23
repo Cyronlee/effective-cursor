@@ -1,56 +1,112 @@
 ---
-title: "Engineering Foundation"
+title: "Engineering Architecture"
 ---
 
-# Engineering Foundation
+# Engineering Architecture
 
-> Establish engineering foundation to lay a solid architecture for AI development
+> Set up architecture and automation systems early, let AI run efficiently on safe tracks
 
-## Chapter Goals
+## Quick Start
+
+In the previous chapter, we completed technology selection. Now it's time to initialize your project or optimize your existing project structure.
+
+### New Projects: Use Scaffolds
+
+If you're starting from scratch, we recommend these battle-tested starter templates:
+
+| Tech Stack | Recommended Scaffold | Features |
+|------------|---------------------|----------|
+| **React/Next.js** | [shadcn/ui](https://ui.shadcn.com/docs) | Modern UI components, native TypeScript support |
+| **Next.js Enterprise** | [next-enterprise](https://github.com/Blazity/next-enterprise) | Enterprise-grade architecture with complete toolchain |
+| **Spring Boot** | [spring-boot-boilerplate](https://github.com/Genc/spring-boot-boilerplate) | Production-ready backend template |
+
+### Existing Projects: Optimize
+
+If you already have a project, you can directly apply the practices in this chapter:
+- **Project structure optimization**: Reorganize directories, split large files
+- **Toolchain configuration**: Introduce static analysis, testing, CI/CD
+
+## Core Concept: Architecture First
 
 In the era of AI-assisted development, many believe they can let AI "freely explore" to build systems. However, practice has shown that **without a solid engineering foundation, AI tends to introduce deviations, technical debt, or low-quality output**.
 
-This chapter introduces how to establish engineering foundations for AI development:
+### The Restaurant Analogy
 
-| Section | Content | Core Concept |
-|---------|---------|--------------|
-| [Engineering Architecture](./engineering-architecture) | Architecture first, modular design | Humans lay foundation, AI builds |
-| [Architecture Design](./architecture-design) | Directory structure, strong typing, interface contracts | Constraints are freedom |
-| [Static Analysis Tools](./static-analysis) | ESLint, Ruff, SpotBugs | Deterministic feedback |
-| [Automated Testing](./automated-testing) | Vitest, PyTest, Playwright | Verify correctness |
-| [CI/CD Pipeline](./ci-cd) | GitHub Actions, pipelines | Automated loop |
+| Restaurant Element | Software Architecture | Who's Responsible |
+|-------------------|----------------------|-------------------|
+| 🏗️ Kitchen Layout | System architecture, directory structure | **Humans** must carefully plan |
+| 📋 Menu Design | API design, interface contracts | **Humans** define contracts |
+| 🍳 Cooking Process | Business logic implementation | **AI** implements efficiently |
+| 🔍 Health Inspection | Static analysis, testing | **Tools** provide automatic feedback |
 
-## Core Concepts
+Just as an excellent executive chef must first design the kitchen layout and workflow to enable the culinary team to operate efficiently, **humans must manually establish a solid architectural foundation at the beginning of the project**.
 
-### 🏗️ Architecture First
+## Automation Tool Layering
 
-Imagine a restaurant: the kitchen layout (system architecture) must be carefully planned by humans before the culinary team (AI) can operate efficiently.
+When introducing automation tools, the key is to **identify which tools are suitable for the AI workflow and which should remain in automated/manual processes**.
 
-**Humans must manually establish a solid architectural foundation** for AI to run efficiently on safe tracks.
+### 🤖 Tools in AI Workflow
 
-### 🔄 Feedback Loop
+These tools should be integrated into AI's work loop, providing **instant feedback**:
+
+| Tool Type | Examples | How AI Uses It |
+|-----------|----------|----------------|
+| **Type Checking** | TypeScript, mypy | AI checks type errors immediately after generating code |
+| **Linter** | ESLint, Ruff | AI auto-fixes code style based on lint errors |
+| **Unit Testing** | Vitest, PyTest | AI runs tests to verify functionality |
+| **Formatting** | Prettier, Black | AI auto-formats output code |
+
+**Principle: Don't add too many tools to the AI workflow.** Each additional tool increases AI's cognitive load and execution time. Keep only core tools that provide **deterministic feedback**.
+
+### ⚙️ Tools in Automated Processes
+
+These tools should run in **automated processes**, not in the AI workflow:
+
+| Tool Type | Examples | Trigger Timing |
+|-----------|----------|----------------|
+| **Pre-commit Hook** | husky + lint-staged | When developer commits code |
+| **Pre-push Hook** | Full test suite | Before pushing code |
+| **CI Checks** | GitHub Actions | When PR is created/updated |
+| **Security Scanning** | Dependabot, Snyk | Periodically or on PR |
+
+### 🧑‍💻 Tools in Manual Processes
+
+These require human judgment and are not suitable for full automation:
+
+| Tool Type | Examples | Why Human Needed |
+|-----------|----------|------------------|
+| **Code Review** | GitHub PR Review | Requires understanding business context and architectural intent |
+| **Architecture Decisions** | ADR documents | Requires global perspective and long-term thinking |
+| **Dependency Upgrades** | Major version upgrades | Requires evaluating impact of breaking changes |
+
+## Feedback Loop Design
+
+Good engineering architecture creates a **fast feedback loop**:
 
 ```
-AI generates code → Tools detect issues → Feedback to AI → AI fixes → Re-check → Pass
+Developer intent → AI generates code → Tools detect instantly → Feedback to AI → AI fixes → Validation passes
 ```
 
-Traditional tools (Linters, tests) provide **deterministic, high-coverage** feedback, avoiding AI hallucinations or subjective bias.
+### Why Feedback Loops Matter?
 
-### 📏 Constraints Are Freedom
+| Feature | Traditional Tool Feedback | AI Self-Assessment |
+|---------|--------------------------|-------------------|
+| **Determinism** | ✅ Clear rules, consistent results | ❌ May hallucinate |
+| **Coverage** | ✅ 100% checks all code | ❌ May miss edge cases |
+| **Speed** | ✅ Millisecond response | ⚠️ Requires extra inference time |
+| **Reliability** | ✅ Tools don't lie | ❌ AI may be overconfident |
 
-Architecture designed for AI development is not about letting AI "freely explore," but building:
+## Chapter Contents
 
-- **Strict Rules**: Clear type definitions, interface contracts, code standards
-- **Fast Feedback**: Real-time lint checks, type validation, test runs
-- **Small Iterations**: Modular design, handling one small task at a time
-
-## Key Principles
-
-1. **Humans handle architecture, AI handles implementation** — Architecture decisions require global perspective and long-term thinking
-2. **Tools provide feedback, AI responds with fixes** — Create a continuous improvement loop
-3. **Clearer constraints, more efficient AI** — Clear rules beat vague guidance
-4. **Small iterations, frequent validation** — Every change should be testable and reversible
+| Section | Content | Core Goal |
+|---------|---------|-----------|
+| [Directory Structure](./directory-structure) | AI-friendly directory organization, small file strategy | Optimize AI context reading |
+| [Database Schema](./database-schema) | Unified ERD management, schema file strategy | Help AI understand data models |
+| [Architecture Design](./architecture-design) | Modularity, strong typing, interface contracts | Establish clear code organization |
+| [Static Analysis Tools](./static-analysis) | ESLint, Ruff, SpotBugs | Provide deterministic feedback |
+| [Automated Testing](./automated-testing) | Vitest, PyTest, Playwright | Verify functional correctness |
+| [CI/CD Pipeline](./ci-cd) | GitHub Actions, pipelines | Build automated feedback loops |
 
 ## Next Steps
 
-Ready? Let's start with [Engineering Architecture](./engineering-architecture) to understand how to lay a solid architectural foundation for AI development.
+Ready? Let's start with [Project Structure Optimization](./directory-structure) to learn how to design an AI-friendly project organization.

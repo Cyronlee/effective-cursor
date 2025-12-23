@@ -2,6 +2,8 @@
 title: "CI/CD 流程"
 ---
 
+import { Steps } from 'nextra/components'
+
 # CI/CD 流程
 
 > 构建多层防护 + 智能修复的自动化闭环
@@ -10,31 +12,13 @@ title: "CI/CD 流程"
 
 在 CI/CD 管道中，将成熟的工程工具链与 AI Agent 深度集成，能构建一个**多层防护 + 智能修复**的自动化闭环，显著降低 AI 生成代码的风险，确保交付物始终保持生产级质量。
 
-### AI 增强的 CI/CD 模型
+### 核心优势
 
-```
-┌──────────────────────────────────────────────────────────────────┐
-│                     AI 增强的 CI/CD 流水线                         │
-├──────────────────────────────────────────────────────────────────┤
-│                                                                  │
-│   Push/PR ──> Lint ──> Type Check ──> Unit Tests ──> E2E Tests  │
-│      │         │           │              │              │       │
-│      │         ▼           ▼              ▼              ▼       │
-│      │    [失败报告] ──────────────> AI Agent 自动修复            │
-│      │                                    │                      │
-│      │                                    ▼                      │
-│      └──────────────── 重新提交 PR <─────┘                       │
-│                                                                  │
-│                  Security Scan ──> Coverage Gate ──> Deploy      │
-│                                                                  │
-└──────────────────────────────────────────────────────────────────┘
-```
-
-**核心优势：**
-
-- **AI 不取代工具链，而是增强工具链**：传统工具提供确定性反馈，AI 负责快速修复
-- **形成真正的自我修复管道**：代码问题几乎在几分钟内自动解决
-- **风险可控**：多层 gate 确保即使 AI 偶尔失误，也不会流入生产
+| 优势 | 说明 |
+|-----|------|
+| **增强而非取代** | AI 不取代工具链，传统工具提供确定性反馈，AI 负责快速修复 |
+| **自我修复管道** | 代码问题几乎在几分钟内自动解决，人只介入复杂决策 |
+| **风险可控** | 多层 gate 确保即使 AI 偶尔失误，也不会流入生产 |
 
 ## CI/CD 关键阶段
 
@@ -47,316 +31,120 @@ title: "CI/CD 流程"
 | **Security Scan** | 依赖漏洞、秘密泄露 | Snyk、Dependabot | 高危问题 AI 修复依赖 |
 | **Coverage Gate** | 测试覆盖率阈值 | Istanbul、Coverage.py | AI 生成缺失测试用例 |
 
-## GitHub Actions 实战
+## AI 增强的 CI/CD 流程
 
-### 基础 CI 流程
+<Steps>
 
-```yaml
-# .github/workflows/ci.yml
-name: CI
+### 触发流水线
 
-on:
-  push:
-    branches: [main, develop]
-  pull_request:
-    branches: [main, develop]
+Push 或 Pull Request 触发 CI/CD
 
-jobs:
-  lint-and-test:
-    runs-on: ubuntu-latest
-    
-    steps:
-      - uses: actions/checkout@v4
-      
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: 'npm'
-      
-      - name: Install dependencies
-        run: npm ci
-      
-      - name: Type Check
-        run: npm run type-check
-      
-      - name: Lint
-        run: npm run lint
-      
-      - name: Unit Tests
-        run: npm run test -- --coverage
-      
-      - name: Upload coverage
-        uses: codecov/codecov-action@v3
-        with:
-          file: ./coverage/lcov.info
+### Lint + Type Check
 
-  e2e:
-    runs-on: ubuntu-latest
-    needs: lint-and-test
-    
-    steps:
-      - uses: actions/checkout@v4
-      
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: 'npm'
-      
-      - name: Install dependencies
-        run: npm ci
-      
-      - name: Install Playwright
-        run: npx playwright install --with-deps
-      
-      - name: Build
-        run: npm run build
-      
-      - name: Run E2E Tests
-        run: npm run test:e2e
-      
-      - name: Upload test results
-        if: failure()
-        uses: actions/upload-artifact@v3
-        with:
-          name: playwright-report
-          path: playwright-report/
-```
+静态分析和类型检查（并行执行）
 
-### 安全扫描集成
+### 单元 & 集成测试
 
-```yaml
-# .github/workflows/security.yml
-name: Security Scan
+运行测试套件，收集失败报告
 
-on:
-  push:
-    branches: [main]
-  schedule:
-    - cron: '0 0 * * *'  # 每日扫描
+### 安全扫描
 
-jobs:
-  security:
-    runs-on: ubuntu-latest
-    
-    steps:
-      - uses: actions/checkout@v4
-      
-      - name: Run Snyk
-        uses: snyk/actions/node@master
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-        with:
-          args: --severity-threshold=high
-      
-      - name: Run CodeQL
-        uses: github/codeql-action/analyze@v2
-        with:
-          languages: javascript, typescript
-```
+检测依赖漏洞和敏感信息泄露
 
-### 覆盖率门禁
+### E2E 测试
 
-```yaml
-# 在 CI 中添加覆盖率检查
-- name: Check coverage threshold
-  run: |
-    COVERAGE=$(cat coverage/coverage-summary.json | jq '.total.lines.pct')
-    if (( $(echo "$COVERAGE < 80" | bc -l) )); then
-      echo "Coverage $COVERAGE% is below threshold 80%"
-      exit 1
-    fi
-```
+运行端到端测试验证用户流程
 
-## Python 项目 CI
+### Coverage Gate
 
-```yaml
-# .github/workflows/python-ci.yml
-name: Python CI
+检查测试覆盖率是否达标
 
-on: [push, pull_request]
+### 部署（可选）
 
-jobs:
-  test:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-version: ['3.10', '3.11', '3.12']
-    
-    steps:
-      - uses: actions/checkout@v4
-      
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: ${{ matrix.python-version }}
-      
-      - name: Install dependencies
-        run: |
-          pip install -e ".[dev]"
-      
-      - name: Lint with Ruff
-        run: |
-          ruff check .
-          ruff format --check .
-      
-      - name: Type check with MyPy
-        run: mypy src
-      
-      - name: Test with PyTest
-        run: pytest --cov=src --cov-report=xml
-      
-      - name: Upload coverage
-        uses: codecov/codecov-action@v3
-```
+所有检查通过后自动部署
 
-## AI 自动修复流程
+</Steps>
 
-### 手动触发 AI 修复
+## 流水线设计原则
 
-```yaml
-# .github/workflows/ai-fix.yml
-name: AI Auto-Fix
+### 快速失败
 
-on:
-  workflow_dispatch:
-    inputs:
-      issue_number:
-        description: 'Issue number to fix'
-        required: true
+| 原则 | 说明 |
+|-----|------|
+| **最快的检查先运行** | Lint 通常最快，先运行 |
+| **依赖关系** | 只有前置检查通过才运行后续 |
+| **及早终止** | 一旦失败立即停止，节省资源 |
 
-jobs:
-  ai-fix:
-    runs-on: ubuntu-latest
-    
-    steps:
-      - uses: actions/checkout@v4
-      
-      - name: Get lint errors
-        id: lint
-        run: |
-          npm run lint 2>&1 | tee lint-output.txt
-          echo "errors=$(cat lint-output.txt)" >> $GITHUB_OUTPUT
-      
-      - name: AI Fix (placeholder)
-        run: |
-          # 这里可以集成 AI Agent API
-          # 例如调用 Cursor API 或自建的 AI 服务
-          echo "AI would fix: ${{ steps.lint.outputs.errors }}"
-```
+### 并行化执行
 
-### 集成 AI 服务的示例架构
+| 策略 | 说明 |
+|-----|------|
+| **独立任务并行** | Lint 和 Type Check 可以并行 |
+| **依赖任务串行** | 测试需要等待前置检查 |
+| **矩阵构建** | 多版本/多平台并行测试 |
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│                    AI 自动修复架构                           │
-├─────────────────────────────────────────────────────────────┤
-│                                                             │
-│   GitHub Actions ──> Webhook ──> AI Service ──> PR Update  │
-│                                                             │
-│   1. CI 失败触发 Webhook                                     │
-│   2. AI Service 接收失败报告                                 │
-│   3. 调用 LLM API 生成修复代码                               │
-│   4. 创建 PR 或更新现有 PR                                   │
-│   5. 重新触发 CI                                            │
-│                                                             │
-└─────────────────────────────────────────────────────────────┘
-```
+### 缓存优化
 
-## 分支保护规则
+| 缓存内容 | 作用 |
+|---------|------|
+| **依赖缓存** | npm/pip 包缓存，加速安装 |
+| **构建缓存** | 增量构建，减少编译时间 |
+| **测试缓存** | 只运行受影响的测试 |
 
-确保所有检查通过才能合并：
+## CI 平台选择
 
-```yaml
-# 在 GitHub 仓库设置中配置 Branch Protection Rules
+| 平台 | 特点 | 推荐度 |
+|-----|------|-------|
+| **GitHub Actions** | GitHub 原生、社区丰富 | ⭐⭐⭐ |
+| **GitLab CI** | GitLab 原生、功能全面 | ⭐⭐⭐ |
+| **CircleCI** | 快速、灵活 | ⭐⭐ |
+| **Jenkins** | 自托管、可定制 | ⭐⭐ |
 
-# main 分支保护规则：
-# - Require status checks to pass
-#   - lint-and-test
-#   - e2e
-#   - security
-# - Require branches to be up to date
-# - Require pull request reviews
-```
+## AI 自动修复架构
 
-## 最佳实践
+### 自动修复流程
 
-### 1. 快速失败原则
+| 步骤 | 说明 |
+|-----|------|
+| 1. CI 失败触发 | 检测到 lint/test 失败 |
+| 2. 收集错误报告 | 提取失败详情和上下文 |
+| 3. AI 分析和修复 | 调用 AI 生成修复代码 |
+| 4. 更新 PR | 将修复推送到分支 |
+| 5. 重新运行 CI | 验证修复是否有效 |
 
-```yaml
-jobs:
-  lint:
-    runs-on: ubuntu-latest
-    steps:
-      - run: npm run lint  # 最快的检查先运行
+### 实现方式
 
-  test:
-    needs: lint  # 只有 lint 通过才运行测试
-    runs-on: ubuntu-latest
-    steps:
-      - run: npm test
-```
+| 方式 | 复杂度 | 说明 |
+|-----|-------|------|
+| **手动触发** | 低 | 人工复制错误让 AI 修复 |
+| **Webhook + AI API** | 中 | 自动将失败报告发给 AI 服务 |
+| **专用 AI Agent** | 高 | 集成 SWE-agent 等工具自动修复 |
 
-### 2. 并行化执行
+## 分支保护策略
 
-```yaml
-jobs:
-  lint:
-    runs-on: ubuntu-latest
-    # ...
-  
-  type-check:
-    runs-on: ubuntu-latest  # 与 lint 并行
-    # ...
-  
-  test:
-    needs: [lint, type-check]  # 等待上述两个任务
-    # ...
-```
+| 策略 | 说明 |
+|-----|------|
+| **要求状态检查通过** | lint、test、security 必须全绿 |
+| **要求分支最新** | 合并前必须 rebase |
+| **要求 PR 审核** | 至少 1 人审批（可选） |
+| **禁止直推** | 所有变更必须通过 PR |
 
-### 3. 缓存优化
+## 完整 CI/CD 检查清单
 
-```yaml
-- name: Cache dependencies
-  uses: actions/cache@v3
-  with:
-    path: ~/.npm
-    key: ${{ runner.OS }}-node-${{ hashFiles('**/package-lock.json') }}
-    restore-keys: |
-      ${{ runner.OS }}-node-
-```
-
-### 4. 错误报告格式化
-
-```yaml
-- name: Format test output for AI
-  if: failure()
-  run: |
-    # 生成 AI 友好的错误报告
-    echo "## Test Failures" > ai-report.md
-    cat test-results.json | jq -r '.testResults[] | select(.status=="failed") | "- \(.name): \(.message)"' >> ai-report.md
-```
-
-## 完整 CI/CD 流程检查清单
-
-- [ ] **代码质量**
-  - [ ] ESLint / Ruff 配置
-  - [ ] Prettier / Black 格式化
-  - [ ] 类型检查 (TypeScript / MyPy)
-- [ ] **测试**
-  - [ ] 单元测试框架配置
-  - [ ] 覆盖率报告
-  - [ ] E2E 测试 (可选)
-- [ ] **安全**
-  - [ ] 依赖漏洞扫描
-  - [ ] 敏感信息检测
-- [ ] **自动化**
-  - [ ] PR 自动检查
-  - [ ] 主分支保护
-  - [ ] 自动部署 (可选)
+| 类别 | 检查项 |
+|-----|-------|
+| **代码质量** | ✅ Linter 配置（ESLint/Ruff） |
+| | ✅ Formatter 配置（Prettier/Black） |
+| | ✅ 类型检查（TypeScript/MyPy） |
+| **测试** | ✅ 单元测试框架配置 |
+| | ✅ 覆盖率报告和阈值 |
+| | ✅ E2E 测试（可选） |
+| **安全** | ✅ 依赖漏洞扫描（Snyk/Dependabot） |
+| | ✅ 敏感信息检测 |
+| **自动化** | ✅ PR 自动检查 |
+| | ✅ 主分支保护规则 |
+| | ✅ 自动部署（可选） |
 
 ## 总结
 
 **把成熟的 Linter、测试、安全扫描等工具作为"铁律守门人"，把 AI Agent 作为"智能修理工"**——两者深度协作，才能真正实现高质量、高速度的 AI 驱动开发交付。这正是当前最务实、最有效的生产级 AI 工程实践。
-
