@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 
 
 import type { I18nLangAsyncProps, I18nLangKeys } from '@/i18n'
-import { GoogleAnalytics } from '@next/third-parties/google'
+import { Analytics } from "@vercel/analytics/next"
 import Script from 'next/script'
 import { Footer, LastUpdated, Layout, Navbar } from 'nextra-theme-docs'
 import { Banner, Head, Search } from 'nextra/components'
@@ -135,7 +135,7 @@ export default async function RootLayout({ children, params }: LayoutProps<'/[la
           disableTransitionOnChange
         >
           <Layout
-            copyPageButton={false}
+            copyPageButton={true}
             // banner={
             //   <CustomBanner lang={lang} />
             // }
@@ -178,7 +178,7 @@ export default async function RootLayout({ children, params }: LayoutProps<'/[la
           </Layout>
         </ThemeProvider>
       </body>
-      <GoogleAnalytics gaId="G-VCR6017LB8" />
+      <Analytics />
       <BaiduTrack />
     </html>
   )
