@@ -8,6 +8,10 @@ import { Callout } from 'nextra/components'
 
 > 让 AI 严格执行你项目的独特要求
 
+<Callout type="info">
+本文假设你已了解 [Rules 的工作原理](./how-rules-work)，包括 Rules 类型、应用方式和文件结构。
+</Callout>
+
 ## 核心理念
 
 Cursor Rules 的唯一使命是：**让 AI 生成的代码符合你项目的独特规范**。
@@ -15,15 +19,15 @@ Cursor Rules 的唯一使命是：**让 AI 生成的代码符合你项目的独�
 很多人误以为 Rules 应该包含各种"最佳实践"和通用知识。实际上，大模型已经知道这些内容。你需要告诉 AI 的是：**在这个项目里，我们这样做**。
 
 <Callout type="warning" emoji="⚠️">
-**反面教材：GitHub 上的"规则大全"**
+**反面教材：GitHub 上的"Rules 大全"**
 
-[awesome-cursorrules](https://github.com/PatrickJS/awesome-cursorrules) 是 GitHub 上的热门项目，但其中大量规则都是废话。例如它的 [react.mdc](https://github.com/PatrickJS/awesome-cursorrules/blob/main/rules-new/react.mdc)：
+[awesome-cursorrules](https://github.com/PatrickJS/awesome-cursorrules) 是 GitHub 上的热门项目，但其中大量 Rules 都是废话。例如它的 [react.mdc](https://github.com/PatrickJS/awesome-cursorrules/blob/main/rules-new/react.mdc)：
 
 - "Use functional components with hooks" - AI 早就知道这是现代 React 的标准
 - "Write clean, readable code" - 这种空话对 AI 毫无价值
 - "Follow React best practices" - 太模糊，等于没说
 
-这些通用建议不仅浪费 token，还会稀释你真正需要的项目独特规则。**不要照抄这些模板，只写你项目里独有的硬性规定。**
+这些通用建议不仅浪费 token，还会稀释你真正需要的项目独特 Rules。**不要照抄这些模板，只写你项目里独有的硬性规定。**
 </Callout>
 
 | 常见误区 | 正确做法 |
@@ -38,9 +42,9 @@ Cursor Rules 的唯一使命是：**让 AI 生成的代码符合你项目的独�
 |------|---------|---------|---------|
 | [1. 极度具体](#specific) | 只写项目独有的强制规范 | "使用 TypeScript" | "避免 any，用 unknown" |
 | [2. 短小精悍](#concise) | 1-3 行/条，不超过 200 行 | 冗长的日期格式化说明 | formatDate() from @/lib/date-time-utils.ts |
-| [3. 分文件匹配](#split-files) | 按主题拆分，用 globs 限定作用域 | 所有规则塞在一个文件 | api-rules.mdc 只管 src/clients/** |
+| [3. 分文件匹配](#split-files) | 按主题拆分，用 globs 限定作用域 | 所有 Rules 塞在一个文件 | api-rules.mdc 只管 src/clients/** |
 | [4. 提供示例](#examples) | 附上 import 和代码示例 | "使用 SWR 获取数据" | 完整的 useSWR 代码片段 |
-| [5. 快速迭代](#iterate) | 从 3-5 条痛点规则开始 | 一次性写 500 行"完美规则" | 发现问题立即补充 |
+| [5. 快速迭代](#iterate) | 从 3-5 条痛点 Rules 开始 | 一次性写 500 行"完美 Rules" | 发现问题立即补充 |
 | [6. 工具链验证](#toolchain) | 让 AI 自动执行 lint/test | 没有验证步骤 | 要求 npm run build 通过 |
 
 ---
@@ -50,11 +54,11 @@ Cursor Rules 的唯一使命是：**让 AI 生成的代码符合你项目的独�
 只写项目独有的强制规范，避免泛泛的描述。
 
 ```markdown
-// ❌ 模糊的规则
+// ❌ 模糊的 Rules
 - 使用 TypeScript 进行类型安全开发
 - 遵循组件化设计原则
 
-// ✅ 具体的规则
+// ✅ 具体的 Rules
 - 避免使用 `any`，不确定类型时使用 `unknown`
 - 使用 interface 定义对象形状，使用 type 定义联合类型
 - 导出函数必须指定返回类型
@@ -62,7 +66,7 @@ Cursor Rules 的唯一使命是：**让 AI 生成的代码符合你项目的独�
 
 ### 2. 短小精悍，狠砍废话 <a id="concise"></a>
 
-每条规则 1-3 行，单个 `.mdc` 文件控制在 100-200 行以内。
+每条 Rule 1-3 行，单个 `.mdc` 文件控制在 100-200 行以内。
 
 大模型已知的常识不需要重复。比如 "函数应该职责单一" 这种，AI 早就知道了。
 
@@ -72,16 +76,16 @@ Cursor Rules 的唯一使命是：**让 AI 生成的代码符合你项目的独�
 所有日期显示的一致性。当您需要格式化日期时，请务必使用我们封装的
 工具函数，而不是直接使用原生 API 或第三方库...
 
-// ✅ 简洁的规则
+// ✅ 简洁的 Rule
 - 日期格式化使用 `formatDate()` from `@/lib/date-time-utils.ts`
 - 金额格式化使用 `formatMoney()` from `@/lib/money-utils.ts`
 ```
 
 ### 3. 分文件、精准匹配 <a id="split-files"></a>
 
-在 `.cursor/rules/` 目录下按主题拆分规则文件，使用 `globs` 限定作用域。
+在 `.cursor/rules/` 目录下按主题拆分 Rules 文件，使用 `globs` 限定作用域。关于 Rules 的四种应用方式，请参考 [Rules 应用方式](./how-rules-work#rules-应用方式)。
 
-| 规则文件 | 作用范围 | 何时触发 |
+| Rules 文件 | 作用范围 | 何时触发 |
 |---------|---------|---------|
 | `global-rules.mdc` | `alwaysApply: true` | 始终生效 |
 | `routing-rules.mdc` | `globs: src/pages/**` | 编辑页面文件时 |
@@ -123,15 +127,15 @@ const { data, error, isLoading } = useSWR(
 
 ### 5. 从少到多，快速迭代 <a id="iterate"></a>
 
-不要试图一开始就写完美的规则。
+不要试图一开始就写完美的 Rules。
 
 | 阶段 | 做法 |
 |-----|------|
-| **起步** | 添加 3-5 条当前最痛的规则 |
+| **起步** | 添加 3-5 条当前最痛的 Rules |
 | **测试** | 立即测试 AI 输出效果 |
 | **迭代** | 根据问题补充或调整 |
 
-当你发现 AI 反复犯同一个错误时，就是添加新规则的时机。
+当你发现 AI 反复犯同一个错误时，就是添加新 Rule 的时机。
 
 ### 6. 工具链配置 <a id="toolchain"></a>
 
@@ -144,9 +148,9 @@ const { data, error, isLoading } = useSWR(
 - Run `npm test` to verify changes don't break existing functionality
 ```
 
-## 规则结构模板
+## Rules 结构模板
 
-一个完整的规则文件通常包含以下部分：
+关于 `.mdc` 文件的完整格式规范，请参考 [Rules 文件结构](./how-rules-work#rules-文件结构)。一个完整的 Rules 文件通常包含以下部分：
 
 ```markdown
 ---
@@ -154,11 +158,11 @@ globs: src/components/**
 alwaysApply: false
 ---
 
-# [规则名称]
+# [Rule 名称]
 
 ## [分类1]
-- 具体规则条目
-- 另一条规则
+- 具体 Rule 条目
+- 另一条 Rule
 
 ## [分类2]
 
@@ -172,10 +176,10 @@ alwaysApply: false
 
 ## 团队协作
 
-项目规则必须提交到 Git，这样可以：
+Project Rules 必须提交到 Git，这样可以：
 
-- 确保团队所有成员使用相同的规则
-- 规则变更有历史记录可追溯
+- 确保团队所有成员使用相同的 Rules
+- Rules 变更有历史记录可追溯
 - 新成员能快速了解项目规范
 
 ```
@@ -189,14 +193,13 @@ alwaysApply: false
 
 ## 参考示例
 
-查看我们收集的完整规则示例：
+查看我们收集的完整 Rules 示例：
 
-- [全局规则示例](/zh/rules/vite-shadcnui/global-rules) - 技术栈、目录结构、TypeScript 规范
-- [API 规则示例](/zh/rules/vite-shadcnui/api-rules) - API 客户端架构、SWR 集成
-- [路由规则示例](/zh/rules/vite-shadcnui/routing-rules) - 页面结构、路由保护
-- [UI 规则示例](/zh/rules/vite-shadcnui/ui-rules) - 组件使用、图标系统
+- [全局 Rules 示例](/zh/rules/vite-shadcnui/global-rules) - 技术栈、目录结构、TypeScript 规范
+- [API Rules 示例](/zh/rules/vite-shadcnui/api-rules) - API 客户端架构、SWR 集成
+- [路由 Rules 示例](/zh/rules/vite-shadcnui/routing-rules) - 页面结构、路由保护
+- [UI Rules 示例](/zh/rules/vite-shadcnui/ui-rules) - 组件使用、图标系统
 
 ## 下一步
 
-了解了编写原则后，接下来我们看看[在开发过程中何时编写这些规则](./development-sequence)。
-
+了解了编写原则后，接下来我们看看[在开发过程中何时编写这些 Rules](./development-sequence)。

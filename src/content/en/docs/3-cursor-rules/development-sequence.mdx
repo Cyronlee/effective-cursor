@@ -1,14 +1,14 @@
 ---
-title: "Rules Development Sequence"
+title: "Rules Iteration and Accumulation"
 ---
 
-# Rules Development Sequence
+# Rules Iteration and Accumulation
 
 > Write the right rules at the right time
 
 ## Core Philosophy
 
-Cursor Rules are not something you write once and forget. They are a **system of standards that evolves with your project**.
+Cursor Rules are not something you write once and forget. They are a **system of standards that accumulates as your project evolves**.
 
 Many people want to write a perfect set of rules at the project's beginning, only to end up with rules that are either too vague or disconnected from actual architecture. The correct approach is: **Architecture first, rules follow**.
 
@@ -83,31 +83,48 @@ In daily development, when you find AI repeatedly making certain types of mistak
 
 **Iteration principle: Problem → Rule → Verify → Optimize**
 
-## Rule Maintenance Checklist
+## Recommended Rule Composition
 
-Use this checklist to verify your rules are complete:
+A healthy rule system should follow the **"less is more"** principle. Too many rules not only consume tokens but also conflict with each other, reducing AI execution effectiveness.
 
-### Global Rules ✅
+### Recommended Rule Structure
 
-- [ ] Is the tech stack list complete?
-- [ ] Is the directory structure clear?
-- [ ] Are TypeScript standards defined?
-- [ ] Are import conventions explained?
-- [ ] Are quality check commands configured?
+| Rule Type | Quantity | Description |
+|-----------|----------|-------------|
+| **Global Rules** | 1 (required) | Tech stack, directory structure, coding standards, quality standards |
+| **File-matched Rules** | 2-4 | Split by architecture layer: routing, api, ui, store, etc. |
+| **Manual Rules** | 0-2 | Manually triggered for specific scenarios: feature-template, refactor-guide, etc. |
 
-### Feature Rules ✅
+### Key Principle: Control Active Rules Per Chat
 
-- [ ] Are routing/page rules in place?
-- [ ] Are API call rules in place?
-- [ ] Are UI component rules in place?
-- [ ] Are state management rules in place?
+**Keep active rules per chat session to 3 or fewer.**
 
-### Best Practices ✅
+- 1 Global Rules (always active)
+- 1-2 File-matched Rules (auto-triggered based on current file)
 
-- [ ] Are rule files split by responsibility?
-- [ ] Are correct globs used?
-- [ ] Does each rule have code examples?
-- [ ] Are rules committed to Git?
+This means you need to carefully design `globs` patterns to ensure rules are **mutually exclusive or have low overlap**:
+
+```yaml
+# ✅ Good design: globs are mutually exclusive, won't trigger together
+routing-rules.mdc  → globs: src/pages/**
+api-rules.mdc      → globs: src/clients/**
+ui-rules.mdc       → globs: src/components/**
+
+# ❌ Bad design: globs overlap, may trigger multiple rules simultaneously
+component-rules.mdc → globs: **/*.tsx
+ui-rules.mdc        → globs: src/components/**
+page-rules.mdc      → globs: src/pages/**
+```
+
+### Rule Quantity vs Quality
+
+| Rule Count | Effect |
+|------------|--------|
+| 1-3 high-quality rules | ✅ AI executes precisely, significant results |
+| 5-8 medium rules | ⚠️ Needs good globs design to avoid conflicts |
+| 10+ rules | ❌ Rule conflicts, token waste, degraded results |
+
+**Better to have fewer rules that are truly needed and specifically actionable for your project.**
 
 ## Practical Example
 

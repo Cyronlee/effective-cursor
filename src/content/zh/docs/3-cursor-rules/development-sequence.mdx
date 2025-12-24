@@ -1,24 +1,24 @@
 ---
-title: "Rules 编写实战顺序"
+title: "Rules 迭代与沉淀"
 ---
 
-# Rules 编写实战顺序
+# Rules 迭代与沉淀
 
-> 在正确的时机编写正确的规则
+> 在正确的时机编写正确的 Rules
 
 ## 核心理念
 
-Cursor Rules 不是一次性写完的产物，而是**随项目演进逐步构建**的规范体系。
+Cursor Rules 不是一次性写完的产物，而是**随项目演进逐步沉淀**的规范体系。
 
-很多人在项目初期就想写一套完美的规则，结果要么规则过于空泛，要么规则与实际架构脱节。正确的做法是：**架构先行，规则紧随**。
+很多人在项目初期就想写一套完美的 Rules，结果要么 Rules 过于空泛，要么 Rules 与实际架构脱节。正确的做法是：**架构先行，Rules 紧随**。
 
-## 规则编写时机
+## Rules 编写时机
 
 ### 阶段一：脚手架搭建完成后
 
-当你完成项目初始化，确定了基础的技术栈和目录结构后，立即编写 **全局规则**。
+当你完成项目初始化，确定了基础的技术栈和目录结构后，立即编写 **Global Rules**。
 
-| 时机 | 要添加的规则 |
+| 时机 | 要添加的 Rules |
 |-----|-------------|
 | 技术栈确定 | 列出所有核心依赖（React, TypeScript, Tailwind 等） |
 | 目录结构确定 | 定义各目录的职责（pages/, components/, lib/ 等） |
@@ -26,7 +26,7 @@ Cursor Rules 不是一次性写完的产物，而是**随项目演进逐步构�
 | 工具链配置完成 | lint、build、test 命令 |
 
 ```markdown
-# 示例：项目初始化后立即添加的全局规则
+# 示例：项目初始化后立即添加的 Global Rules
 
 ## Tech Stack
 - Vite + React + TypeScript
@@ -45,13 +45,13 @@ Cursor Rules 不是一次性写完的产物，而是**随项目演进逐步构�
 - Ensure `npm run lint` and `npm run build` passes before commits
 ```
 
-> 📖 参考：[全局规则示例](/zh/rules/vite-shadcnui/global-rules)
+> 📖 参考：[全局 Rules 示例](/zh/rules/vite-shadcnui/global-rules)
 
 ### 阶段二：架构扩展时
 
-每当你为项目添加新的架构层或功能模块时，**立即**为其编写专门的规则。
+每当你为项目添加新的架构层或功能模块时，**立即**为其编写专门的 Rules。
 
-| 添加的架构 | 要创建的规则文件 | 规则内容 |
+| 添加的架构 | 要创建的 Rules 文件 | Rules 内容 |
 |-----------|-----------------|---------|
 | 路由系统 | `routing-rules.mdc` | 页面文件结构、路由保护、认证流程 |
 | API 调用层 | `api-rules.mdc` | HTTP 客户端、数据获取模式、错误处理 |
@@ -59,59 +59,53 @@ Cursor Rules 不是一次性写完的产物，而是**随项目演进逐步构�
 | 状态管理 | `store-rules.mdc` | Store 组织方式、状态更新模式 |
 | 表单处理 | `form-rules.mdc` | 表单验证、错误处理、提交流程 |
 
-**关键原则：架构决策落地后，规则必须同步更新。**
+**关键原则：架构决策落地后，Rules 必须同步更新。**
 
-> 📖 参考：[路由规则示例](/zh/rules/vite-shadcnui/routing-rules)、[API 规则示例](/zh/rules/vite-shadcnui/api-rules)、[UI 规则示例](/zh/rules/vite-shadcnui/ui-rules)
+> 📖 参考：[路由 Rules 示例](/zh/rules/vite-shadcnui/routing-rules)、[API Rules 示例](/zh/rules/vite-shadcnui/api-rules)、[UI Rules 示例](/zh/rules/vite-shadcnui/ui-rules)
 
 ### 阶段三：迭代开发中
 
-在日常开发中，当你发现 AI 反复出现某类问题时，这就是补充规则的信号。
+在日常开发中，当你发现 AI 反复出现某类问题时，这就是补充 Rules 的信号。
 
-| 发现的问题 | 补充的规则 |
+| 发现的问题 | 补充的 Rules |
 |-----------|-----------|
 | AI 总是用错日期格式化方法 | 添加 `formatDate()` from `@/lib/date-time-utils.ts` |
 | AI 使用了禁用的组件 | 添加 "Do not use Card component unless I request it" |
 | AI 的错误处理方式不对 | 添加错误处理的代码示例 |
 | AI 忽略了认证检查 | 添加 `<ProtectedRoute>` 使用规范 |
 
-**迭代原则：问题 → 规则 → 验证 → 优化**
+**迭代原则：问题 → Rule → 验证 → 优化**
 
-## 规则维护清单
+## Rules 组成建议
 
-使用这个清单来检查你的规则是否完善：
+一个健康的 Rules 体系应该遵循 **"少而精"** 的原则。过多的 Rules 不仅消耗 token，还会相互冲突，降低 AI 的执行效果。
 
-### 全局规则 ✅
+### 推荐的 Rules 结构
 
-- [ ] 技术栈列表是否完整？
-- [ ] 目录结构是否明确？
-- [ ] TypeScript 规范是否定义？
-- [ ] Import 约定是否说明？
-- [ ] 质量检查命令是否配置？
+| Rules 类型 | 数量 | 说明 |
+|---------|------|------|
+| **Global Rules** | 1 个（必须） | 技术栈、目录结构、编码规范、质量标准 |
+| **File-matched Rules** | 2-4 个 | 按架构层划分：routing、api、ui、store 等 |
+| **Manual Rules** | 0-2 个 | 特定场景手动触发：feature-template、refactor-guide 等 |
 
-### 功能规则 ✅
+### 关键原则：控制同时生效的 Rules 数量
 
-- [ ] 路由/页面规则是否有？
-- [ ] API 调用规则是否有？
-- [ ] UI 组件规则是否有？
-- [ ] 状态管理规则是否有？
+**每次聊天时生效的 Rules 最好控制在 3 个以内。**
 
-### 最佳实践 ✅
+- 1 个 Global Rules（始终生效）
+- 1-2 个 File-matched Rules（根据当前编辑文件自动触发）
 
-- [ ] 规则文件是否按职责拆分？
-- [ ] 是否使用了正确的 globs？
-- [ ] 每个规则是否有代码示例？
-- [ ] 规则是否已提交到 Git？
+这样做的核心目的是**优化大模型的注意力**，减少不必要的规则噪声，避免 Rules 之间产生冲突或相互干扰。
 
 ## 常见误区
 
 | 误区 | 正确做法 |
 |-----|---------|
-| 一开始就想写完美的规则 | 从 3-5 条最痛点的规则开始 |
-| 规则写了就不管了 | 规则需要随项目演进持续更新 |
-| 把所有规则放在一个文件 | 按职责拆分，使用 globs 精准匹配 |
-| 复制网上的通用规则 | 只写项目独有的具体规范 |
+| 一开始就想写完美的 Rules | 从 3-5 条最痛点的 Rules 开始 |
+| Rules 写了就不管了 | Rules 需要随项目演进持续更新 |
+| 把所有 Rules 放在一个文件 | 按职责拆分，使用 globs 精准匹配 |
+| 复制网上的通用 Rules | 只写项目独有的具体规范 |
 
 ## 下一步
 
-有时候你可能需要从零开始为一个新的技术栈编写规则。接下来我们将分享[用于生成 Rules 的元提示词](./meta-prompt)，帮助你快速生成规则框架。
-
+有时候你可能需要从零开始为一个新的技术栈编写 Rules。接下来我们将分享[用于生成 Rules 的元提示词](./meta-prompt)，帮助你快速生成 Rules 框架。

@@ -2,9 +2,15 @@
 title: "Rules Writing Best Practices"
 ---
 
+import { Callout } from 'nextra/components'
+
 # Cursor Rules Writing Best Practices
 
 > Make AI strictly follow your project's unique requirements
+
+<Callout type="info">
+This article assumes you already understand [How Rules Work](./how-rules-work), including rule types, application methods, and file structure.
+</Callout>
 
 ## Core Philosophy
 
@@ -55,7 +61,7 @@ of native APIs or third-party libraries directly...
 
 ### 3. Split Files, Match Precisely
 
-Split rule files by topic in `.cursor/rules/` directory, use `globs` to limit scope.
+Split rule files by topic in `.cursor/rules/` directory, use `globs` to limit scope. For details on the four rule application methods, see [Rule Application Methods](./how-rules-work#rule-application-methods).
 
 | Rule File | Scope | When Triggered |
 |-----------|-------|----------------|
@@ -122,7 +128,7 @@ Let AI automatically run toolchain verification after completing tasks.
 
 ## Rule Structure Template
 
-A complete rule file typically contains these sections:
+For complete `.mdc` file format specifications, see [Rule File Format Specification](./how-rules-work#rule-file-format-specification). A complete rule file typically contains these sections:
 
 ```markdown
 ---
