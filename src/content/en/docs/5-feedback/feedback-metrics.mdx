@@ -1,0 +1,220 @@
+---
+title: "Metrics Framework"
+---
+
+import { Callout } from 'nextra/components'
+
+# Metrics Framework
+
+> Use data to scientifically measure AI-assisted development effectiveness
+
+## Why Quantify
+
+"It feels more efficient" is not enough. We need to:
+
+- **Prove value**: Demonstrate ROI of AI tools to team and management
+- **Identify issues**: Find areas where AI underperforms for targeted improvement
+- **Continuous optimization**: Baselines enable measuring improvement effects
+- **Knowledge accumulation**: Quantitative data helps identify and promote best practices
+
+## Core Performance Metrics
+
+### Code Acceptance Rate
+
+**Definition**: The percentage of AI-generated code that is used directly or with minor modifications.
+
+```
+Code Acceptance Rate = Accepted Code Volume / Total AI Generated Code × 100%
+```
+
+**Reference Benchmarks**:
+
+| Rating | Acceptance Rate | Description |
+|--------|-----------------|-------------|
+| Excellent | > 80% | High AI output quality, smooth team collaboration |
+| Good | 60-80% | Normal level, room for optimization |
+| Needs Improvement | < 60% | Review prompt quality or task suitability |
+
+<Callout type="info">
+Low acceptance rate isn't necessarily bad. Complex tasks naturally have lower rates. The key is identifying patterns and improving.
+</Callout>
+
+**Influencing Factors**:
+- Prompt clarity and completeness
+- Cursor Rules quality
+- Task complexity and domain fit
+- Context information sufficiency
+
+### Velocity Improvement
+
+**Definition**: Time comparison for completing the same type of task before and after using AI assistance.
+
+**Measurement Methods**:
+
+1. **Historical Comparison**
+   ```
+   Velocity Improvement = (Historical Average Time - Current Time) / Historical Average Time × 100%
+   ```
+
+2. **Type Comparison**
+   - Categorize by task type (UI development, API development, bug fixes, etc.)
+   - Track efficiency changes for each type separately
+
+**Typical Reference Values**:
+
+| Task Type | Expected Improvement | Notes |
+|-----------|---------------------|-------|
+| UI/Static Pages | 100-200% | AI's strongest domain |
+| CRUD APIs | 50-100% | Highly patterned |
+| Business Logic | 30-50% | Requires more manual adjustment |
+| Complex Algorithms | 10-30% | Limited AI assistance |
+
+### Developer Satisfaction
+
+**Definition**: Developers' subjective evaluation of AI assistance tools.
+
+**Measurement Method**: Regular surveys
+
+**Recommended Questions**:
+
+```markdown
+1. Overall Satisfaction (1-10)
+   - How satisfied are you with current AI-assisted development?
+
+2. NPS Question
+   - Would you recommend using Cursor for development to colleagues? (0-10)
+
+3. Specific Dimension Ratings (1-5)
+   - Code generation quality
+   - Response speed
+   - Context understanding ability
+   - Adherence to project standards
+```
+
+## Quality Assurance Metrics
+
+### AI-Generated Code Bug Rate
+
+**Definition**: The proportion of bugs found in AI-generated code.
+
+```
+Bug Rate = Bugs Introduced by AI Code / Total Bugs × 100%
+```
+
+**Tracking Methods**:
+- Add labels in bug tracking systems to distinguish sources
+- Mark problematic AI-generated code during Code Review
+- Trace code origins during production incident retrospectives
+
+### Code Review Rework Rate
+
+**Definition**: The proportion of AI-generated code requiring modifications during review.
+
+**Focus Areas**:
+- Code types with high rework rates
+- Common modification reasons (naming, structure, performance, security)
+- Whether rework can be reduced by optimizing Rules
+
+### Technical Debt Marking
+
+**Recommended Practice**:
+
+```typescript
+// TODO(AI-DEBT): AI-generated, needs performance optimization later
+// Generated: 2024-01-15
+// Reason: Urgent release, performance not optimized
+function processLargeData(data: any[]) {
+  // ...
+}
+```
+
+Establish a "technical debt radar" to regularly clean up and optimize marked code.
+
+## Usage Behavior Metrics
+
+### AI Tool Usage Ratio
+
+**Definition**: The proportion of development time using AI assistance.
+
+```
+Usage Ratio = Cursor Usage Time / Total Development Time × 100%
+```
+
+**Reference Values**:
+- **70-90%**: AI has become the primary development method
+- **50-70%**: Mixed usage, room for improvement
+- **< 50%**: Possible usage barriers, investigate reasons
+
+### Prompt Iteration Count
+
+**Definition**: Average number of prompt interactions needed to complete a task.
+
+**Significance**:
+- High iteration count indicates prompt quality or context issues
+- Trend tracking is more important than absolute values
+
+### Session Duration Distribution
+
+Track session duration distribution to identify:
+- Overly long sessions (context loss risk)
+- Overly short sessions (possibly trial and error)
+
+## Metrics Dashboard
+
+Consider integrating key metrics into a visual dashboard:
+
+```
+┌─────────────────────────────────────────────────────────┐
+│              AI-Assisted Development Dashboard           │
+├─────────────────┬─────────────────┬─────────────────────┤
+│  Acceptance Rate │ Velocity Boost  │   Satisfaction     │
+│      77%        │     +159%       │       78%          │
+│  ▲ 5% vs last mo│ ▲ 12% vs last mo│  ▲ 3% vs last mo   │
+├─────────────────┴─────────────────┴─────────────────────┤
+│                 Performance by Domain                    │
+│  ████████████ UI Development    95%                     │
+│  ██████████   API Development   80%                     │
+│  ██████       Business Logic    60%                     │
+│  ████         Database Ops      40%                     │
+│  ███          Agent Development 30%                     │
+└─────────────────────────────────────────────────────────┘
+```
+
+## Best Practices
+
+### Start Simple
+
+<Callout type="warning">
+Don't aim for a perfect metrics system from the start. Begin with 2-3 core metrics and gradually improve.
+</Callout>
+
+**Recommended Starting Metrics**:
+1. Developer satisfaction (monthly survey)
+2. Code acceptance rate (estimated during review)
+3. Perceived efficiency improvement (self-assessment)
+
+### Metrics Should Be Actionable
+
+Each metric should guide action:
+
+| Metric Anomaly | Possible Cause | Improvement Action |
+|----------------|----------------|-------------------|
+| Declining acceptance rate | Outdated Rules | Update Cursor Rules |
+| Declining satisfaction | Poor context management | Optimize workflow |
+| Rising bug rate | Insufficient review | Strengthen code review |
+| Declining usage | Experience issues | Collect specific feedback |
+
+### Pitfalls to Avoid
+
+❌ **Metric obsession**: Don't lower code quality standards to improve acceptance rate
+
+❌ **Gaming metrics**: Avoid incentive distortion (e.g., overusing AI to boost usage rate)
+
+❌ **Ignoring context**: Same metrics mean different things in different projects and phases
+
+❌ **Over-collection**: Too many metrics increase burden and reduce data quality
+
+## Next Steps
+
+After establishing your metrics framework, you'll need a [feedback collection mechanism](/en/docs/5-feedback/feedback-collection) to gather data.
+

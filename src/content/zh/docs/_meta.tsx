@@ -7,5 +7,5 @@ export default {
   '2-scaffolding': '2. 工程架构',
   '3-cursor-rules': '3. 制定 Cursor Rules',
   '4-workflow': '4. 规范工作流',
-  '5-feedback': '5. 反馈与更新',
+  '5-feedback': '5. 反馈与迭代',
 } satisfies MetaRecord

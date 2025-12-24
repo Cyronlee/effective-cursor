@@ -1,0 +1,207 @@
+---
+title: "Our Practice Feedback"
+---
+
+import { Callout } from 'nextra/components'
+
+# Our Practice Feedback
+
+> Real team data and experiences from AI-assisted development practice
+
+## Core Metrics Summary
+
+After introducing AI-assisted development, our team collected the following core metrics:
+
+| Metric | Value | Description |
+|--------|-------|-------------|
+| **Code Acceptance Rate** | 77% | Percentage of AI-generated code accepted |
+| **Development Velocity Improvement** | 159% | Efficiency comparison for same task types |
+| **Developer Satisfaction** | 78% | Team member satisfaction score |
+
+**Overall Satisfaction Distribution**: Out of 10 feedback responses, 8 rated 8+ points (80%), and 2 rated 7 points. The team has high overall recognition of AI-assisted development practices.
+
+**Tool Usage**: Most developers use Cursor 70-90% of the time, making it the team's primary development tool.
+
+## Key Achievements
+
+### Significant Coding Efficiency Improvement
+
+The team reported significant efficiency gains in the following scenarios:
+
+- **Demo and Prototype Development**: Rapid idea validation
+- **Static Pages**: Extremely high UI component generation efficiency
+- **Utility Functions**: Accurate pattern-based code generation
+- **Standalone Modules**: Feature modules with clear boundaries
+- **Unfamiliar Domains**: Such as shell scripts, infrastructure configuration, etc.
+
+### Outstanding UI Generation Capability
+
+<Callout type="info">
+Figma MCP / screenshot-to-UI generation achieves high similarity, with results close to design specs. Related satisfaction is generally high.
+</Callout>
+
+- High design fidelity
+- Reduced time for image slicing and style adjustments
+- Good responsive layout foundation generation
+
+### Lowered Full-Stack Development Barrier
+
+> "Everyone can be a full-stack developer now"
+
+- Easier onboarding for newcomers and cross-domain developers
+- Reduced collaboration dependencies, improved individual delivery capability
+- Frontend engineers can quickly write backend code and vice versa
+
+### Effective Practice Patterns
+
+The team validated the following efficient patterns:
+
+| Pattern | Use Case | Effect |
+|---------|----------|--------|
+| **Draft-Final** | Unfamiliar languages/frameworks | Notable improvement in solution quality |
+| **Document-Driven** | Complex feature development | Reduced rework, better code consistency |
+| **Cursor Rules Constraints** | Daily development | Improved code standardization |
+
+### Accelerated Bug Fixes and Refactoring
+
+- Faster problem identification (AI-assisted analysis)
+- More comprehensive refactoring suggestions
+- Improved test case generation efficiency
+
+## Major Challenges
+
+### Significant Domain Capability Disparity
+
+AI shows significant performance differences across domains:
+
+```
+┌────────────────────────────────────────────┐
+│           AI Capability Distribution        │
+├────────────────────────────────────────────┤
+│ ████████████████████  Frontend UI / Static │
+│ ██████████████████    Simple Business Logic│
+│ ████████████          API Development      │
+│ ████████              Complex Interactions │
+│ ██████                Dynamic/Responsive   │
+│ ████                  Database Operations  │
+│ ███                   Agent Development    │
+└────────────────────────────────────────────┘
+```
+
+**Excellent Performance**:
+- Frontend UI / Static pages
+- Simple business logic
+- CRUD interfaces
+
+**Requires Significant Manual Coding**:
+- Complex database operations
+- Agent development
+- Complex interaction logic
+- Dynamic effects / Responsive layout details
+
+### Maintainability Issues
+
+<Callout type="warning">
+Code quality and maintainability scores are generally lower than functional implementation scores.
+</Callout>
+
+Common issues:
+- **Over Design**: Unnecessary abstraction layers
+- **Deep Nesting**: Complex component structures
+- **Inconsistent Naming**: Mismatched with existing project style
+- **Duplicate Code**: Similar code across files not abstracted
+
+### User Experience Pain Points
+
+| Pain Point | Description | Impact |
+|------------|-------------|--------|
+| **Task Granularity** | Too fine = slow, too coarse = poor quality | High efficiency variance |
+| **Weak Long Context Understanding** | Iteration modifications often fail | Need to restart sessions |
+| **High Review Time Ratio** | 50-60% time spent on review | Sometimes worse than manual coding |
+| **Request Limits** | Cursor request quota limits | Affects continuous development |
+
+### Process and Knowledge Management Gaps
+
+- Lack of experience accumulation and unified practices (everyone explores alone)
+- No effective sharing and governance mechanism for Prompts/Rules
+- Story cards/Tasking difficult for AI to use directly, low structure
+- Testing habits degraded (rarely TDD, tests added later)
+
+## Future Improvement Directions
+
+Based on feedback, we identified the following priority improvement directions (ranked by importance):
+
+### 1. Standardize Task Breakdown and Description Methods
+
+**Problem**: Story cards and Tasking formats are inconsistent, AI has difficulty understanding and executing directly.
+
+**Improvements**:
+- Establish Tasking templates and standards
+- Explore Evaluation First / Schema-driven patterns
+- Make task descriptions more structured and AI-friendly
+
+### 2. Establish Cursor Rules Governance Mechanism
+
+**Problem**: Rules are valuable but lack maintenance mechanism, easily become outdated or bloated.
+
+**Improvements**:
+- Establish Technical Governance process
+- Regular review and update of Rules
+- Categorized management (general rules vs project-specific rules)
+
+### 3. Optimize UI Generation Pipeline
+
+**Problem**: Figma MCP generates code with redundant classes and deep nesting.
+
+**Improvements**:
+- Optimize Figma-to-code conversion rules
+- Establish component mapping tables
+- Post-processing scripts to clean redundant code
+
+### 4. Build Team AI Experience Library
+
+**Problem**: Good practices are scattered in individual experience, cannot scale.
+
+**Improvements**:
+- Build Prompt library (reusable Prompt templates)
+- Project knowledge graph
+- Persistent storage for technical decisions
+
+### 5. Tackle Complex Scenarios
+
+**Problem**: Weaker performance in Agent, database, complex interaction domains.
+
+**Improvements**:
+- Targeted Rules optimization
+- Explore further evolution of Draft-Final pattern
+- Build domain-specific Prompt templates
+
+### 6. Improve Code Quality Assurance
+
+**Problem**: AI-generated code may introduce technical debt.
+
+**Improvements**:
+- Consider LLM-assisted Review Pipeline
+- Dual verification for critical code
+- Establish "technical debt radar" to track compromised code
+
+## One-Line Summary
+
+<Callout>
+Current AI-assisted development practices have brought **significant efficiency improvements and better development experience** to the team (especially in UI, simple business logic, cross-domain scenarios), with high overall satisfaction; however, there are still obvious shortcomings in **complex logic, database, Agent, and maintainability** domains. **Standardized practices, knowledge accumulation, and Rules governance** are the three most leveraged improvement directions going forward.
+</Callout>
+
+## Recommendations for Your Team
+
+If your team is introducing AI-assisted development:
+
+1. **Start with Strong Domains**: UI, static pages, CRUD APIs are low-risk, high-reward starting points
+2. **Establish Feedback Mechanisms**: Start collecting data from day one
+3. **Invest in Cursor Rules**: This is the highest ROI investment
+4. **Manage Expectations**: Complex domains require more human intervention
+5. **Iterate Continuously**: AI-assisted development is a continuous optimization process
+
+## Next Steps
+
+Learn how to establish a [feedback collection mechanism](/en/docs/5-feedback/feedback-collection) and start collecting your team's data.
+
