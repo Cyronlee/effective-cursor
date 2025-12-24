@@ -29,6 +29,10 @@ export default {
     title: 'Cursor Rules',
     type: 'page',
   },
+  prompts: {
+    title: 'Prompts',
+    type: 'page',
+  },
   // upgrade: {
   //   title: (
   //     <span className="flex items-center leading-[1]">

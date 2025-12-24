@@ -1,0 +1,113 @@
+---
+title: "Giscus Comments"
+---
+
+import { Callout } from 'nextra/components'
+
+# Nextra Giscus Comments Integration
+
+<Callout type="info">
+This prompt helps you quickly integrate Giscus comment system into your Nextra blog.
+</Callout>
+
+## Quick Implementation Steps
+
+### 1. Install Dependencies
+```bash
+bun add @giscus/react
+```
+
+### 2. Create Comments Component `src/components/GiscusComments/index.tsx`
+```tsx
+'use client'
+
+import Giscus from '@giscus/react'
+import { useTheme } from 'next-themes'
+
+interface GiscusCommentsProps {
+  lang: string
+}
+
+export function GiscusComments({ lang }: GiscusCommentsProps) {
+  const { resolvedTheme } = useTheme()
+
+  return (
+    <div className="mt-8">
+      <Giscus
+        id="comments"
+        repo="your-username/your-repo"
+        repoId="YOUR_REPO_ID"
+        category="General"
+        categoryId="YOUR_CATEGORY_ID"
+        mapping="og:title"
+        strict="0"
+        reactionsEnabled="1"
+        emitMetadata="0"
+        inputPosition="bottom"
+        theme={resolvedTheme === 'dark' ? 'dark' : 'light'}
+        lang={lang === 'zh' ? 'zh-CN' : 'en'}
+        loading="lazy"
+      />
+    </div>
+  )
+}
+```
+
+### 3. Modify `src/app/[lang]/[[...mdxPath]]/page.tsx`
+```tsx
+import { generateStaticParamsFor, importPage } from 'nextra/pages'
+import { useMDXComponents } from '@/mdx-components'
+import { GiscusComments } from '@/components/GiscusComments'
+
+export const generateStaticParams = generateStaticParamsFor('mdxPath')
+
+export async function generateMetadata(props: PageProps) {
+  const params = await props.params
+  const { metadata } = await importPage(params.mdxPath, params.lang)
+  return metadata
+}
+
+type PageProps = Readonly<{
+  params: Promise<{
+    mdxPath: string[]
+    lang: string
+  }>
+}>
+
+const Wrapper = useMDXComponents().wrapper
+
+export default async function Page(props: PageProps) {
+  const params = await props.params
+  const result = await importPage(params.mdxPath, params.lang)
+  const { default: MDXContent, toc, metadata, sourceCode } = result
+
+  const isDocsPage = params.mdxPath && params.mdxPath.length > 0
+
+  return (
+    <Wrapper
+      toc={toc}
+      metadata={metadata}
+      sourceCode={sourceCode}
+      bottomContent={isDocsPage ? <GiscusComments lang={params.lang} /> : undefined}
+    >
+      <MDXContent {...props} params={params} />
+    </Wrapper>
+  )
+}
+```
+
+## Key Points
+
+1. **Use `bottomContent` parameter**: Use Nextra's `wrapper` component's `bottomContent` parameter to render comments below the pagination navigation
+2. **Auto theme switching**: Use `next-themes`'s `useTheme` to implement automatic dark mode switching
+3. **Multi-language support**: Automatically switch comment language based on page language
+4. **Conditional rendering**: Only show comments on documentation pages, not on homepage
+
+## Configuration
+
+Visit https://giscus.app to configure and obtain your:
+- `repo`: GitHub repository path
+- `repoId`: Repository ID
+- `category`: Discussion category
+- `categoryId`: Category ID
+

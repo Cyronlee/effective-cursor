@@ -1,0 +1,61 @@
+---
+title: "提示词集合"
+---
+
+import { Callout } from 'nextra/components'
+import { ChatExample } from '@/components/ChatExample'
+
+# 提示词集合
+
+<Callout type="info">
+这里收录了已经沉淀的解决方案提示词，以及一些 meta prompts 来帮助你生成规则。
+</Callout>
+
+## 什么是提示词集合？
+
+提示词集合是经过实践验证的、可复用的提示词模板。它们可以帮助你快速解决常见的开发问题，或者作为生成项目规则的起点。
+
+## 如何使用？
+
+1. **浏览提示词**：在左侧导航栏选择你感兴趣的类别（如前端、后端、博客等）
+2. **复制提示词**：找到适合你需求的提示词，复制到 Cursor 的聊天窗口
+3. **少许修改**：根据你的具体项目情况，对提示词进行微调
+4. **直接使用**：由于在主要手册中已经介绍了如何配置 Cursor Rules，这些提示词直接使用不会有太多副作用
+
+<Callout type="warning">
+如果你担心直接使用可能带来问题，可以参考工作流中的 PRD-Solution 模式，为你的项目重新生成解决方案。
+</Callout>
+
+## 使用示例
+
+以下是一个典型的提示词使用方式：
+
+<ChatExample mode="Agent" model="claude-4.5-sonnet">
+{`参考 @rules 目录结构，创建一个同级的 prompts 目录
+
+### 添加 index.mdx 引言
+
+这个目录用于分享已经沉淀后的解决方案提示词
+
+介绍如何使用这些提示词，少许修改后即可使用，例如实现
+@solution.md`}
+</ChatExample>
+
+## 提示词分类
+
+### 前端
+- Web 应用开发相关的提示词
+- UI 组件、样式、交互等
+
+### 后端
+- 服务端开发相关的提示词
+- API 设计、数据库、架构等
+
+### 博客
+- 博客功能集成相关的提示词
+- 评论系统、SEO、发布流程等
+
+## 贡献提示词
+
+如果你有优质的提示词想要分享，欢迎提交 PR 到我们的 [GitHub 仓库](https://github.com/cyronlee/effective-cursor)。
+

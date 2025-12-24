@@ -1,0 +1,113 @@
+---
+title: "Giscus 评论系统"
+---
+
+import { Callout } from 'nextra/components'
+
+# Nextra 集成 Giscus 评论系统
+
+<Callout type="info">
+本提示词帮助你快速为 Nextra 博客集成 Giscus 评论系统。
+</Callout>
+
+## 快速实现步骤
+
+### 1. 安装依赖
+```bash
+bun add @giscus/react
+```
+
+### 2. 创建评论组件 `src/components/GiscusComments/index.tsx`
+```tsx
+'use client'
+
+import Giscus from '@giscus/react'
+import { useTheme } from 'next-themes'
+
+interface GiscusCommentsProps {
+  lang: string
+}
+
+export function GiscusComments({ lang }: GiscusCommentsProps) {
+  const { resolvedTheme } = useTheme()
+
+  return (
+    <div className="mt-8">
+      <Giscus
+        id="comments"
+        repo="your-username/your-repo"
+        repoId="YOUR_REPO_ID"
+        category="General"
+        categoryId="YOUR_CATEGORY_ID"
+        mapping="og:title"
+        strict="0"
+        reactionsEnabled="1"
+        emitMetadata="0"
+        inputPosition="bottom"
+        theme={resolvedTheme === 'dark' ? 'dark' : 'light'}
+        lang={lang === 'zh' ? 'zh-CN' : 'en'}
+        loading="lazy"
+      />
+    </div>
+  )
+}
+```
+
+### 3. 修改 `src/app/[lang]/[[...mdxPath]]/page.tsx`
+```tsx
+import { generateStaticParamsFor, importPage } from 'nextra/pages'
+import { useMDXComponents } from '@/mdx-components'
+import { GiscusComments } from '@/components/GiscusComments'
+
+export const generateStaticParams = generateStaticParamsFor('mdxPath')
+
+export async function generateMetadata(props: PageProps) {
+  const params = await props.params
+  const { metadata } = await importPage(params.mdxPath, params.lang)
+  return metadata
+}
+
+type PageProps = Readonly<{
+  params: Promise<{
+    mdxPath: string[]
+    lang: string
+  }>
+}>
+
+const Wrapper = useMDXComponents().wrapper
+
+export default async function Page(props: PageProps) {
+  const params = await props.params
+  const result = await importPage(params.mdxPath, params.lang)
+  const { default: MDXContent, toc, metadata, sourceCode } = result
+
+  const isDocsPage = params.mdxPath && params.mdxPath.length > 0
+
+  return (
+    <Wrapper
+      toc={toc}
+      metadata={metadata}
+      sourceCode={sourceCode}
+      bottomContent={isDocsPage ? <GiscusComments lang={params.lang} /> : undefined}
+    >
+      <MDXContent {...props} params={params} />
+    </Wrapper>
+  )
+}
+```
+
+## 核心要点
+
+1. **使用 `bottomContent` 参数**：通过 Nextra 的 `wrapper` 组件的 `bottomContent` 参数将评论渲染在翻页导航下方
+2. **主题自动切换**：利用 `next-themes` 的 `useTheme` 实现暗色模式自动切换
+3. **多语言支持**：根据页面语言自动切换评论语言
+4. **条件渲染**：仅在文档页面显示评论，首页不显示
+
+## 配置获取
+
+访问 https://giscus.app/zh-CN 配置并获取你的：
+- `repo`: GitHub 仓库路径
+- `repoId`: 仓库 ID
+- `category`: 讨论分类
+- `categoryId`: 分类 ID
+

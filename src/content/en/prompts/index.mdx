@@ -1,0 +1,61 @@
+---
+title: "Prompts Collection"
+---
+
+import { Callout } from 'nextra/components'
+import { ChatExample } from '@/components/ChatExample'
+
+# Prompts Collection
+
+<Callout type="info">
+This collection contains battle-tested solution prompts and meta prompts to help you generate rules.
+</Callout>
+
+## What is the Prompts Collection?
+
+The prompts collection consists of reusable, practice-verified prompt templates. They can help you quickly solve common development problems or serve as starting points for generating project rules.
+
+## How to Use?
+
+1. **Browse Prompts**: Select a category from the left navigation (e.g., Frontend, Backend, Blog)
+2. **Copy Prompts**: Find the prompt that suits your needs and copy it to Cursor's chat window
+3. **Minor Adjustments**: Make minor tweaks based on your specific project requirements
+4. **Direct Use**: Since the main guide already covers how to configure Cursor Rules, using these prompts directly won't cause too many side effects
+
+<Callout type="warning">
+If you're concerned about potential issues, you can refer to the PRD-Solution pattern in the workflow to regenerate solutions for your project.
+</Callout>
+
+## Usage Example
+
+Here's a typical way to use these prompts:
+
+<ChatExample mode="Agent" model="claude-4.5-sonnet">
+{`Reference @rules directory structure, create a parallel prompts directory
+
+### Add index.mdx introduction
+
+This directory is for sharing settled solution prompts
+
+Introduce how to use these prompts, ready to use with minor modifications, for example implementing
+@solution.md`}
+</ChatExample>
+
+## Prompt Categories
+
+### Frontend
+- Web application development related prompts
+- UI components, styles, interactions, etc.
+
+### Backend
+- Server-side development related prompts
+- API design, database, architecture, etc.
+
+### Blog
+- Blog feature integration related prompts
+- Comment systems, SEO, publishing workflow, etc.
+
+## Contribute Prompts
+
+If you have quality prompts to share, feel free to submit a PR to our [GitHub repository](https://github.com/cyronlee/effective-cursor).
+

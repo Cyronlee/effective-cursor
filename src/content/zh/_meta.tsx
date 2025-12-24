@@ -25,7 +25,11 @@ export default {
     type: 'page',
   },
   rules: {
-    title: 'Cursor Rules 规则集合',
+    title: 'Cursor Rules',
+    type: 'page',
+  },
+  prompts: {
+    title: '提示词',
     type: 'page',
   },
   // upgrade: {
