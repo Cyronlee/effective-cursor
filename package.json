@@ -1,5 +1,5 @@
 {
-  "name": "nextjs-nextra-starter",
+  "name": "effective-cursor",
   "type": "module",
   "version": "0.0.1",
   "description": "Next.js Nextra (v4) Tailwind CSS (v4) docs starter",
@@ -15,7 +15,7 @@
   },
   "engines": {
     "node": ">=20.x",
-    "pnpm": ">=9.x"
+    "bun": ">=1.1.0"
   },
   "scripts": {
     "dev": "next dev --turbopack -p 8000",

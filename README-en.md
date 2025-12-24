@@ -35,16 +35,16 @@ This Wiki is organized following the **Effective Cursor Methodology (Six Steps)*
 
 ### Prerequisites
 - Node >= 20.x
-- pnpm 9.x
+- bun >= 1.1.0
 
 ### Installation & Running
 
 ```bash
 # Install dependencies
-pnpm install
+bun install
 
 # Local development
-pnpm dev
+bun dev
 ```
 
 Open http://localhost:8000 to access
@@ -81,5 +81,5 @@ src/content/
 
 ## 🙏 Acknowledgments
 
-- This project is built on the [nextjs-nextra-starter](https://github.com/Cyronlee/effective-cursor) template
+- This project is built on the [nextjs-nextra-starter](https://github.com/pdsuwwz/nextjs-nextra-starter) template
 - Thanks to all contributors for sharing their valuable experiences

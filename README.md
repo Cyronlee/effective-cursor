@@ -35,16 +35,16 @@
 
 ### 前置条件
 - Node >= 20.x
-- pnpm 9.x
+- bun >= 1.1.0
 
 ### 安装与运行
 
 ```bash
 # 安装依赖
-pnpm install
+bun install
 
 # 本地开发
-pnpm dev
+bun dev
 ```
 
 打开 http://localhost:8000 即可访问
@@ -81,5 +81,5 @@ src/content/
 
 ## 🙏 致谢
 
-- 本项目基于 [nextjs-nextra-starter](https://github.com/Cyronlee/effective-cursor) 模板构建
+- 本项目基于 [nextjs-nextra-starter](https://github.com/pdsuwwz/nextjs-nextra-starter) 模板构建
 - 感谢所有贡献者的宝贵经验分享
