@@ -227,61 +227,21 @@ After collecting data, analyze using this template:
 
 #### Git Commit Correlation Analysis
 
-Mark AI assistance information in Git commits:
-
-```bash
-# Commit message format
-feat(user): add user list page
-
-AI-Assisted: true
-AI-Contribution: 70%
-AI-Tools: cursor
-```
-
-Then analyze with scripts:
-
-```bash
-#!/bin/bash
-# Count AI-assisted commits
-
-total=$(git log --oneline --since="1 month ago" | wc -l)
-ai_assisted=$(git log --grep="AI-Assisted: true" --since="1 month ago" --oneline | wc -l)
-
-echo "Total commits: $total"
-echo "AI-assisted commits: $ai_assisted"
-echo "AI assistance ratio: $(echo "scale=2; $ai_assisted * 100 / $total" | bc)%"
-```
+Add AI assistance markers (e.g., `AI-Assisted: true`) in Git commit messages, then use scripts to track AI-assisted commit ratios and trends.
 
 #### IDE Usage Statistics
 
-If your team uses VS Code / Cursor, collect usage data through extensions:
+Passively collect usage data through IDE extensions:
 
-- WakaTime: Automatically track coding time
-- Code Time: Track coding habits
+- **WakaTime**: Automatically track coding time
+- **Code Time**: Track coding habits
 
 #### Automated Quality Metrics Tracking
 
-Integrate AI-related quality metrics into CI/CD:
-
-```yaml
-# .github/workflows/ai-metrics.yml
-name: AI Code Metrics
-
-on:
-  pull_request:
-    types: [closed]
-
-jobs:
-  collect-metrics:
-    if: github.event.pull_request.merged == true
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check AI labels
-        run: |
-          # Check if PR contains AI assistance labels
-          # Count code changes
-          # Track subsequent bug rate
-```
+Integrate AI-related quality metrics into CI/CD Pipeline, automatically tracking:
+- AI assistance labels in PRs
+- Code change volumes
+- Subsequent bug correlation tracking
 
 ## Feedback Collection Best Practices
 

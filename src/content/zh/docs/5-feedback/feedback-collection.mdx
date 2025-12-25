@@ -227,61 +227,21 @@ flowchart LR
 
 #### 代码提交关联分析
 
-在 Git commit 中标记 AI 辅助信息：
-
-```bash
-# Commit message 格式
-feat(user): add user list page
-
-AI-Assisted: true
-AI-Contribution: 70%
-AI-Tools: cursor
-```
-
-然后通过脚本分析：
-
-```bash
-#!/bin/bash
-# 统计 AI 辅助的提交数量
-
-total=$(git log --oneline --since="1 month ago" | wc -l)
-ai_assisted=$(git log --grep="AI-Assisted: true" --since="1 month ago" --oneline | wc -l)
-
-echo "总提交数: $total"
-echo "AI 辅助提交数: $ai_assisted"
-echo "AI 辅助比例: $(echo "scale=2; $ai_assisted * 100 / $total" | bc)%"
-```
+在 Git commit message 中添加 AI 辅助标记（如 `AI-Assisted: true`），然后通过脚本统计 AI 辅助提交的比例和趋势。
 
 #### IDE 使用统计
 
-如果你的团队使用 VS Code / Cursor，可以通过扩展收集使用数据：
+通过 IDE 扩展被动收集使用数据：
 
-- WakaTime：自动追踪编码时间
-- Code Time：统计编码习惯
+- **WakaTime**：自动追踪编码时间
+- **Code Time**：统计编码习惯
 
 #### 质量指标自动追踪
 
-将 AI 相关的质量指标集成到 CI/CD：
-
-```yaml
-# .github/workflows/ai-metrics.yml
-name: AI Code Metrics
-
-on:
-  pull_request:
-    types: [closed]
-
-jobs:
-  collect-metrics:
-    if: github.event.pull_request.merged == true
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check AI labels
-        run: |
-          # 检查 PR 是否包含 AI 辅助标签
-          # 统计代码变更量
-          # 追踪后续 Bug 率
-```
+将 AI 相关的质量指标集成到 CI/CD Pipeline，自动统计：
+- PR 中的 AI 辅助标签
+- 代码变更量
+- 后续 Bug 关联追踪
 
 ## 反馈收集最佳实践
 
