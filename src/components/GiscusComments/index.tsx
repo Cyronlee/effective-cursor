@@ -18,7 +18,7 @@ export function GiscusComments({ lang }: GiscusCommentsProps) {
         repoId="R_kgDOQriDNw"
         category="General"
         categoryId="DIC_kwDOQriDN84C0L-W"
-        mapping="og:title"
+        mapping="pathname"
         strict="0"
         reactionsEnabled="1"
         emitMetadata="0"
