@@ -31,73 +31,85 @@ export default {
   heroSubtitle: 'From beginner to expert, master AI-assisted programming best practices',
   heroDescription: 'Based on real-world experience to help you unleash the full power of Cursor',
 
-  // Four main categories
+  // Six Core Modules (Six-Step Methodology)
   categories: [
     {
-      title: 'Basics & Getting Started',
-      description: 'Quick start with Cursor, master core features & shortcuts, understand model selection & cost optimization',
+      title: '0. Tool Setup',
+      description: 'Installation, extensions, model selection & MCP tools — make Cursor your truly handy dev environment',
       icon: 'rocket',
-      link: '/docs/getting-started',
+      link: '/docs/0-tool-setup',
     },
     {
-      title: 'Engineering & Tech Stack',
-      description: 'Explore AI-friendly tech stacks, establish reliable Lint, Format & CI/CD engineering practices',
+      title: '1. Tech Stack',
+      description: 'Explore AI-friendly programming languages & tech stacks, choose the most AI-compatible combinations',
       icon: 'code',
-      link: '/docs/engineering',
+      link: '/docs/1-tech-stack',
     },
     {
-      title: 'Core Features & Config',
-      description: 'Deep dive into Cursor Rules configuration, learn to write efficient rules, improve code generation quality',
+      title: '2. Engineering',
+      description: 'Project structure, database schema, static analysis, automated testing & CI/CD foundations',
+      icon: 'stack',
+      link: '/docs/2-scaffolding',
+    },
+    {
+      title: '3. Cursor Rules',
+      description: 'Understand how Rules work, master best practices, make AI automatically follow team standards',
       icon: 'settings',
-      link: '/docs/configuration',
+      link: '/docs/3-cursor-rules',
     },
     {
-      title: 'Prompt Engineering',
-      description: 'Master prompt design principles, complete practice from PRD to code, build your Prompt template library',
+      title: '4. Workflow',
+      description: 'Context management, Direct/Document/Draft-Final modes — deeply integrate AI into your dev flow',
+      icon: 'workflow',
+      link: '/docs/4-workflow',
+    },
+    {
+      title: '5. Feedback & Iteration',
+      description: 'Metrics framework, feedback collection, retrospective practices — continuously improve AI effectiveness',
       icon: 'sparkles',
-      link: '/docs/prompt-engineering',
+      link: '/docs/5-feedback',
     },
   ],
 
   featureList: [
     {
-      title: 'Quick Start with Cursor',
-      description: 'UI walkthrough, core features (Chat, Composer, Cmd+K, @references), shortcut cheat sheet, project indexing optimization',
+      title: 'Installation & Model Selection',
+      description: 'Cursor setup, extension recommendations, model comparison & scenario-based selection guide',
     },
     {
-      title: 'Model Selection & Cost Optimization',
-      description: 'Model comparison, scenario-based selection guide, benchmarks and cost control tips',
+      title: 'MCP Tool Ecosystem',
+      description: 'Model Context Protocol tool integration, extending AI capabilities beyond boundaries',
     },
     {
-      title: 'AI-Era Tech Stack Selection',
-      description: 'React + TS + Zod, NestJS/FastAPI, Next.js and other AI-friendly tech stack analysis & best practices',
+      title: 'AI-Friendly Tech Stack',
+      description: 'TypeScript, React, Next.js, NestJS/FastAPI — the best tech choices for the AI era',
     },
     {
-      title: 'Engineering Practices',
-      description: 'Cursor Rules with ESLint/Prettier integration, GitHub Actions, dual review mechanism',
+      title: 'Engineering Architecture',
+      description: 'Project structure optimization, database schema design, ESLint/Prettier static analysis setup',
     },
     {
-      title: 'Automated Testing Assistance',
-      description: 'AI-generated unit/integration/e2e tests, AI-variant of TDD, coverage review',
+      title: 'Testing & CI/CD',
+      description: 'AI-assisted test generation, GitHub Actions integration, continuous integration & deployment',
     },
     {
       title: 'Cursor Rules Development',
-      description: 'Rules writing principles, conditional rules, dynamic references, toolchain integration',
+      description: 'How Rules work, writing best practices, iteration & accumulation, meta-prompt techniques',
     },
     {
-      title: 'Prompt Engineering Principles',
-      description: 'Clear expression, context provision, iterative optimization, role-playing, structured output',
+      title: 'Context Management',
+      description: 'Effectively manage conversation context, keeping AI accurately informed about your project',
     },
     {
-      title: 'Structured PRD Practice',
-      description: 'Complete workflow from vague requirements to technical solutions, task breakdown, and code generation',
+      title: 'Three Work Modes',
+      description: 'Direct quick mode, Document-driven mode, Draft-Final two-stage collaboration',
     },
     {
-      title: 'Prompt Template Library',
-      description: 'Templates for PRD, new features, refactoring, debugging, test generation, documentation, and more',
+      title: 'Continuous Feedback & Iteration',
+      description: 'Metrics framework, feedback collection, retrospective guide & real-world experience sharing',
     },
   ],
-  featuresDesc: '13 carefully crafted pages covering all aspects of AI-assisted development',
+  featuresDesc: '30+ carefully crafted docs covering the complete AI-assisted development workflow',
 
   faqs: [
     {
@@ -106,11 +118,11 @@ export default {
     },
     {
       question: 'How is the Wiki content organized?',
-      answer: 'Content follows a progressive path: Getting Started → Engineering Practices → Configuration → Prompt Engineering, helping you master AI-assisted development step by step.',
+      answer: 'Content follows the "Six-Step Methodology": Tool Setup → Tech Stack → Engineering → Cursor Rules → Workflow → Feedback & Iteration, forming a complete loop from tools to process.',
     },
     {
-      question: 'Why should I learn prompt engineering?',
-      answer: 'Good prompts lead to more accurate AI-generated code, reducing time spent on revisions. Mastering prompt engineering is key to unleashing Cursor\'s full potential.',
+      question: 'Why should I learn in this order?',
+      answer: 'Get tools ready, choose the right tech stack, and build a solid engineering foundation first to avoid "AI writes fast, debugging is painful". Rules are the highest leverage for reducing manual corrections, and standardized workflows transform AI from occasional helper to full-time collaborator.',
     },
     {
       question: 'What\'s the difference between Cursor Rules and regular prompts?',
@@ -118,7 +130,7 @@ export default {
     },
     {
       question: 'How do I choose the right AI model?',
-      answer: 'Different models have different strengths: Claude excels at complex reasoning and long documents, GPT-4 is great for general tasks, while lightweight models are suitable for simple completions. The Wiki includes detailed comparison tables and selection guidelines.',
+      answer: 'Different models have different strengths: Claude excels at complex reasoning and long contexts, GPT-4 is great for general tasks, while lightweight models suit simple completions. The Wiki includes detailed comparison tables and selection guidelines.',
     },
     {
       question: 'Can I contribute content?',
@@ -129,10 +141,10 @@ export default {
   quickLinks: {
     title: 'Quick Links',
     items: [
-      { label: 'Shortcut Cheat Sheet', link: '/docs/shortcuts' },
-      { label: 'Model Comparison', link: '/docs/models' },
-      { label: 'Rules Examples', link: '/docs/rules-examples' },
-      { label: 'Prompt Templates', link: '/docs/prompt-templates' },
+      { label: 'Getting Started', link: '/docs' },
+      { label: 'Model Selection', link: '/docs/0-tool-setup/model-selection' },
+      { label: 'Rules Best Practices', link: '/docs/3-cursor-rules/best-practices' },
+      { label: 'Workflow Practice', link: '/docs/4-workflow/workflow-practice' },
     ],
   },
 }

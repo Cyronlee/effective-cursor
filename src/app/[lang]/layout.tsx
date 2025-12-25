@@ -102,8 +102,8 @@ export default async function RootLayout({ children, params }: LayoutProps<'/[la
   const dictionary = await getDictionary(lang)
   const pageMap = await getPageMap(lang)
 
-  const title = 'My Nextra Starter'
-  const description = 'A Starter template with Next.js, Nextra'
+  const title = 'Effective Cursor'
+  const description = 'AI-assisted programming best practices'
 
   const { t } = await useServerLocale(lang)
 

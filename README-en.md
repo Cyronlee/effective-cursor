@@ -19,7 +19,7 @@ This Wiki is organized following the **Effective Cursor Methodology (Six Steps)*
 |------|-------------------|--------------------------------------------------|
 | 0    | Tool Setup        | Make Cursor your truly handy development environment |
 | 1    | Tech Stack        | Choose the most AI-friendly tech stack           |
-| 2    | Scaffolding       | Establish engineering foundation                 |
+| 2    | Engineering       | Establish engineering foundation                 |
 | 3    | Cursor Rules      | Make AI automatically follow team standards      |
 | 4    | Workflow          | Deeply integrate AI into daily development       |
 | 5    | Feedback & Iteration | Continuously iterate to improve AI effectiveness |
@@ -30,6 +30,49 @@ This Wiki is organized following the **Effective Cursor Methodology (Six Steps)*
 - Rules are the highest leverage for reducing manual correction costs
 - Standardized workflow transforms AI from "occasional helper" to "full-time collaborator"
 - Feedback and iteration is key to maintaining productivity leadership
+
+### Detailed Contents
+
+```
+0. Tool Setup
+   ├── Installation & Configuration
+   ├── Extensions
+   ├── Model Selection
+   └── MCP Tools
+
+1. Tech Stack Selection
+   ├── AI Era Favorites
+   ├── Frontend Stack
+   ├── Backend Stack
+   └── Collaboration Tools
+
+2. Engineering Architecture
+   ├── Project Structure Optimization
+   ├── Database Schema
+   ├── Static Analysis Tools
+   ├── Automated Testing
+   └── CI/CD Pipeline
+
+3. Cursor Rules
+   ├── How Rules Work
+   ├── Rules Writing Best Practices
+   ├── Rules Iteration & Accumulation
+   └── Meta Prompts for Generating Rules
+
+4. Workflow
+   ├── Modes Overview
+   ├── Context Management
+   ├── Direct Mode
+   ├── Document Mode
+   ├── Draft-Final Mode
+   └── Workflow Practice
+
+5. Feedback & Iteration
+   ├── Metrics Framework
+   ├── Feedback Collection
+   ├── Retrospective Guide
+   └── Our Practice Feedback
+```
 
 ## 🛠️ Local Development
 
@@ -68,7 +111,7 @@ src/content/
 │       ├── index.mdx      # Getting Started
 │       ├── 0-tool-setup/  # Tool Setup
 │       ├── 1-tech-stack/  # Tech Stack Selection
-│       ├── 2-scaffolding/ # Scaffolding
+│       ├── 2-scaffolding/ # Engineering Architecture
 │       ├── 3-cursor-rules/# Cursor Rules
 │       ├── 4-workflow/    # Workflow
 │       └── 5-feedback/    # Feedback & Iteration

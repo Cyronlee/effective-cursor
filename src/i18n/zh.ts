@@ -31,73 +31,85 @@ export default {
   heroSubtitle: '从入门到精通，掌握 AI 辅助编程的最佳实践',
   heroDescription: '基于实战经验，助你充分发挥 Cursor 的强大能力',
 
-  // 四大分类
+  // 六大核心模块（方法论六步走）
   categories: [
     {
-      title: '基础与上手',
-      description: '快速入门 Cursor，掌握核心功能与快捷键，了解模型选择与成本优化策略',
+      title: '0. 工具就绪',
+      description: '安装配置、扩展程序、模型选择与 MCP 工具，让 Cursor 成为真正顺手的开发环境',
       icon: 'rocket',
-      link: '/docs/getting-started',
+      link: '/docs/0-tool-setup',
     },
     {
-      title: '工程化与技术栈',
-      description: '探索 AI 友好的技术栈选择，建立可靠的 Lint、Format 与 CI/CD 工程体系',
+      title: '1. 技术选型',
+      description: '探索 AI 友好的编程语言与前后端技术栈，选择对 AI 最友好的技术组合',
       icon: 'code',
-      link: '/docs/engineering',
+      link: '/docs/1-tech-stack',
     },
     {
-      title: '核心功能与配置',
-      description: '深入 Cursor Rules 配置，学习编写高效规则，提升代码生成质量',
+      title: '2. 工程架构',
+      description: '项目结构、数据库 Schema、静态分析、自动化测试与 CI/CD，建立工程化基础',
+      icon: 'stack',
+      link: '/docs/2-scaffolding',
+    },
+    {
+      title: '3. Cursor Rules',
+      description: '理解 Rules 工作原理，掌握编写最佳实践，让 AI 自动遵守团队规范',
       icon: 'settings',
-      link: '/docs/configuration',
+      link: '/docs/3-cursor-rules',
     },
     {
-      title: '提示工程',
-      description: '掌握提示词设计原则，从 PRD 到代码的完整实践，构建你的 Prompt 模板库',
+      title: '4. 规范工作流',
+      description: '上下文管理、Direct/Document/Draft-Final 三种模式，把 AI 深度融入开发流程',
+      icon: 'workflow',
+      link: '/docs/4-workflow',
+    },
+    {
+      title: '5. 反馈与迭代',
+      description: '量化指标、反馈收集、复盘实践，持续迭代提升 AI 辅助效果',
       icon: 'sparkles',
-      link: '/docs/prompt-engineering',
+      link: '/docs/5-feedback',
     },
   ],
 
   featureList: [
     {
-      title: '快速上手 Cursor',
-      description: '界面导览、核心功能（Chat、Composer、Cmd+K、@引用）、快捷键速查、项目索引优化',
+      title: '安装与模型选择',
+      description: 'Cursor 安装配置、扩展程序推荐、主流模型对比与场景选型指南',
     },
     {
-      title: '模型选择与成本优化',
-      description: '主流模型对比、场景选型指南、实测数据与成本控制技巧',
+      title: 'MCP 工具生态',
+      description: 'Model Context Protocol 工具集成，扩展 AI 的能力边界',
     },
     {
-      title: 'AI 时代技术栈选择',
-      description: 'React + TS + Zod、NestJS/FastAPI、Next.js 等 AI 友好技术栈分析与最佳实践',
+      title: 'AI 友好技术栈',
+      description: 'TypeScript、React、Next.js、NestJS/FastAPI 等 AI 时代的最佳技术选择',
     },
     {
-      title: '工程化实践',
-      description: 'Cursor Rules 与 ESLint/Prettier 联动、GitHub Actions 集成、双重审查机制',
+      title: '工程架构设计',
+      description: '项目结构优化、数据库 Schema 设计、ESLint/Prettier 等静态分析配置',
     },
     {
-      title: '自动化测试辅助',
-      description: 'AI 生成单元/集成/e2e 测试、测试驱动开发的 AI 变种、覆盖率审查',
+      title: '自动化测试与 CI/CD',
+      description: 'AI 辅助生成测试、GitHub Actions 集成、持续集成部署流程',
     },
     {
       title: 'Cursor Rules 制定',
-      description: 'Rules 编写原则、条件规则、动态引用、与工具链联动的进阶技巧',
+      description: 'Rules 工作原理、编写最佳实践、迭代沉淀与元提示词技巧',
     },
     {
-      title: '提示工程核心原则',
-      description: '清晰表达、上下文提供、迭代优化、角色扮演、结构化输出',
+      title: '上下文管理',
+      description: '有效管理对话上下文，让 AI 始终保持对项目的准确理解',
     },
     {
-      title: '结构化 PRD 实战',
-      description: '从模糊需求到技术方案、任务拆解、代码生成的完整链条',
+      title: '三种工作模式',
+      description: 'Direct 快速模式、Document 文档驱动、Draft-Final 两阶段协作',
     },
     {
-      title: 'Prompt 模板库',
-      description: 'PRD、新功能、重构、调试优化、测试生成、文档生成等模板集合',
+      title: '持续反馈与迭代',
+      description: '量化指标体系、反馈收集机制、复盘实践指南与实战经验分享',
     },
   ],
-  featuresDesc: '13 个精心设计的页面，覆盖 AI 辅助开发的方方面面',
+  featuresDesc: '30+ 篇精心编写的文档，覆盖 AI 辅助开发的完整流程',
 
   faqs: [
     {
@@ -106,11 +118,11 @@ export default {
     },
     {
       question: 'Wiki 的内容是如何组织的？',
-      answer: '内容按照"基础上手 → 工程化保障 → 配置优化 → 提示工程"的进阶路径组织，帮助你循序渐进地掌握 AI 辅助开发的各个方面。',
+      answer: '内容按照"六步方法论"组织：工具就绪 → 技术选型 → 工程架构 → Cursor Rules → 规范工作流 → 反馈迭代，形成从工具到流程的完整闭环。',
     },
     {
-      question: '为什么要学习提示工程？',
-      answer: '好的提示词能让 AI 输出更精准的代码，减少反复修改的时间。掌握提示工程是发挥 Cursor 最大威力的关键。',
+      question: '为什么要按这个顺序学习？',
+      answer: '先把工具磨好、技术栈选对、工程基础打牢，才能避免"AI 写得快、后期修得惨"。Rules 是降低人工修正成本的最高杠杆，规范工作流让 AI 从"偶尔帮忙"变成"全程协作"。',
     },
     {
       question: 'Cursor Rules 和普通提示词有什么区别？',
@@ -118,7 +130,7 @@ export default {
     },
     {
       question: '如何选择合适的 AI 模型？',
-      answer: '不同模型各有优劣：Claude 适合复杂推理和长文档，GPT-4 擅长通用任务，而轻量模型适合简单补全。Wiki 中有详细的对比表格和选型建议。',
+      answer: '不同模型各有优劣：Claude 适合复杂推理和长上下文，GPT-4 擅长通用任务，而轻量模型适合简单补全。Wiki 中有详细的对比表格和选型建议。',
     },
     {
       question: '我可以贡献内容吗？',
@@ -129,10 +141,10 @@ export default {
   quickLinks: {
     title: '快速导航',
     items: [
-      { label: '快捷键速查', link: '/docs/shortcuts' },
-      { label: '模型对比表', link: '/docs/models' },
-      { label: 'Rules 示例', link: '/docs/rules-examples' },
-      { label: 'Prompt 模板', link: '/docs/prompt-templates' },
+      { label: '快速起步', link: '/docs' },
+      { label: '模型选择', link: '/docs/0-tool-setup/model-selection' },
+      { label: 'Rules 最佳实践', link: '/docs/3-cursor-rules/best-practices' },
+      { label: '工作流实践', link: '/docs/4-workflow/workflow-practice' },
     ],
   },
 }

@@ -28,7 +28,9 @@ const CategoryCard = ({
   const iconMap: Record<string, string> = {
     rocket: 'icon-[ph--rocket-launch-bold]',
     code: 'icon-[ph--code-bold]',
+    stack: 'icon-[ph--stack-bold]',
     settings: 'icon-[ph--gear-six-bold]',
+    workflow: 'icon-[ph--git-branch-bold]',
     sparkles: 'icon-[ph--sparkle-bold]',
   }
 
@@ -101,14 +103,14 @@ export default function HomepageHero() {
       <SetupHero />
 
       <div className="relative z-1 pb-10 md:pb-[100px]">
-        {/* 4 Main Categories Section */}
+        {/* 6 Main Categories Section */}
         <Section
-          title={currentLocale === 'zh' ? '四大核心模块' : 'Four Core Modules'}
+          title={currentLocale === 'zh' ? '六大核心模块' : 'Six Core Modules'}
           description={currentLocale === 'zh'
-            ? '从入门到精通的完整学习路径'
-            : 'A complete learning path from beginner to expert'}
+            ? '从工具到流程的完整闭环'
+            : 'A complete loop from tools to workflow'}
         >
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-4xl my-8 px-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-6xl my-8 px-4">
             {categories.map((category, index) => (
               <CategoryCard
                 key={index}
