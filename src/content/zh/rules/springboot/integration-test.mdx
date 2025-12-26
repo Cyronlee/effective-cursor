@@ -1,0 +1,219 @@
+---
+title: "集成测试规范"
+---
+
+# 集成测试规范
+
+此规则定义了集成测试的编写规范，包括测试基类、MockMvc 配置、测试数据准备、断言风格等。它确保测试代码的质量和一致性。
+
+**适用范围**: `src/test/java/com/example/order/**/*.java`
+
+````mdc filename="integration-test.mdc"
+---
+description: 集成测试规范
+globs:
+  - src/test/java/com/example/order/**/*.java
+alwaysApply: false
+---
+
+# 集成测试规范
+
+## 基础结构
+
+所有集成测试必须继承 `BaseIntegrationTest`：
+
+```java
+public class OrderControllerTest extends BaseIntegrationTest {
+    // ...
+}
+```
+
+### BaseIntegrationTest 提供的能力
+
+- `@SpringBootTest` - 完整 Spring 上下文
+- `@Transactional` - 每个测试自动回滚
+- `@ExtendWith(SpringExtension.class)` - JUnit 5 集成
+
+## 测试类组织
+
+### 使用 @Nested 按功能分组
+
+```java
+public class OrderControllerTest extends BaseIntegrationTest {
+
+    @Nested
+    class CreateOrder {
+        @Test
+        void should_return_400_given_invalid_customer_id() { }
+
+        @Test
+        void should_successfully_create_given_valid_request() { }
+    }
+
+    @Nested
+    class UpdateOrder {
+        @Test
+        void should_successfully_update_given_valid_request() { }
+    }
+}
+```
+
+### 测试方法命名
+
+格式：`should_{期望行为}_given_{前置条件}` 或 `should_{期望行为}_when_{触发条件}`
+
+```java
+void should_return_400_given_invalid_customer_id()
+void should_successfully_create_given_valid_request()
+void should_throw_forbidden_error_given_user_has_no_permission()
+void should_return_order_list_when_filter_by_status()
+```
+
+## MockMvc 设置
+
+在 `@BeforeEach` 中初始化：
+
+```java
+@Resource
+OrderController orderController;
+
+private MockMvc mockMvc;
+
+@BeforeEach
+public void setup() {
+    MockitoAnnotations.openMocks(this);
+    this.mockMvc = MockMvcBuilders
+            .standaloneSetup(orderController)
+            .setControllerAdvice(ControllerAdvice.class)
+            .build();
+
+    // 设置当前用户
+    SessionUserContext.setSessionUser(
+            new SessionUser(1L, "user1", "user1@test.com", "10001"));
+}
+```
+
+## 测试数据准备
+
+### SQL 脚本（准备数据库数据）
+
+位置：`src/test/resources/sql/{module}/{scenario}/xxx.sql`
+
+```java
+@Resource
+SqlHelper sqlHelper;
+
+@Test
+void should_successfully_create_given_valid_request() throws Exception {
+    // given
+    sqlHelper.run("sql/order/create-order/create-customer-with-address.sql");
+
+    // when & then
+    // ...
+}
+
+@AfterEach
+public void clearData() {
+    sqlHelper.run("sql/order/clear-data.sql");
+}
+```
+
+### JSON 文件（请求体数据）
+
+位置：`src/test/resources/test-data/{module}/{scenario}/xxx.json`
+
+```java
+// 读取为字符串（用于 RequestBody）
+String payload = JsonReader.readAsString("test-data/order/create-order/valid-order.json");
+
+// 读取为对象（需要修改后使用）
+OrderUpdateDTO dto = JsonReader.readObject(
+    "test-data/order/update-order/valid.json",
+    OrderUpdateDTO.class
+);
+dto.setId(order.getId());
+```
+
+## API 测试模式
+
+### 基本请求结构
+
+```java
+MvcResult result = mockMvc.perform(
+        post("/api/order/create")
+                .headers(AuthUtil.buildHeadersForUserId("10001"))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(payload))
+        .andExpect(status().isOk())
+        .andReturn();
+```
+
+### 解析响应
+
+```java
+// 单个对象
+OrderInfoDTO dto = JsonUtil.readAsObject(result, OrderInfoDTO.class);
+
+// 列表
+List<OrderItemDTO> list = JsonUtil.readAsList(result, OrderItemDTO.class);
+```
+
+### 验证错误响应
+
+```java
+MvcResult result = mockMvc.perform(...)
+        .andExpect(status().isBadRequest())
+        .andReturn();
+
+ErrorVO errorVO = JsonUtil.readAsObject(result, ErrorVO.class);
+assertTrue(errorVO.getErrorMessage().startsWith("invalid customer id"));
+```
+
+### 验证异常类型
+
+```java
+mockMvc.perform(...)
+        .andExpect(result -> assertInstanceOf(BizException.class, result.getResolvedException()))
+        .andExpect(result -> assertEquals("expected message",
+            Objects.requireNonNull(result.getResolvedException()).getMessage()));
+```
+
+## 断言风格
+
+使用 AssertJ 链式断言：
+
+```java
+assertThat(orderInfoDTO)
+        .returns("PENDING", OrderInfoDTO::getStatus)
+        .returns(order.getId(), OrderInfoDTO::getId)
+        .returns(order.getCustomerId(), OrderInfoDTO::getCustomerId);
+
+assertThat(list)
+        .hasSize(2)
+        .extracting(OrderItemDTO::getProductName)
+        .containsExactlyInAnyOrder("Product A", "Product B")
+        .doesNotContain("Product C");
+```
+
+## 已封装的测试工具
+
+| 工具类        | 路径                  | 用途                   |
+| ------------- | --------------------- | ---------------------- |
+| `SqlHelper`   | `integration/helper/` | 执行 SQL 脚本          |
+| `JsonReader`  | `integration/util/`   | 读取 JSON 测试数据文件 |
+| `JsonUtil`    | `integration/util/`   | 解析 MvcResult 响应    |
+| `AuthUtil`    | `integration/util/`   | 构建认证 Header        |
+| `OrderHelper` | `integration/helper/` | 构建订单相关测试实体   |
+
+## Mock 静态方法（如 LocalDate.now()）
+
+```java
+try (MockedStatic<LocalDate> localDate = mockStatic(LocalDate.class, CALLS_REAL_METHODS)) {
+    localDate.when(LocalDate::now).thenReturn(LocalDate.of(2024, 4, 9));
+
+    // 执行测试
+    mockMvc.perform(...);
+}
+```
+````
+

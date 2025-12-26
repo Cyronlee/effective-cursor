@@ -27,6 +27,7 @@ src/content/
 - 自定义组件：可以使用 @/components/ui 下的组件，例如ChatExample来渲染Agent使用示例
 - 官方组件：import { ImageZoom, Callout, Cards, FileTree, Steps, Tabs, Playground } from 'nextra/components'
 - 图片：统一放 public/img/{doc-name}/
+- 代码块：当代码块的内容本身包含三个连续的反引号时，需要用四个反引号包裹，解决嵌套问题
 
 ### i18n 处理
 - 页面文案：修改 src/i18n/zh.ts 和 en.ts

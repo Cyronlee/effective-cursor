@@ -1,0 +1,219 @@
+---
+title: "Integration Test Standards"
+---
+
+# Integration Test Standards
+
+This rule defines integration test writing standards, including test base classes, MockMvc configuration, test data preparation, and assertion styles. It ensures the quality and consistency of test code.
+
+**Scope**: `src/test/java/com/example/order/**/*.java`
+
+````mdc filename="integration-test.mdc"
+---
+description: Integration test standards
+globs:
+  - src/test/java/com/example/order/**/*.java
+alwaysApply: false
+---
+
+# Integration Test Standards
+
+## Basic Structure
+
+All integration tests must extend `BaseIntegrationTest`:
+
+```java
+public class OrderControllerTest extends BaseIntegrationTest {
+    // ...
+}
+```
+
+### BaseIntegrationTest Capabilities
+
+- `@SpringBootTest` - Full Spring context
+- `@Transactional` - Each test automatically rolls back
+- `@ExtendWith(SpringExtension.class)` - JUnit 5 integration
+
+## Test Class Organization
+
+### Use @Nested for Functional Grouping
+
+```java
+public class OrderControllerTest extends BaseIntegrationTest {
+
+    @Nested
+    class CreateOrder {
+        @Test
+        void should_return_400_given_invalid_customer_id() { }
+
+        @Test
+        void should_successfully_create_given_valid_request() { }
+    }
+
+    @Nested
+    class UpdateOrder {
+        @Test
+        void should_successfully_update_given_valid_request() { }
+    }
+}
+```
+
+### Test Method Naming
+
+Format: `should_{expected_behavior}_given_{precondition}` or `should_{expected_behavior}_when_{trigger_condition}`
+
+```java
+void should_return_400_given_invalid_customer_id()
+void should_successfully_create_given_valid_request()
+void should_throw_forbidden_error_given_user_has_no_permission()
+void should_return_order_list_when_filter_by_status()
+```
+
+## MockMvc Setup
+
+Initialize in `@BeforeEach`:
+
+```java
+@Resource
+OrderController orderController;
+
+private MockMvc mockMvc;
+
+@BeforeEach
+public void setup() {
+    MockitoAnnotations.openMocks(this);
+    this.mockMvc = MockMvcBuilders
+            .standaloneSetup(orderController)
+            .setControllerAdvice(ControllerAdvice.class)
+            .build();
+
+    // Set current user
+    SessionUserContext.setSessionUser(
+            new SessionUser(1L, "user1", "user1@test.com", "10001"));
+}
+```
+
+## Test Data Preparation
+
+### SQL Scripts (Prepare Database Data)
+
+Location: `src/test/resources/sql/{module}/{scenario}/xxx.sql`
+
+```java
+@Resource
+SqlHelper sqlHelper;
+
+@Test
+void should_successfully_create_given_valid_request() throws Exception {
+    // given
+    sqlHelper.run("sql/order/create-order/create-customer-with-address.sql");
+
+    // when & then
+    // ...
+}
+
+@AfterEach
+public void clearData() {
+    sqlHelper.run("sql/order/clear-data.sql");
+}
+```
+
+### JSON Files (Request Body Data)
+
+Location: `src/test/resources/test-data/{module}/{scenario}/xxx.json`
+
+```java
+// Read as string (for RequestBody)
+String payload = JsonReader.readAsString("test-data/order/create-order/valid-order.json");
+
+// Read as object (when modification is needed)
+OrderUpdateDTO dto = JsonReader.readObject(
+    "test-data/order/update-order/valid.json",
+    OrderUpdateDTO.class
+);
+dto.setId(order.getId());
+```
+
+## API Test Patterns
+
+### Basic Request Structure
+
+```java
+MvcResult result = mockMvc.perform(
+        post("/api/order/create")
+                .headers(AuthUtil.buildHeadersForUserId("10001"))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(payload))
+        .andExpect(status().isOk())
+        .andReturn();
+```
+
+### Parse Response
+
+```java
+// Single object
+OrderInfoDTO dto = JsonUtil.readAsObject(result, OrderInfoDTO.class);
+
+// List
+List<OrderItemDTO> list = JsonUtil.readAsList(result, OrderItemDTO.class);
+```
+
+### Verify Error Response
+
+```java
+MvcResult result = mockMvc.perform(...)
+        .andExpect(status().isBadRequest())
+        .andReturn();
+
+ErrorVO errorVO = JsonUtil.readAsObject(result, ErrorVO.class);
+assertTrue(errorVO.getErrorMessage().startsWith("invalid customer id"));
+```
+
+### Verify Exception Type
+
+```java
+mockMvc.perform(...)
+        .andExpect(result -> assertInstanceOf(BizException.class, result.getResolvedException()))
+        .andExpect(result -> assertEquals("expected message",
+            Objects.requireNonNull(result.getResolvedException()).getMessage()));
+```
+
+## Assertion Style
+
+Use AssertJ fluent assertions:
+
+```java
+assertThat(orderInfoDTO)
+        .returns("PENDING", OrderInfoDTO::getStatus)
+        .returns(order.getId(), OrderInfoDTO::getId)
+        .returns(order.getCustomerId(), OrderInfoDTO::getCustomerId);
+
+assertThat(list)
+        .hasSize(2)
+        .extracting(OrderItemDTO::getProductName)
+        .containsExactlyInAnyOrder("Product A", "Product B")
+        .doesNotContain("Product C");
+```
+
+## Pre-built Test Utilities
+
+| Utility Class | Path                  | Purpose                     |
+| ------------- | --------------------- | --------------------------- |
+| `SqlHelper`   | `integration/helper/` | Execute SQL scripts         |
+| `JsonReader`  | `integration/util/`   | Read JSON test data files   |
+| `JsonUtil`    | `integration/util/`   | Parse MvcResult response    |
+| `AuthUtil`    | `integration/util/`   | Build authentication Header |
+| `OrderHelper` | `integration/helper/` | Build order-related test entities |
+
+## Mock Static Methods (e.g., LocalDate.now())
+
+```java
+try (MockedStatic<LocalDate> localDate = mockStatic(LocalDate.class, CALLS_REAL_METHODS)) {
+    localDate.when(LocalDate::now).thenReturn(LocalDate.of(2024, 4, 9));
+
+    // Execute test
+    mockMvc.perform(...);
+}
+```
+````
+

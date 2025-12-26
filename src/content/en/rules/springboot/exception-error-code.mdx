@@ -1,0 +1,107 @@
+---
+title: "Exception & Error Code Standards"
+---
+
+# Exception & Error Code Standards
+
+This rule defines the project's exception handling system, including exception types, error codes, and error message formats. It ensures all error responses maintain a consistent structure and semantics.
+
+**Scope**: 
+- `src/main/java/com/example/order/exception/**/*.java`
+- `src/main/java/com/example/order/controller/**/*.java`
+- `src/main/java/com/example/order/service/**/*.java`
+
+````mdc filename="exception-error-code.mdc"
+---
+description: Exception and error handling standards
+globs:
+  - src/main/java/com/example/order/exception/**/*.java
+  - src/main/java/com/example/order/controller/**/*.java
+  - src/main/java/com/example/order/service/**/*.java
+alwaysApply: false
+---
+
+# Exception & Error Code Standards
+
+## Exception Class Hierarchy
+
+The project uses a simplified exception hierarchy; all exceptions extend `Exception`:
+
+| Exception Class         | HTTP Status | Use Case                                         |
+| ----------------------- | ----------- | ------------------------------------------------ |
+| `BadRequestException`   | 400         | Parameter validation failure, request format error |
+| `BizException`          | 400         | Business rule validation failure (extends BadRequestException) |
+| `UnauthorizedException` | 401         | Not authenticated                                |
+| `ForbiddenException`    | 403         | No access permission                             |
+| `NotFoundException`     | 404         | Resource not found                               |
+
+### Exception Class Structure
+
+All exceptions only accept a message parameter, no error codes:
+
+```java
+// com.example.order.exception.BizException
+public class BizException extends BadRequestException {
+    public BizException(String message) {
+        super(message);
+    }
+}
+```
+
+## When to Throw Exceptions
+
+### Service Layer Throws Business Exceptions
+
+```java
+// Resource not found
+public User getUserById(Long userId) throws NotFoundException {
+    return userRepository.findById(userId)
+            .orElseThrow(() -> new NotFoundException("user not found with id: " + userId));
+}
+
+// Business rule validation
+if (order.isCancelled()) {
+    throw new BizException("can not update order because it is already cancelled");
+}
+
+// Permission validation
+if (!hasPermission) {
+    throw new ForbiddenException("user does not have the permission to update order");
+}
+```
+
+### Error Message Format
+
+- Use lowercase English descriptions
+- Include key business information (such as ID, name, etc.)
+- Format: `"{resource} not found with {field}: {value}"`
+
+## Global Exception Handling
+
+`ControllerAdvice` handles all exceptions uniformly, returning `ErrorVO`:
+
+```java
+// com.example.order.vo.ErrorVO
+public class ErrorVO {
+    private String errorCode;    // Uppercase underscore format: BAD_REQUEST, NOT_FOUND
+    private String errorMessage; // Exception's getMessage()
+}
+```
+
+### Predefined errorCode Values
+
+| errorCode               | Corresponding Exception             |
+| ----------------------- | ----------------------------------- |
+| `BAD_REQUEST`           | BadRequestException, BizException   |
+| `UNAUTHORIZED`          | UnauthorizedException               |
+| `FORBIDDEN`             | ForbiddenException                  |
+| `NOT_FOUND`             | NotFoundException                   |
+| `INTERNAL_SERVER_ERROR` | Other unhandled exceptions          |
+
+## Important Notes
+
+1. **Do not add new exception types**: Use the existing four exception types
+2. **Do not modify ControllerAdvice**: Global exception handling logic is fixed
+3. **Controller method signatures declare `throws Exception`**: Let all exceptions propagate up
+````
+

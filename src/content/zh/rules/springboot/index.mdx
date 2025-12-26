@@ -1,0 +1,54 @@
+---
+title: "Spring Boot 规则集"
+---
+
+import { FileTree } from 'nextra/components'
+
+# Spring Boot 规则集
+
+这是一套针对 Spring Boot + Spring Data JPA + PostgreSQL 技术栈的 Cursor Rules 规则集合。通过将项目规范转化为 AI 可理解的规则，让 Cursor 在开发过程中自动遵循团队的技术标准和最佳实践。
+
+## 规则概览
+
+| 规则文件 | 适用范围 | 核心内容 | 作用 |
+|---------|---------|---------|------|
+| **全局规则**<br/>`global-rules.mdc` | 整个项目<br/>`alwaysApply: true` | 技术栈定义、包结构<br/>分层规范、依赖注入 | 确保项目的基础架构<br/>和代码风格保持一致 |
+| **接口契约**<br/>`api-contract.mdc` | `controller/**/*.java` | URL 设计、响应结构<br/>参数绑定规范 | 统一 RESTful API<br/>的设计风格 |
+| **鉴权安全**<br/>`auth-security.mdc` | `controller/**`<br/>`service/**` | 认证方式、用户上下文<br/>权限校验模式 | 规范安全相关的<br/>实现方式 |
+| **异常处理**<br/>`exception-error-code.mdc` | `exception/**`<br/>`controller/**`<br/>`service/**` | 异常类体系、错误码<br/>全局异常处理 | 统一错误处理<br/>和响应格式 |
+| **集成测试**<br/>`integration-test.mdc` | `src/test/**/*.java` | 测试基类、MockMvc<br/>数据准备、断言风格 | 规范测试代码<br/>的编写方式 |
+
+## 使用方法
+
+将这些规则文件添加到项目的 `.cursor/rules/` 目录中，Cursor 会根据文件路径和 `globs` 配置自动应用相应的规则：
+
+<FileTree>
+  <FileTree.Folder name=".cursor" defaultOpen>
+    <FileTree.Folder name="rules" defaultOpen>
+      <FileTree.File name="global-rules.mdc" />
+      <FileTree.File name="api-contract.mdc" />
+      <FileTree.File name="auth-security.mdc" />
+      <FileTree.File name="exception-error-code.mdc" />
+      <FileTree.File name="integration-test.mdc" />
+    </FileTree.Folder>
+  </FileTree.Folder>
+</FileTree>
+
+## 规则特点
+
+- **分层设计**: 通过 `alwaysApply` 和 `globs` 实现规则的精确作用域控制
+- **技术栈绑定**: 专门针对 Spring Boot 3.x + JPA 生态系统优化
+- **最佳实践**: 包含分层架构、异常处理、安全认证等企业级最佳实践
+- **测试优先**: 内置集成测试规范，确保代码质量
+
+## 扩展建议
+
+根据项目需求，可以继续添加其他规则文件：
+
+- **数据访问规则**: 针对 `repository/**` 的 JPA Repository 规范
+- **DTO 规则**: 针对数据传输对象的设计规范
+- **缓存规则**: 针对 Redis/本地缓存的使用规范
+- **消息队列规则**: 针对 Kafka/RabbitMQ 的集成规范
+
+这样可以构建一个完整的、分层的规则体系，让 AI 助手更好地理解和遵循项目规范。
+

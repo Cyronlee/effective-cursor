@@ -1,0 +1,62 @@
+---
+title: "全局开发规范"
+---
+
+# 全局开发规范
+
+此规则定义了项目的技术栈、包结构和分层边界，是整个项目的基础架构规范。它确保团队成员在依赖注入、异常处理、用户上下文获取等方面保持一致的实践。
+
+**适用范围**: 整个项目（可设置 `alwaysApply: true`）
+
+````mdc filename="global-rules.mdc"
+---
+description: 全局开发规范详细说明
+globs:
+alwaysApply: false
+---
+
+# 全局开发规范
+
+## 技术栈
+
+- Java 17
+- Spring Boot 3.x
+- Spring Data JPA
+- PostgreSQL
+- Lombok
+
+## 包结构与分层边界
+
+项目根包：`com.example.order`
+
+| 层级       | 包路径                 | 职责                               |
+| ---------- | ---------------------- | ---------------------------------- |
+| Controller | `controller/{module}/` | 接收请求、参数校验、调用 Service   |
+| Service    | `service/{module}/`    | 业务逻辑，可跨模块调用其他 Service |
+| Repository | `repository/{module}/` | 数据访问，继承 JpaRepository       |
+| Entity     | `entity/{module}/`     | JPA 实体                           |
+| DTO        | `dto/{module}/`        | 数据传输对象                       |
+| Projection | `projection/{module}/` | JPA 查询投影接口                   |
+
+### 模块划分
+
+按业务域分包，主要包括：
+
+- `order` - 订单
+- `order_template` - 订单模板
+- `user_management` - 用户管理（Customer/Order/OrderItem/User）
+- `order_fulfillment` - 订单履约
+
+## Key Conventions
+
+- **依赖注入**：使用 `@Resource` 而非 `@Autowired`
+- **Service 层**：直接定义实现类，不使用接口
+- **异常处理**：使用 `BadRequestException`/`BizException`/`NotFoundException`/`ForbiddenException`
+- **用户上下文**：通过 `SessionUserContext.getSessionUser()` 获取当前用户
+
+## 开发流程约束
+
+1. **每次生成代码后**：运行 `./gradlew test` 确保测试通过
+2. **新增功能**：必须同时提供对应的集成测试
+````
+

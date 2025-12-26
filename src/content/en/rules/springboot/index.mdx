@@ -1,0 +1,54 @@
+---
+title: "Spring Boot Ruleset"
+---
+
+import { FileTree } from 'nextra/components'
+
+# Spring Boot Ruleset
+
+This is a comprehensive set of Cursor Rules designed for Spring Boot + Spring Data JPA + PostgreSQL technology stack. By converting project standards into AI-understandable rules, Cursor can automatically follow team technical standards and best practices during development.
+
+## Rules Overview
+
+| Rule File | Scope | Core Content | Purpose |
+|-----------|-------|--------------|---------|
+| **Global Rules**<br/>`global-rules.mdc` | Entire project<br/>`alwaysApply: true` | Tech stack definition, package structure<br/>Layering conventions, dependency injection | Ensure consistent<br/>project architecture and code style |
+| **API Contract**<br/>`api-contract.mdc` | `controller/**/*.java` | URL design, response structure<br/>Parameter binding conventions | Standardize RESTful API<br/>design patterns |
+| **Auth Security**<br/>`auth-security.mdc` | `controller/**`<br/>`service/**` | Authentication methods, user context<br/>Permission validation patterns | Standardize security-related<br/>implementations |
+| **Exception Handling**<br/>`exception-error-code.mdc` | `exception/**`<br/>`controller/**`<br/>`service/**` | Exception hierarchy, error codes<br/>Global exception handling | Unified error handling<br/>and response format |
+| **Integration Test**<br/>`integration-test.mdc` | `src/test/**/*.java` | Test base class, MockMvc<br/>Test data preparation, assertion style | Standardize test code<br/>writing practices |
+
+## Usage
+
+Add these rule files to your project's `.cursor/rules/` directory. Cursor will automatically apply the appropriate rules based on file paths and `globs` configuration:
+
+<FileTree>
+  <FileTree.Folder name=".cursor" defaultOpen>
+    <FileTree.Folder name="rules" defaultOpen>
+      <FileTree.File name="global-rules.mdc" />
+      <FileTree.File name="api-contract.mdc" />
+      <FileTree.File name="auth-security.mdc" />
+      <FileTree.File name="exception-error-code.mdc" />
+      <FileTree.File name="integration-test.mdc" />
+    </FileTree.Folder>
+  </FileTree.Folder>
+</FileTree>
+
+## Features
+
+- **Layered Design**: Precise scope control through `alwaysApply` and `globs`
+- **Tech Stack Bound**: Optimized specifically for Spring Boot 3.x + JPA ecosystem
+- **Best Practices**: Includes enterprise-level best practices for layered architecture, exception handling, and security
+- **Test First**: Built-in integration test conventions to ensure code quality
+
+## Extension Suggestions
+
+Based on project needs, you can add more rule files:
+
+- **Data Access Rules**: JPA Repository conventions for `repository/**`
+- **DTO Rules**: Data transfer object design conventions
+- **Cache Rules**: Redis/local cache usage conventions
+- **Message Queue Rules**: Kafka/RabbitMQ integration conventions
+
+This allows you to build a complete, layered rule system that helps AI assistants better understand and follow project conventions.
+

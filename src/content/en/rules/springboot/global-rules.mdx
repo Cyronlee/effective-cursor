@@ -1,0 +1,62 @@
+---
+title: "Global Development Standards"
+---
+
+# Global Development Standards
+
+This rule defines the project's technology stack, package structure, and layering boundaries. It serves as the foundational architecture specification for the entire project, ensuring team members maintain consistent practices in dependency injection, exception handling, and user context retrieval.
+
+**Scope**: Entire project (can set `alwaysApply: true`)
+
+````mdc filename="global-rules.mdc"
+---
+description: Global development standards detailed specification
+globs:
+alwaysApply: false
+---
+
+# Global Development Standards
+
+## Technology Stack
+
+- Java 17
+- Spring Boot 3.x
+- Spring Data JPA
+- PostgreSQL
+- Lombok
+
+## Package Structure & Layer Boundaries
+
+Root package: `com.example.order`
+
+| Layer      | Package Path           | Responsibility                              |
+| ---------- | ---------------------- | ------------------------------------------- |
+| Controller | `controller/{module}/` | Receive requests, validate params, call Service |
+| Service    | `service/{module}/`    | Business logic, can call other Services cross-module |
+| Repository | `repository/{module}/` | Data access, extends JpaRepository          |
+| Entity     | `entity/{module}/`     | JPA entities                                |
+| DTO        | `dto/{module}/`        | Data transfer objects                       |
+| Projection | `projection/{module}/` | JPA query projection interfaces             |
+
+### Module Organization
+
+Organize by business domain:
+
+- `order` - Orders
+- `order_template` - Order templates
+- `user_management` - User management (Customer/Order/OrderItem/User)
+- `order_fulfillment` - Order fulfillment
+
+## Key Conventions
+
+- **Dependency Injection**: Use `@Resource` instead of `@Autowired`
+- **Service Layer**: Define implementation classes directly, no interfaces
+- **Exception Handling**: Use `BadRequestException`/`BizException`/`NotFoundException`/`ForbiddenException`
+- **User Context**: Get current user via `SessionUserContext.getSessionUser()`
+
+## Development Workflow Constraints
+
+1. **After each code generation**: Run `./gradlew test` to ensure tests pass
+2. **New features**: Must include corresponding integration tests
+````
+

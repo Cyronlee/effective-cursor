@@ -1,0 +1,98 @@
+---
+title: "接口契约规范"
+---
+
+# 接口契约规范
+
+此规则定义了 RESTful API 的设计规范，包括 URL 命名、响应结构、Controller 编写规范等。它确保所有 API 接口保持一致的风格和结构。
+
+**适用范围**: `src/main/java/com/example/order/controller/**/*.java`
+
+````mdc filename="api-contract.mdc"
+---
+description: 接口契约规范，适用于 Controller 层开发
+globs: src/main/java/com/example/order/controller/**/*.java
+alwaysApply: false
+---
+
+# 接口契约规范
+
+## URL 设计
+
+- 统一前缀：`/api/{module}`
+- 资源命名：使用 kebab-case（如 `/api/order-fulfillment`）
+- **不使用版本控制**（无 `/v1`、`/v2` 前缀）
+
+### 常见 URL 模式
+
+```
+GET    /api/{module}/{id}           # 获取单个资源
+GET    /api/{module}/list           # 获取列表（带分页参数）
+POST   /api/{module}/create         # 创建资源
+PUT    /api/{module}/update         # 更新资源
+POST   /api/{module}/filter         # 复杂条件查询（请求体传参）
+DELETE /api/{module}/delete/{id}    # 删除资源
+```
+
+## 响应结构
+
+### 成功响应
+
+项目中存在两种返回风格，新代码推荐直接返回 DTO：
+
+```java
+// 推荐：直接返回 DTO
+@GetMapping("/{id}")
+public OrderInfoDTO getOrder(@PathVariable Long id) throws Exception {
+    return orderService.getOrderInfo(id);
+}
+
+// 也可：返回 ResponseEntity（需要指定状态码时使用）
+@PostMapping("/create")
+public ResponseEntity<OrderDto> create(...) {
+    return new ResponseEntity<>(response, HttpStatus.CREATED);
+}
+```
+
+### 错误响应
+
+所有错误通过异常抛出，由 `ControllerAdvice` 统一处理。
+
+错误响应结构（`ErrorVO`）：
+
+```json
+{
+  "errorCode": "BAD_REQUEST",
+  "errorMessage": "具体错误信息"
+}
+```
+
+## Controller 规范
+
+1. **使用 `@RestController`**
+2. **类级别 `@RequestMapping` 定义模块前缀**
+3. **异常直接抛出**，不在 Controller 中 try-catch
+
+```java
+@RestController
+@RequestMapping("/api/order")
+public class OrderController {
+
+    @Resource
+    private OrderService orderService;
+
+    @GetMapping("/{id:\\d+}")
+    public OrderInfoDTO getOrder(@PathVariable Long id) throws Exception {
+        return orderService.getOrderInfo(id);
+    }
+}
+```
+
+## 参数绑定
+
+- 路径参数：`@PathVariable`
+- 查询参数：`@RequestParam`（可设置 `required = false` 和 `defaultValue`）
+- 请求体：`@RequestBody`
+- 需要校验时添加 `@Valid`
+````
+

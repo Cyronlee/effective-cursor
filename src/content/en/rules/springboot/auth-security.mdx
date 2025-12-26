@@ -1,0 +1,137 @@
+---
+title: "Authentication & Security Standards"
+---
+
+# Authentication & Security Standards
+
+This rule defines the project's authentication and authorization mechanisms, including JWT/Basic Auth authentication, user context retrieval, and permission validation patterns. It ensures consistency and correctness in security-related code implementations.
+
+**Scope**: 
+- `src/main/java/com/example/order/controller/**/*.java`
+- `src/main/java/com/example/order/service/**/*.java`
+
+````mdc filename="auth-security.mdc"
+---
+description: Authentication and security standards, getting current user information
+globs:
+  - src/main/java/com/example/order/controller/**/*.java
+  - src/main/java/com/example/order/service/**/*.java
+alwaysApply: false
+---
+
+# Authentication & Security Standards
+
+## Authentication Approach
+
+The project uses `AuthFilter` for unified authentication, supporting two methods:
+
+1. **Bearer Token (JWT)** - Used in production
+2. **Basic Auth** - Used for testing and internal service calls
+
+All requests must include `Authorization` Header; unauthenticated requests return 401 directly.
+
+## Getting Current User
+
+Get current logged-in user information via `SessionUserContext`:
+
+```java
+import com.example.order.context.SessionUser;
+import com.example.order.context.SessionUserContext;
+
+// In Controller or Service
+SessionUser sessionUser = SessionUserContext.getSessionUser();
+Long userId = sessionUser.getId();
+String email = sessionUser.getEmail();
+String username = sessionUser.getUsername();
+String name = sessionUser.getName();
+```
+
+### SessionUser Structure
+
+```java
+public class SessionUser {
+    private Long id;          // User ID
+    private String name;      // User name
+    private String email;     // User email
+    private String username;  // Username
+}
+```
+
+## Permission Validation Patterns
+
+### 1. Separate Checker Classes in Service Layer
+
+For complex permission validation logic, use separate Checker classes:
+
+```java
+@Service
+public class OrderPermissionChecker {
+
+    public void check(Long orderId) throws ForbiddenException {
+        // Check if current user has permission to access this order
+        SessionUser user = SessionUserContext.getSessionUser();
+        // ... permission validation logic
+        if (!hasPermission) {
+            throw new ForbiddenException("...");
+        }
+    }
+}
+```
+
+Controller usage:
+
+```java
+@Resource
+private OrderPermissionChecker orderPermissionChecker;
+
+@PostMapping
+public ResponseEntity saveOrderItem(@RequestBody OrderItemDto dto,
+                                    @RequestParam Long orderId) throws Exception {
+    orderPermissionChecker.check(orderId);  // Permission validation
+    // ... business logic
+}
+```
+
+### 2. Inline Validation in Service Methods
+
+For simple scenarios, validate directly within Service methods:
+
+```java
+public List<OrderDetailDto> getOrderDetails(
+        SessionUser sessionUser, Long customerId, ...) throws ForbiddenException {
+
+    if (!isCustomerOwner(sessionUser, customerId)) {
+        throw new ForbiddenException("user does not have the permission");
+    }
+    // ... business logic
+}
+```
+
+## Pre-built Components (Do Not Modify)
+
+The following components are already encapsulated and ready to use:
+
+| Component            | Path                              | Purpose              |
+| -------------------- | --------------------------------- | -------------------- |
+| `AuthFilter`         | `auth/AuthFilter.java`            | Authentication filter |
+| `JwtAuthManager`     | `auth/JwtAuthManager.java`        | JWT verification     |
+| `BasicAuthManager`   | `auth/BasicAuthManager.java`      | Basic Auth verification |
+| `SessionUserContext` | `context/SessionUserContext.java` | User context         |
+| `SessionUser`        | `context/SessionUser.java`        | User information     |
+
+## Authentication in Tests
+
+Integration tests use Basic Auth to simulate users:
+
+```java
+import com.example.order.integration.util.AuthUtil;
+
+mockMvc.perform(
+    post("/api/order/create")
+        .headers(AuthUtil.buildHeadersForUserId("10001"))  // Simulate user with ID 10001
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(payload)
+);
+```
+````
+

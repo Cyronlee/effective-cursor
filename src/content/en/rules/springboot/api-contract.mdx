@@ -1,0 +1,98 @@
+---
+title: "API Contract Standards"
+---
+
+# API Contract Standards
+
+This rule defines RESTful API design conventions, including URL naming, response structure, and Controller coding standards. It ensures all API endpoints maintain a consistent style and structure.
+
+**Scope**: `src/main/java/com/example/order/controller/**/*.java`
+
+````mdc filename="api-contract.mdc"
+---
+description: API contract standards for Controller layer development
+globs: src/main/java/com/example/order/controller/**/*.java
+alwaysApply: false
+---
+
+# API Contract Standards
+
+## URL Design
+
+- Unified prefix: `/api/{module}`
+- Resource naming: Use kebab-case (e.g., `/api/order-fulfillment`)
+- **No version control** (no `/v1`, `/v2` prefixes)
+
+### Common URL Patterns
+
+```
+GET    /api/{module}/{id}           # Get single resource
+GET    /api/{module}/list           # Get list (with pagination params)
+POST   /api/{module}/create         # Create resource
+PUT    /api/{module}/update         # Update resource
+POST   /api/{module}/filter         # Complex query (request body params)
+DELETE /api/{module}/delete/{id}    # Delete resource
+```
+
+## Response Structure
+
+### Success Response
+
+Two return styles exist in the project; new code should prefer returning DTOs directly:
+
+```java
+// Recommended: Return DTO directly
+@GetMapping("/{id}")
+public OrderInfoDTO getOrder(@PathVariable Long id) throws Exception {
+    return orderService.getOrderInfo(id);
+}
+
+// Alternative: Return ResponseEntity (when status code needs to be specified)
+@PostMapping("/create")
+public ResponseEntity<OrderDto> create(...) {
+    return new ResponseEntity<>(response, HttpStatus.CREATED);
+}
+```
+
+### Error Response
+
+All errors are thrown as exceptions and handled uniformly by `ControllerAdvice`.
+
+Error response structure (`ErrorVO`):
+
+```json
+{
+  "errorCode": "BAD_REQUEST",
+  "errorMessage": "Specific error message"
+}
+```
+
+## Controller Standards
+
+1. **Use `@RestController`**
+2. **Class-level `@RequestMapping` defines module prefix**
+3. **Throw exceptions directly**, no try-catch in Controller
+
+```java
+@RestController
+@RequestMapping("/api/order")
+public class OrderController {
+
+    @Resource
+    private OrderService orderService;
+
+    @GetMapping("/{id:\\d+}")
+    public OrderInfoDTO getOrder(@PathVariable Long id) throws Exception {
+        return orderService.getOrderInfo(id);
+    }
+}
+```
+
+## Parameter Binding
+
+- Path parameters: `@PathVariable`
+- Query parameters: `@RequestParam` (can set `required = false` and `defaultValue`)
+- Request body: `@RequestBody`
+- Add `@Valid` when validation is needed
+````
+

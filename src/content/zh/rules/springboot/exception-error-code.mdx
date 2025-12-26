@@ -1,0 +1,107 @@
+---
+title: "异常与错误码规范"
+---
+
+# 异常与错误码规范
+
+此规则定义了项目的异常处理体系，包括异常类型、错误码、错误消息格式等。它确保所有错误响应保持一致的结构和语义。
+
+**适用范围**: 
+- `src/main/java/com/example/order/exception/**/*.java`
+- `src/main/java/com/example/order/controller/**/*.java`
+- `src/main/java/com/example/order/service/**/*.java`
+
+````mdc filename="exception-error-code.mdc"
+---
+description: 异常与错误处理规范
+globs:
+  - src/main/java/com/example/order/exception/**/*.java
+  - src/main/java/com/example/order/controller/**/*.java
+  - src/main/java/com/example/order/service/**/*.java
+alwaysApply: false
+---
+
+# 异常与错误码规范
+
+## 异常类体系
+
+项目使用简化的异常体系，所有异常都继承自 `Exception`：
+
+| 异常类                  | HTTP 状态码 | 使用场景                                       |
+| ----------------------- | ----------- | ---------------------------------------------- |
+| `BadRequestException`   | 400         | 参数校验失败、请求格式错误                     |
+| `BizException`          | 400         | 业务规则校验失败（继承自 BadRequestException） |
+| `UnauthorizedException` | 401         | 未认证                                         |
+| `ForbiddenException`    | 403         | 无权限访问                                     |
+| `NotFoundException`     | 404         | 资源不存在                                     |
+
+### 异常类结构
+
+所有异常只接收 message 参数，不使用错误码：
+
+```java
+// com.example.order.exception.BizException
+public class BizException extends BadRequestException {
+    public BizException(String message) {
+        super(message);
+    }
+}
+```
+
+## 异常抛出时机
+
+### Service 层抛出业务异常
+
+```java
+// 资源不存在
+public User getUserById(Long userId) throws NotFoundException {
+    return userRepository.findById(userId)
+            .orElseThrow(() -> new NotFoundException("user not found with id: " + userId));
+}
+
+// 业务规则校验
+if (order.isCancelled()) {
+    throw new BizException("can not update order because it is already cancelled");
+}
+
+// 权限校验
+if (!hasPermission) {
+    throw new ForbiddenException("user does not have the permission to update order");
+}
+```
+
+### 错误消息格式
+
+- 使用小写开头的英文描述
+- 包含关键业务信息（如 ID、名称等）
+- 格式：`"{resource} not found with {field}: {value}"`
+
+## 全局异常处理
+
+`ControllerAdvice` 统一处理所有异常，返回 `ErrorVO`：
+
+```java
+// com.example.order.vo.ErrorVO
+public class ErrorVO {
+    private String errorCode;    // 大写下划线格式：BAD_REQUEST, NOT_FOUND
+    private String errorMessage; // 异常的 getMessage()
+}
+```
+
+### 预定义 errorCode
+
+| errorCode               | 对应异常                          |
+| ----------------------- | --------------------------------- |
+| `BAD_REQUEST`           | BadRequestException, BizException |
+| `UNAUTHORIZED`          | UnauthorizedException             |
+| `FORBIDDEN`             | ForbiddenException                |
+| `NOT_FOUND`             | NotFoundException                 |
+| `INTERNAL_SERVER_ERROR` | 其他未处理异常                    |
+
+## 注意事项
+
+1. **不要新增异常类型**：使用现有的四种异常即可
+2. **不要修改 ControllerAdvice**：全局异常处理逻辑已固化
+3. **Controller 方法签名声明 `throws Exception`**：让所有异常向上传播
+````
+
