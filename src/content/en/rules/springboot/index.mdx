@@ -52,3 +52,60 @@ Based on project needs, you can add more rule files:
 
 This allows you to build a complete, layered rule system that helps AI assistants better understand and follow project conventions.
 
+## Rules Extraction Template
+
+If you want to extract conventions from an existing Spring Boot project, you can use the following prompt template:
+
+````md
+# Spring Boot Project Conventions Extraction Task
+
+You are now a highly experienced senior Java backend architect, specializing in reverse-engineering and summarizing **project-specific mandatory conventions** from existing Spring Boot project code.
+
+## Task
+
+Based on the project code snippets I provide (including directory structure, representative classes, configuration files, annotation usage, etc.), summarize the high-level content for the following **5 convention documents** for this project, to be saved in the `.cursor/rules/` directory.
+
+## Principles
+
+Strictly adhere to the following principles:
+
+1. Only write conventions that **actually exist and are repeatedly enforced** in this project. **Do not write** general LLM knowledge, textbook best practices, or generic online advice.
+
+   - For example, don't write things like "functions should have single responsibility", "use lombok", "use @Validated for parameter validation" that everyone knows, unless the project has very specific, non-standard mandatory conventions or special approaches.
+
+2. Keep each document under **300 lines**, with concise, clear, and actionable language.
+
+3. **Only include** key import locations and representative code snippets (3-10 lines recommended) **when truly necessary to clarify usage, reduce ambiguity, or when the project's approach significantly deviates from standard practice**.
+
+   - If the rule itself is already clear enough, or if the project's approach aligns with mainstream practices, don't include code.
+   - Don't force code examples just to fill space.
+
+4. The rule documents are intended for **Cursor Rules** to improve AI generation quality, so optimize for LLM attention.
+
+## 5 Documents to Summarize
+
+Only summarize high-level content, focusing on what the project actually enforces uniquely, without over-detailing implementation:
+
+### 1. Global Development Conventions (`global.mdc` + `global-development.mdc`)
+
+- Focus on: Tech stack, package structure and layer boundaries, dependency injection approach, Service layer design patterns
+- Set `alwaysApply: true` in `global.mdc`, with core conventions
+- Include detailed explanations in `global-development.mdc`
+
+### 2. API Contract Conventions (`api-contract.mdc`)
+
+- Focus on: URL design style, versioning approach, unified response structure, Controller writing conventions
+
+### 3. Exception and Error Code Conventions (`exception-error-code.mdc`)
+
+- Focus on: Exception class hierarchy, business exception throwing timing and encapsulation, error code encoding rules (digits, prefixes, allocation principles), global exception handling main strategies
+
+### 4. Authentication and Security Conventions (`auth-security.mdc`)
+
+- Focus on: Actual authentication scheme used in the project and core flow, how to get current user information, which encapsulated tools are available but should not be modified
+
+### 5. Integration Test Conventions (`integration-test.mdc`)
+
+- Focus on: Test base classes, test class organization, test data preparation approaches, encapsulated test utility classes
+````
+

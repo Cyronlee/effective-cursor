@@ -1,38 +1,46 @@
 ---
-title: "Cursor Rules"
+title: "Rules 模板库"
 ---
 
-import { Callout } from 'nextra/components'
+import { Callout, Cards } from 'nextra/components'
 
-# Cursor Rules 规则集合
+# Cursor Rules 模板库
 
 <Callout type="info">
-这里收录了不同项目类型的 Cursor Rules 配置，可以作为你项目的参考模板。
+这里收录了经过验证的 Cursor Rules 模板，可以直接复制使用或作为参考进行定制。
 </Callout>
 
-## 什么是 Cursor Rules？
+## 快速开始
 
-Cursor Rules 是 Cursor AI 编辑器中的项目级配置规则，通过在 `.cursorrules` 文件中定义规范，可以让 AI 更好地理解你的项目结构、技术栈和编码风格，从而生成更符合项目要求的代码。
+1. **选择模板** — 在下方选择适合你技术栈的规则集
+2. **复制规则** — 点击规则页面中的复制按钮，将内容复制到 `.cursor/rules/` 目录
+3. **按需调整** — 根据项目实际情况修改规则内容
 
-## 如何使用？
+> 💡 如果你还不了解 Cursor Rules 的工作原理和编写方法，建议先阅读 [Cursor Rules 指南](/zh/docs/3-cursor-rules)。
 
-1. **浏览规则集**：在左侧导航栏选择你的项目类型（如 Next.js + shadcn/ui）
-2. **查看规则详情**：每个项目类型包含多个规则文件，涵盖不同方面的规范
-3. **复制到项目**：使用 Playground 组件中的复制按钮，将规则内容复制到你的 `.cursorrules` 文件中
-4. **按需调整**：根据实际项目需求，修改和定制这些规则
+## 可用模板
 
-## 规则分类
+<Cards>
+  <Cards.Card icon={<span className="icon-[devicon--vitejs]" />} title="Vite + Shadcn/UI" href="./vite-shadcnui" />
+  <Cards.Card icon={<span className="icon-[devicon--spring]" />} title="Spring Boot" href="./springboot" />
+</Cards>
 
-### 全局规则 (Global Rules)
-- 适用于整个项目的通用规范
-- 包括技术栈、目录结构、编码标准等
-- 通常设置 `alwaysApply: true`
+## 相关文档
 
-### 特定规则 (Specific Rules)
-- 针对特定文件类型或目录的规则
-- 通过 `globs` 字段指定应用范围
-- 如路由规则、UI 组件规则等
+想要深入了解 Cursor Rules？参考以下指南：
 
-## 贡献规则
+| 主题 | 链接 | 适合场景 |
+|-----|------|---------|
+| Rules 工作原理 | [查看](/zh/docs/3-cursor-rules/how-rules-work) | 理解 `alwaysApply` 和 `globs` 如何控制规则作用域 |
+| 编写最佳实践 | [查看](/zh/docs/3-cursor-rules/best-practices) | 学习如何写出高效的规则 |
+| 开发阶段指南 | [查看](/zh/docs/3-cursor-rules/development-sequence) | 了解在项目不同阶段应该编写什么规则 |
+| 元提示词生成 | [查看](/zh/docs/3-cursor-rules/meta-prompt) | 使用 AI 快速生成规则框架 |
+
+## 贡献模板
 
 如果你有优质的 Cursor Rules 想要分享，欢迎提交 PR 到我们的 [GitHub 仓库](https://github.com/cyronlee/effective-cursor)。
+
+提交规范：
+- 在 `src/content/zh/rules/` 下创建新的技术栈目录
+- 包含 `index.mdx` 概览和各规则文件
+- 同步创建对应的英文版本

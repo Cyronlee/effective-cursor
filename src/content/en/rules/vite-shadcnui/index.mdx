@@ -50,3 +50,55 @@ You can add more rule files based on project needs:
 
 This approach builds a complete, layered rule system that helps AI assistants better understand and follow project conventions.
 
+## Rules Extraction Template
+
+If you want to extract conventions from an existing Vite + React project, you can use the following prompt template:
+
+````md
+# Vite + React Project Conventions Extraction Task
+
+You are now a highly experienced senior frontend architect, specializing in reverse-engineering and summarizing **project-specific mandatory conventions** from existing Vite + React + TypeScript project code.
+
+## Task
+
+Based on the project code snippets I provide (including directory structure, representative components, configuration files, dependency usage, etc.), summarize the high-level content for the following **4 convention documents** for this project, to be saved in the `.cursor/rules/` directory.
+
+## Principles
+
+Strictly adhere to the following principles:
+
+1. Only write conventions that **actually exist and are repeatedly enforced** in this project. **Do not write** general LLM knowledge, textbook best practices, or generic online advice.
+
+   - For example, don't write things like "components should have single responsibility", "use ESLint", "define types for Props" that everyone knows, unless the project has very specific, non-standard mandatory conventions or special approaches.
+
+2. Keep each document under **300 lines**, with concise, clear, and actionable language.
+
+3. **Only include** key import locations and representative code snippets (3-10 lines recommended) **when truly necessary to clarify usage, reduce ambiguity, or when the project's approach significantly deviates from standard practice**.
+
+   - If the rule itself is already clear enough, or if the project's approach aligns with mainstream practices, don't include code.
+   - Don't force code examples just to fill space.
+
+4. The rule documents are intended for **Cursor Rules** to improve AI generation quality, so optimize for LLM attention.
+
+## 4 Documents to Summarize
+
+Only summarize high-level content, focusing on what the project actually enforces uniquely, without over-detailing implementation:
+
+### 1. Global Development Conventions (`global-rules.mdc`)
+
+- Focus on: Tech stack, directory structure and module boundaries, TypeScript configuration and type definition conventions, import path conventions (alias, relative path usage rules)
+- Set `alwaysApply: true`
+
+### 2. Routing Conventions (`routing-rules.mdc`)
+
+- Focus on: Route file organization, page component naming and structure, route protection and permission control, navigation methods (Link vs useNavigate)
+
+### 3. UI Component Conventions (`ui-rules.mdc`)
+
+- Focus on: UI component library used in the project (Shadcn/UI, Ant Design, etc.), component import and usage patterns, icon system, global component usage conventions (notifications/modals, etc.), styling approach (CSS Modules, Tailwind, styled-components, etc.)
+
+### 4. API and Data Fetching Conventions (`api-rules.mdc`)
+
+- Focus on: API client architecture (axios, fetch, etc.), data fetching library (SWR, React Query, etc.), request/response interceptors, error handling and retry strategies, type definition approaches
+````
+
