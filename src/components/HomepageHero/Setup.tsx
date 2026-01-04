@@ -47,7 +47,7 @@ export function SetupHero(props: Props) {
         ])}
         >
           {t('heroSubtitle')}
-          <br />
+          {/* <br />
           <FlipWords
             words={
               currentLocale === 'zh'
@@ -68,7 +68,7 @@ export function SetupHero(props: Props) {
                     'Boost Productivity',
                   ]
             }
-          />
+          /> */}
         </div>
         <div className="flex justify-center pt-10">
           <div className="max-w-[500px] flex flex-wrap gap-[20px] max-sm:justify-center">
