@@ -8,21 +8,37 @@ import { Callout, Tabs } from 'nextra/components'
 
 > 用 AI 来帮你写 AI 的规则
 
-## 为什么需要元提示词
+## 什么是元提示词
 
-当你面对一个新项目或新技术栈时，从零开始编写 Cursor Rules 可能会让人无从下手。**元提示词（Meta Prompt）** 可以帮助你：
-
-- 快速生成规则框架
-- 确保规则覆盖关键领域
-- 保持规则格式的一致性
+当你面对一个新项目或新技术栈时，从零开始编写 Cursor Rules 可能会让人无从下手。**元提示词（Meta Prompt）** 本质上是"用来生成提示词的提示词"——你告诉 AI 你的项目情况，AI 帮你生成适合的 Cursor Rules。
 
 <Callout type="info">
-元提示词本质上是"用来生成提示词的提示词"。你告诉 AI 你的项目情况，AI 帮你生成适合的 Cursor Rules。
+元提示词可以帮你快速生成规则框架、确保规则覆盖关键领域、保持格式一致性。但它只是起点，真正有效的规则来自实际开发中的持续迭代。
 </Callout>
 
-## 通用元提示词模板
+## 完整示例
 
-以下是一个经过验证的元提示词模板，可以帮助你快速生成项目规则：
+我们已经为常见技术栈准备了完整的规则提取模板和示例：
+
+- **[Vite + Shadcn/UI 规则集](/zh/rules/vite-shadcnui)** - 前端项目规则提取模板及 4 个规则文件示例
+- **[Spring Boot 规则集](/zh/rules/springboot)** - 后端项目规则提取模板及 5 个规则文件示例
+
+这些示例包含了从项目中提取规范的完整提示词模板，可以直接使用或根据你的技术栈调整。
+
+## 快速开始：三步生成规则
+
+### 步骤 1：准备项目信息
+
+收集项目的关键信息：
+
+```bash
+# 获取目录结构
+tree src -L 2 -I 'node_modules|dist'
+```
+
+### 步骤 2：选择并填充模板
+
+根据你的技术栈，从上述示例中选择合适的提取模板，或使用下面的通用模板：
 
 <Tabs items={['中文版', 'English']}>
 <Tabs.Tab>
@@ -32,20 +48,20 @@ import { Callout, Tabs } from 'nextra/components'
 为我的项目生成 Cursor Rules 规则文件。
 
 # 项目信息
-- 技术栈：[列出你的技术栈，如 React, TypeScript, Tailwind CSS, Zustand]
-- 框架：[列出主要框架，如 Vite, Next.js, Express]
-- UI 库：[如 Shadcn/UI, Ant Design, Material UI]
-- 项目类型：[如 Web 应用、管理后台、移动端 H5]
+- 技术栈：[列出你的技术栈，如 React, TypeScript, Tailwind CSS]
+- 框架：[列出主要框架，如 Vite, Next.js, Spring Boot]
+- 项目类型：[如 Web 应用、管理后台、REST API]
 
 # 目录结构
 [粘贴你的项目目录结构]
 
 # 规则要求
-1. 生成 global-rules.mdc：包含技术栈、目录结构、TypeScript 规范、导入约定
-2. 针对主要功能模块生成专门的规则文件
-3. 每条规则必须具体、可执行，避免泛泛描述
-4. 包含代码示例，指明 import 路径
-5. 使用合适的 globs 和 alwaysApply 配置
+1. 生成 global-rules.mdc：包含技术栈、目录结构、语言规范、导入约定
+2. 针对主要功能模块生成专门的规则文件（如路由、UI、API、测试等）
+3. 只写项目中真实存在且被反复强制使用的规范，不要写大模型常识
+4. 每条规则必须具体、可执行，避免泛泛描述
+5. 仅在必要时附上代码示例（3~10 行）
+6. 使用合适的 globs 和 alwaysApply 配置
 
 # 输出格式
 为每个规则文件输出完整内容，使用 .mdc 格式，包含 frontmatter。
@@ -59,20 +75,20 @@ import { Callout, Tabs } from 'nextra/components'
 Generate Cursor Rules files for my project.
 
 # Project Info
-- Tech Stack: [List your tech stack, e.g., React, TypeScript, Tailwind CSS, Zustand]
-- Framework: [List main frameworks, e.g., Vite, Next.js, Express]
-- UI Library: [e.g., Shadcn/UI, Ant Design, Material UI]
-- Project Type: [e.g., Web App, Admin Dashboard, Mobile H5]
+- Tech Stack: [e.g., React, TypeScript, Tailwind CSS]
+- Framework: [e.g., Vite, Next.js, Spring Boot]
+- Project Type: [e.g., Web App, Admin Dashboard, REST API]
 
 # Directory Structure
 [Paste your project directory structure]
 
 # Rule Requirements
-1. Generate global-rules.mdc: Include tech stack, directory structure, TypeScript standards, import conventions
-2. Generate specific rule files for main functional modules
-3. Each rule must be specific and actionable, avoid vague descriptions
-4. Include code examples with import paths
-5. Use appropriate globs and alwaysApply configurations
+1. Generate global-rules.mdc: Include tech stack, directory structure, language standards, import conventions
+2. Generate specific rule files for main modules (e.g., routing, UI, API, testing)
+3. Only write rules that actually exist and are enforced in the project, not LLM common knowledge
+4. Each rule must be specific and actionable, avoid vague descriptions
+5. Include code examples (3~10 lines) only when necessary
+6. Use appropriate globs and alwaysApply configurations
 
 # Output Format
 Output complete content for each rule file in .mdc format with frontmatter.
@@ -81,61 +97,18 @@ Output complete content for each rule file in .mdc format with frontmatter.
 </Tabs.Tab>
 </Tabs>
 
-## 使用示例
-
-### 步骤 1：准备项目信息
-
-首先，收集你项目的关键信息：
-
-```bash
-# 获取目录结构
-tree src -L 2 -I 'node_modules|dist'
-
-# 查看 package.json 中的依赖
-cat package.json | jq '.dependencies, .devDependencies'
-```
-
-### 步骤 2：填充模板
-
-```markdown
-# 任务
-为我的项目生成 Cursor Rules 规则文件。
-
-# 项目信息
-- 技术栈：React 18, TypeScript 5, Tailwind CSS 3
-- 框架：Vite 5
-- UI 库：Shadcn/UI
-- 状态管理：Zustand
-- 数据获取：SWR
-- 认证：Okta
-- 项目类型：企业级管理后台
-
-# 目录结构
-src/
-├── pages/           # 路由页面
-├── components/      # UI 组件
-│   ├── ui/          # Shadcn 基础组件
-│   └── features/    # 业务组件
-├── lib/             # 工具函数
-├── stores/          # Zustand stores
-├── clients/         # API 客户端
-├── hooks/           # 自定义 Hooks
-└── types/           # TypeScript 类型
-
-# 规则要求
-...
-```
-
 ### 步骤 3：迭代优化
 
-AI 生成的规则可能不完全符合你的需求，需要：
+AI 生成的规则需要验证和改进：
 
-1. **审查**：检查规则是否符合项目实际情况
-2. **补充**：添加 AI 遗漏的项目特定规范
-3. **测试**：让 AI 基于规则生成代码，验证效果
-4. **调整**：根据测试结果优化规则
+1. **审查** - 检查规则是否符合项目实际情况
+2. **补充** - 添加 AI 遗漏的项目特定规范
+3. **测试** - 让 AI 基于规则生成代码，验证效果
+4. **调整** - 根据测试结果优化规则
 
-## 针对特定场景的提示词
+## 针对特定模块的提示词
+
+有时你只需要为特定模块生成或更新规则：
 
 ### 生成 API 规则
 
@@ -143,7 +116,7 @@ AI 生成的规则可能不完全符合你的需求，需要：
 分析我的 API 客户端代码，生成 api-rules.mdc：
 
 1. 识别 HTTP 客户端的使用模式
-2. 总结数据获取的标准流程（如 SWR）
+2. 总结数据获取的标准流程（如 SWR、React Query）
 3. 提取错误处理的统一方式
 4. 包含完整的代码示例
 
@@ -161,9 +134,9 @@ AI 生成的规则可能不完全符合你的需求，需要：
 3. 规范通知/Toast 的使用方式
 4. 列出需要避免的组件或模式
 
-UI 库：Shadcn/UI
-图标库：Lucide React
-通知库：Sonner
+UI 库：[Shadcn/UI / Ant Design / Material UI]
+图标库：[Lucide / Iconify]
+通知库：[Sonner / React Hot Toast]
 ```
 
 ### 生成测试规则
@@ -171,16 +144,16 @@ UI 库：Shadcn/UI
 ```markdown
 为我的项目生成 testing-rules.mdc：
 
-1. 测试框架：[Vitest/Jest]
+1. 测试框架：[Vitest / Jest / JUnit]
 2. 测试文件位置和命名规范
-3. 单元测试的标准结构
+3. 测试的标准结构
 4. Mock 的使用规范
 5. 测试覆盖率要求
 ```
 
-## 规则质量检查
+## 规则质量检查清单
 
-生成规则后，使用以下清单检查质量：
+生成规则后，使用以下清单验证质量：
 
 | 检查项 | 标准 |
 |-------|------|
@@ -191,14 +164,15 @@ UI 库：Shadcn/UI
 | **作用域** | globs 配置是否正确？ |
 
 <Callout type="warning">
-元提示词生成的规则只是起点，不是终点。真正有效的规则来自于实际开发中的持续迭代。
+避免写"组件应该职责单一"、"使用 ESLint"、"函数命名要语义化"这类大模型已知的常识。只写项目独有的、AI 无法推断的规范。
 </Callout>
 
 ## 参考资源
 
 - [Cursor Rules 最佳实践](./best-practices) - 规则编写的核心原则
 - [Rules 编写实战顺序](./development-sequence) - 何时编写什么规则
-- [Vite + Shadcn/UI 规则集](/zh/rules/vite-shadcnui) - 完整的规则示例
+- [Vite + Shadcn/UI 规则集](/zh/rules/vite-shadcnui) - 前端完整规则示例
+- [Spring Boot 规则集](/zh/rules/springboot) - 后端完整规则示例
 
 ## 下一步
 

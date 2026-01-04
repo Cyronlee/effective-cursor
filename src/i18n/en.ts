@@ -14,7 +14,7 @@ export default {
     loading: 'Loading...',
   },
 
-  badgeTitle: 'Make AI Your Coding Partner 🤖',
+  badgeTitle: 'AI-Assisted Development Engineering Practice Wiki',
   featureSupport: `🔥 {{feature}}`,
   lastUpdated: 'Last updated on:',
 

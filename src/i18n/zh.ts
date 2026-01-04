@@ -14,7 +14,7 @@ export default {
     loading: '加载中...',
   },
 
-  badgeTitle: '让 AI 成为你的编程伙伴 🤖',
+  badgeTitle: 'AI 辅助开发工程化实践 Wiki',
   featureSupport: `🔥 {{feature}}`,
   lastUpdated: '最后更新于:',
 

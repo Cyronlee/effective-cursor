@@ -8,21 +8,37 @@ import { Callout, Tabs } from 'nextra/components'
 
 > Use AI to help you write AI rules
 
-## Why Meta Prompts
+## What is a Meta Prompt
 
-When facing a new project or tech stack, writing Cursor Rules from scratch can be overwhelming. **Meta Prompts** can help you:
-
-- Quickly generate rule frameworks
-- Ensure rules cover key areas
-- Maintain consistency in rule format
+When facing a new project or tech stack, writing Cursor Rules from scratch can be overwhelming. **Meta Prompts** are essentially "prompts for generating prompts"—you tell AI about your project, and AI helps you generate suitable Cursor Rules.
 
 <Callout type="info">
-Meta prompts are essentially "prompts for generating prompts". You tell AI about your project, and AI helps you generate suitable Cursor Rules.
+Meta prompts help you quickly generate rule frameworks, ensure rules cover key areas, and maintain format consistency. But they're just a starting point—truly effective rules come from continuous iteration during actual development.
 </Callout>
 
-## Universal Meta Prompt Template
+## Complete Examples
 
-Here's a proven meta prompt template to help you quickly generate project rules:
+We've prepared complete rule extraction templates and examples for common tech stacks:
+
+- **[Vite + Shadcn/UI Rule Set](/en/rules/vite-shadcnui)** - Frontend project rule extraction template with 4 rule file examples
+- **[Spring Boot Rule Set](/en/rules/springboot)** - Backend project rule extraction template with 5 rule file examples
+
+These examples include complete prompt templates for extracting standards from projects, ready to use or adapt to your tech stack.
+
+## Quick Start: Three Steps to Generate Rules
+
+### Step 1: Gather Project Information
+
+Collect key information about your project:
+
+```bash
+# Get directory structure
+tree src -L 2 -I 'node_modules|dist'
+```
+
+### Step 2: Choose and Fill in Template
+
+Based on your tech stack, choose an appropriate extraction template from the examples above, or use this universal template:
 
 <Tabs items={['English', '中文版']}>
 <Tabs.Tab>
@@ -32,20 +48,20 @@ Here's a proven meta prompt template to help you quickly generate project rules:
 Generate Cursor Rules files for my project.
 
 # Project Info
-- Tech Stack: [List your tech stack, e.g., React, TypeScript, Tailwind CSS, Zustand]
-- Framework: [List main frameworks, e.g., Vite, Next.js, Express]
-- UI Library: [e.g., Shadcn/UI, Ant Design, Material UI]
-- Project Type: [e.g., Web App, Admin Dashboard, Mobile H5]
+- Tech Stack: [e.g., React, TypeScript, Tailwind CSS]
+- Framework: [e.g., Vite, Next.js, Spring Boot]
+- Project Type: [e.g., Web App, Admin Dashboard, REST API]
 
 # Directory Structure
 [Paste your project directory structure]
 
 # Rule Requirements
-1. Generate global-rules.mdc: Include tech stack, directory structure, TypeScript standards, import conventions
-2. Generate specific rule files for main functional modules
-3. Each rule must be specific and actionable, avoid vague descriptions
-4. Include code examples with import paths
-5. Use appropriate globs and alwaysApply configurations
+1. Generate global-rules.mdc: Include tech stack, directory structure, language standards, import conventions
+2. Generate specific rule files for main modules (e.g., routing, UI, API, testing)
+3. Only write rules that actually exist and are enforced in the project, not LLM common knowledge
+4. Each rule must be specific and actionable, avoid vague descriptions
+5. Include code examples (3~10 lines) only when necessary
+6. Use appropriate globs and alwaysApply configurations
 
 # Output Format
 Output complete content for each rule file in .mdc format with frontmatter.
@@ -59,20 +75,20 @@ Output complete content for each rule file in .mdc format with frontmatter.
 为我的项目生成 Cursor Rules 规则文件。
 
 # 项目信息
-- 技术栈：[列出你的技术栈，如 React, TypeScript, Tailwind CSS, Zustand]
-- 框架：[列出主要框架，如 Vite, Next.js, Express]
-- UI 库：[如 Shadcn/UI, Ant Design, Material UI]
-- 项目类型：[如 Web 应用、管理后台、移动端 H5]
+- 技术栈：[列出你的技术栈，如 React, TypeScript, Tailwind CSS]
+- 框架：[列出主要框架，如 Vite, Next.js, Spring Boot]
+- 项目类型：[如 Web 应用、管理后台、REST API]
 
 # 目录结构
 [粘贴你的项目目录结构]
 
 # 规则要求
-1. 生成 global-rules.mdc：包含技术栈、目录结构、TypeScript 规范、导入约定
-2. 针对主要功能模块生成专门的规则文件
-3. 每条规则必须具体、可执行，避免泛泛描述
-4. 包含代码示例，指明 import 路径
-5. 使用合适的 globs 和 alwaysApply 配置
+1. 生成 global-rules.mdc：包含技术栈、目录结构、语言规范、导入约定
+2. 针对主要功能模块生成专门的规则文件（如路由、UI、API、测试等）
+3. 只写项目中真实存在且被反复强制使用的规范，不要写大模型常识
+4. 每条规则必须具体、可执行，避免泛泛描述
+5. 仅在必要时附上代码示例（3~10 行）
+6. 使用合适的 globs 和 alwaysApply 配置
 
 # 输出格式
 为每个规则文件输出完整内容，使用 .mdc 格式，包含 frontmatter。
@@ -81,61 +97,18 @@ Output complete content for each rule file in .mdc format with frontmatter.
 </Tabs.Tab>
 </Tabs>
 
-## Usage Example
-
-### Step 1: Gather Project Information
-
-First, collect key information about your project:
-
-```bash
-# Get directory structure
-tree src -L 2 -I 'node_modules|dist'
-
-# Check dependencies in package.json
-cat package.json | jq '.dependencies, .devDependencies'
-```
-
-### Step 2: Fill in the Template
-
-```markdown
-# Task
-Generate Cursor Rules files for my project.
-
-# Project Info
-- Tech Stack: React 18, TypeScript 5, Tailwind CSS 3
-- Framework: Vite 5
-- UI Library: Shadcn/UI
-- State Management: Zustand
-- Data Fetching: SWR
-- Authentication: Okta
-- Project Type: Enterprise Admin Dashboard
-
-# Directory Structure
-src/
-├── pages/           # Route pages
-├── components/      # UI components
-│   ├── ui/          # Shadcn base components
-│   └── features/    # Business components
-├── lib/             # Utilities
-├── stores/          # Zustand stores
-├── clients/         # API clients
-├── hooks/           # Custom Hooks
-└── types/           # TypeScript types
-
-# Rule Requirements
-...
-```
-
 ### Step 3: Iterate and Refine
 
-Rules generated by AI may not fully match your needs, you'll need to:
+AI-generated rules need validation and improvement:
 
-1. **Review**: Check if rules match actual project situation
-2. **Supplement**: Add project-specific standards AI missed
-3. **Test**: Have AI generate code based on rules, verify effectiveness
-4. **Adjust**: Optimize rules based on test results
+1. **Review** - Check if rules match actual project situation
+2. **Supplement** - Add project-specific standards AI missed
+3. **Test** - Have AI generate code based on rules, verify effectiveness
+4. **Adjust** - Optimize rules based on test results
 
-## Prompts for Specific Scenarios
+## Prompts for Specific Modules
+
+Sometimes you only need to generate or update rules for specific modules:
 
 ### Generate API Rules
 
@@ -143,7 +116,7 @@ Rules generated by AI may not fully match your needs, you'll need to:
 Analyze my API client code and generate api-rules.mdc:
 
 1. Identify HTTP client usage patterns
-2. Summarize standard data fetching flow (e.g., SWR)
+2. Summarize standard data fetching flow (e.g., SWR, React Query)
 3. Extract unified error handling approach
 4. Include complete code examples
 
@@ -161,9 +134,9 @@ Based on my UI component library, generate ui-rules.mdc:
 3. Standardize notification/Toast usage
 4. List components or patterns to avoid
 
-UI Library: Shadcn/UI
-Icon Library: Lucide React
-Notification Library: Sonner
+UI Library: [Shadcn/UI / Ant Design / Material UI]
+Icon Library: [Lucide / Iconify]
+Notification Library: [Sonner / React Hot Toast]
 ```
 
 ### Generate Testing Rules
@@ -171,16 +144,16 @@ Notification Library: Sonner
 ```markdown
 Generate testing-rules.mdc for my project:
 
-1. Testing framework: [Vitest/Jest]
+1. Testing framework: [Vitest / Jest / JUnit]
 2. Test file location and naming conventions
-3. Standard structure for unit tests
+3. Standard structure for tests
 4. Mock usage standards
 5. Test coverage requirements
 ```
 
 ## Rule Quality Checklist
 
-After generating rules, use this checklist to verify quality:
+After generating rules, verify quality with this checklist:
 
 | Check Item | Standard |
 |------------|----------|
@@ -191,14 +164,15 @@ After generating rules, use this checklist to verify quality:
 | **Scope** | Are globs configured correctly? |
 
 <Callout type="warning">
-Rules generated by meta prompts are just a starting point, not the end. Truly effective rules come from continuous iteration during actual development.
+Avoid writing "components should be single-purpose", "use ESLint", "function names should be semantic"—LLMs already know this. Only write project-specific rules that AI cannot infer.
 </Callout>
 
 ## Reference Resources
 
 - [Cursor Rules Best Practices](./best-practices) - Core principles for rule writing
 - [Rules Development Sequence](./development-sequence) - When to write what rules
-- [Vite + Shadcn/UI Rule Set](/en/rules/vite-shadcnui) - Complete rule examples
+- [Vite + Shadcn/UI Rule Set](/en/rules/vite-shadcnui) - Complete frontend rule examples
+- [Spring Boot Rule Set](/en/rules/springboot) - Complete backend rule examples
 
 ## Next Steps
 

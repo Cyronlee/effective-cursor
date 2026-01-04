@@ -41,21 +41,6 @@ export function SetupHero(props: Props) {
           Cursor
         </h1>
 
-        <div
-          className={clsx([
-            'bg-linear-to-r from-violet-500 via-purple-500 to-fuchsia-500 text-white shadow-lg',
-            'dark:bg-linear-to-r dark:from-cyan-400 dark:via-blue-500 dark:to-purple-500 dark:text-white',
-            'text-sm mt-2 inline-block px-4 py-1.5 rounded-lg',
-            '[&>span]:font-bold',
-          ])}
-          dangerouslySetInnerHTML={{
-            __html: t('featureSupport', {
-              feature: `<span>Cursor AI 辅助开发实践 Wiki</span>`,
-            }),
-          }}
-        />
-
-
         <div className={clsx([
           styles.subtitle,
           'text-neutral-500 dark:text-neutral-300',
