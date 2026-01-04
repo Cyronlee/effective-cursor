@@ -94,13 +94,13 @@ Prepare necessary reference materials for each Task.
 **File Organization:**
 
 ```
-prds/
+specs/
 └── order-management/
-    ├── task-1-order-list/
+    ├── 001-order-list/
     │   ├── draft.md
     │   ├── final.md
     │   └── api-spec.yaml
-    ├── task-3-order-list-ui/
+    ├── 002-order-detail/
     │   ├── draft.md
     │   ├── final.md
     │   └── design.png
@@ -145,8 +145,8 @@ Use Cursor to refine the draft into a detailed technical solution.
 **Prompt Example:**
 
 ```
-@prds/order-management/task-1-order-list/draft.md
-@prds/order-management/shared/order-schema.sql
+@specs/order-management/001-order-list/draft.md
+@specs/order-management/shared/order-schema.sql
 
 Based on the draft and database Schema, generate a detailed technical solution:
 1. Specific API design (paths, parameters, responses)
@@ -154,7 +154,7 @@ Based on the draft and database Schema, generate a detailed technical solution:
 3. Pagination and sorting implementation
 4. Error handling
 
-Output to @prds/order-management/task-1-order-list/final.md
+Output to @specs/order-management/001-order-list/final.md
 ```
 
 ### Review and Adjust Solution
@@ -173,7 +173,7 @@ Before generating code, carefully review final.md.
 **Adjusting Solution:**
 
 ```
-@prds/order-management/task-1-order-list/final.md
+@specs/order-management/001-order-list/final.md
 
 Please adjust the following:
 1. Change pagination to cursor-based pagination
@@ -190,12 +190,12 @@ After confirming the solution, have AI generate code step by step.
 **Recommend generating in steps:**
 
 ```
-@prds/order-management/task-1-order-list/final.md
+@specs/order-management/001-order-list/final.md
 Following the solution's implementation steps, first complete step 1: create data model
 ```
 
 ```
-@prds/order-management/task-1-order-list/final.md
+@specs/order-management/001-order-list/final.md
 Continue with step 2: implement API endpoint
 ```
 
@@ -285,7 +285,7 @@ Tasks:
 **Step 3: Generate final.md**
 
 ```
-@prds/comment/task-1-api/draft.md
+@specs/comment/001-api/draft.md
 @src/models/Article.ts
 @src/models/User.ts
 
@@ -295,7 +295,7 @@ Based on existing data models, design complete API solution for comment feature,
 **Step 4: Implement Code**
 
 ```
-@prds/comment/task-1-api/final.md
+@specs/comment/001-api/final.md
 Following the solution, first create Comment model
 ```
 
@@ -322,7 +322,7 @@ Not necessarily. Simple tasks can use Direct Mode directly. Suggested criteria:
 ### Q: How does the team share these documents?
 
 - All draft/final files committed to Git repository
-- Placed in `prds/` directory, organized by feature
+- Placed in `specs/` directory, organized by feature
 - New members can quickly understand the project by reading historical solutions
 
 ### Q: Do solution documents become outdated?
@@ -331,6 +331,10 @@ Yes. But this is acceptable:
 - Draft records thinking at that time, has historical value
 - Final is the solution at implementation time, code is the ultimate truth
 - Major changes can be supplemented with new solution documents
+
+### Q: Why not use spec frameworks like OpenSpec or Kiro?
+
+Our approach is inspired by Spec-Driven Development principles, but we've chosen to implement them manually. This gives us better integration with our existing enterprise workflows (Jira, code review processes) and more control over token consumption. See [Why No Spec Framework](./why-no-spec-framework) for a detailed explanation.
 
 ## Next Steps
 

@@ -7,5 +7,6 @@ export default {
   'direct-mode': 'Direct 模式',
   'document-mode': 'Document 模式',
   'draft-final-mode': 'Draft-Final 模式',
+  'why-no-spec-framework': '不依赖 Spec 框架',
   'workflow-practice': '工作流实践',
 } satisfies MetaRecord

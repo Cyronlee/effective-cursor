@@ -49,7 +49,7 @@ flowchart LR
 @src/types/user.ts           # 引用单个文件
 @src/api/                    # 引用整个目录
 @package.json                # 引用配置文件
-@prds/feature-a/final.md     # 引用需求文档
+@specs/001-feature-a/final.md   # 引用需求文档
 ```
 
 ### 最佳实践
@@ -68,14 +68,14 @@ flowchart LR
 ### 推荐目录结构
 
 ```
-prds/                          # PRD 和任务文档
-├── feature-a/
+specs/                          # Spec 和任务文档
+├── 001-feature-a/
 │   ├── draft.md               # 需求草稿
 │   ├── final.md               # 完善的方案
 │   ├── design.png             # 设计图
 │   ├── api-spec.md            # API 规格
 │   └── example-response.json  # 示例数据
-├── feature-b/
+├── 002-feature-b/
 │   └── ...
 └── _archive/                  # 已完成任务的归档
     └── ...
@@ -95,8 +95,8 @@ prds/                          # PRD 和任务文档
 ### 使用示例
 
 ```
-@prds/user-auth/final.md 按照这个方案实现用户认证功能
-@prds/user-auth/api-spec.md 参考这个 API 规格实现接口
+@specs/001-user-auth/final.md 按照这个方案实现用户认证功能
+@specs/001-user-auth/api-spec.md 参考这个 API 规格实现接口
 ```
 
 ## 项目知识库
@@ -202,7 +202,7 @@ Cursor Memory 允许 AI 记住跨会话的信息，包括：
 #### 1. 实现新功能
 
 ```
-@prds/feature/final.md
+@specs/001-feature/final.md
 按照这个方案实现 [功能名称]，要求：
 1. 遵循现有代码风格
 2. 添加类型定义

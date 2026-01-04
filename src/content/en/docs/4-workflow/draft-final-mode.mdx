@@ -136,9 +136,9 @@ Users want to export order list as Excel file
 ### Step 2: Generate final.md
 
 <ChatExample>
-{`@prds/order-export/draft.md 
+{`@specs/001-order-export/draft.md 
 Based on this requirement draft, combined with the project's existing tech stack and code structure,
-generate a detailed technical solution, output to @prds/order-export/final.md`}
+generate a detailed technical solution, output to @specs/001-order-export/final.md`}
 </ChatExample>
 
 AI will automatically retrieve project context and generate a final.md like this:
@@ -220,7 +220,7 @@ Before generating code, developers can:
 ### Step 4: Generate Code
 
 <ChatExample>
-{`@prds/order-export/final.md 
+{`@specs/001-order-export/final.md 
 Following the solution's implementation steps, first complete steps 1-3: data model, API endpoint, and queue consumer`}
 </ChatExample>
 
@@ -253,12 +253,12 @@ Following the solution's implementation steps, first complete steps 1-3: data mo
 ### File Organization
 
 ```
-prds/
-├── order-export/
+specs/
+├── 001-order-export/
 │   ├── draft.md          # Original requirement draft
 │   ├── final.md          # AI-refined technical solution
 │   └── api-spec.json     # Optional: detailed API spec
-├── user-auth/
+├── 002-user-auth/
 │   ├── draft.md
 │   └── final.md
 └── ...
@@ -271,7 +271,7 @@ prds/
 Continue the conversation to adjust:
 
 <ChatExample>
-{`@prds/order-export/final.md 
+{`@specs/001-order-export/final.md 
 Change the async task handling in this solution to use Redis instead of Bull, update the solution`}
 </ChatExample>
 
@@ -290,4 +290,6 @@ No need to include complete technical details — that's Final's job.
 
 ## Next Steps
 
-After understanding all the modes, let's see how to integrate them into a complete [Workflow Practice](./workflow-practice).
+Our Draft-Final workflow embodies the principles of Spec-Driven Development (SDD) without relying on external frameworks. Learn more about [Why No Spec Framework](./why-no-spec-framework) and how we've adapted these principles to our enterprise context.
+
+Then, let's see how to integrate all modes into a complete [Workflow Practice](./workflow-practice).

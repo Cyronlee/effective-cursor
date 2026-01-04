@@ -49,7 +49,7 @@ The most common way to provide context—directly reference files in your projec
 @src/types/user.ts           # Reference single file
 @src/api/                    # Reference entire directory
 @package.json                # Reference config file
-@prds/feature-a/final.md     # Reference requirement doc
+@specs/001-feature-a/final.md   # Reference requirement doc
 ```
 
 ### Best Practices
@@ -68,14 +68,14 @@ Task-specific temporary documents that can be archived or deleted after use.
 ### Recommended Directory Structure
 
 ```
-prds/                          # PRD and task documents
-├── feature-a/
+specs/                          # Spec and task documents
+├── 001-feature-a/
 │   ├── draft.md               # Requirement draft
 │   ├── final.md               # Refined solution
 │   ├── design.png             # Design mockup
 │   ├── api-spec.md            # API specification
 │   └── example-response.json  # Sample data
-├── feature-b/
+├── 002-feature-b/
 │   └── ...
 └── _archive/                  # Archive for completed tasks
     └── ...
@@ -95,8 +95,8 @@ prds/                          # PRD and task documents
 ### Usage Example
 
 ```
-@prds/user-auth/final.md Implement user authentication according to this solution
-@prds/user-auth/api-spec.md Implement the API following this specification
+@specs/001-user-auth/final.md Implement user authentication according to this solution
+@specs/001-user-auth/api-spec.md Implement the API following this specification
 ```
 
 ## Project Knowledge Base
@@ -202,7 +202,7 @@ Follow @src/api/product.ts implementation style
 #### 1. Implement New Feature
 
 ```
-@prds/feature/final.md
+@specs/001-feature/final.md
 Implement [feature name] according to this solution:
 1. Follow existing code style
 2. Add type definitions

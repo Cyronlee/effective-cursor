@@ -94,13 +94,13 @@ Tasks:
 **文件组织：**
 
 ```
-prds/
+specs/
 └── order-management/
-    ├── task-1-order-list/
+    ├── 001-order-list/
     │   ├── draft.md
     │   ├── final.md
     │   └── api-spec.yaml
-    ├── task-3-order-list-ui/
+    ├── 002-order-detail/
     │   ├── draft.md
     │   ├── final.md
     │   └── design.png
@@ -145,8 +145,8 @@ Draft 不需要完美，重点是记录你的思考过程和不确定的点。
 **Prompt 示例：**
 
 ```
-@prds/order-management/task-1-order-list/draft.md
-@prds/order-management/shared/order-schema.sql
+@specs/order-management/001-order-list/draft.md
+@specs/order-management/shared/order-schema.sql
 
 基于 draft 和数据库 Schema，生成详细的技术方案：
 1. 具体的 API 设计（路径、参数、响应）
@@ -154,7 +154,7 @@ Draft 不需要完美，重点是记录你的思考过程和不确定的点。
 3. 分页和排序实现
 4. 错误处理
 
-输出到 @prds/order-management/task-1-order-list/final.md
+输出到 @specs/order-management/001-order-list/final.md
 ```
 
 ### 审查并调整方案
@@ -173,7 +173,7 @@ Draft 不需要完美，重点是记录你的思考过程和不确定的点。
 **调整方案：**
 
 ```
-@prds/order-management/task-1-order-list/final.md
+@specs/order-management/001-order-list/final.md
 
 请调整以下内容：
 1. 分页改用 cursor-based pagination
@@ -190,12 +190,12 @@ Draft 不需要完美，重点是记录你的思考过程和不确定的点。
 **建议分步生成：**
 
 ```
-@prds/order-management/task-1-order-list/final.md
+@specs/order-management/001-order-list/final.md
 按照方案的实现步骤，先完成第 1 步：创建数据模型
 ```
 
 ```
-@prds/order-management/task-1-order-list/final.md
+@specs/order-management/001-order-list/final.md
 继续第 2 步：实现 API 接口
 ```
 
@@ -285,7 +285,7 @@ Tasks:
 **Step 3: 生成 final.md**
 
 ```
-@prds/comment/task-1-api/draft.md
+@specs/comment/001-api/draft.md
 @src/models/Article.ts
 @src/models/User.ts
 
@@ -295,7 +295,7 @@ Tasks:
 **Step 4: 实现代码**
 
 ```
-@prds/comment/task-1-api/final.md
+@specs/comment/001-api/final.md
 按照方案实现评论 API，先创建 Comment 模型
 ```
 
@@ -322,7 +322,7 @@ Tasks:
 ### Q: 团队如何共享这些文档？
 
 - 所有 draft/final 文件提交到 Git 仓库
-- 放在 `prds/` 目录下，按功能组织
+- 放在 `specs/` 目录下，按功能组织
 - 新成员可以通过阅读历史方案快速了解项目
 
 ### Q: 方案文档会过时吗？
@@ -331,6 +331,10 @@ Tasks:
 - Draft 记录的是当时的思路，有历史价值
 - Final 是实现时的方案，代码才是最终真相
 - 重大变更时可以补充新的方案文档
+
+### Q: 为什么不使用 OpenSpec 或 Kiro 等 Spec 框架？
+
+我们的方法受规范驱动开发原则的启发，但我们选择手动实现这些原则。这让我们能够更好地与现有的企业工作流（Jira、代码评审流程）集成，并对 Token 消耗有更精细的控制。详见[为什么不用 Spec 框架](./why-no-spec-framework)了解详细解释。
 
 ## 下一步
 

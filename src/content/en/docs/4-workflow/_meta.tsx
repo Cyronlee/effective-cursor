@@ -7,5 +7,6 @@ export default {
   'direct-mode': 'Direct Mode',
   'document-mode': 'Document Mode',
   'draft-final-mode': 'Draft-Final Mode',
+  'why-no-spec-framework': 'Why No Spec Framework',
   'workflow-practice': 'Workflow Practice',
 } satisfies MetaRecord

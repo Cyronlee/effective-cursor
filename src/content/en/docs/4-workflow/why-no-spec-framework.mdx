@@ -1,0 +1,113 @@
+---
+title: "Why No Spec Framework"
+---
+
+import { Callout } from 'nextra/components'
+
+# Why No Spec Framework
+
+> Adopting SDD philosophy in a simplified, Cursor-native way
+
+## Core Message
+
+We follow the **Spec-Driven Development (SDD)** philosophy, but implement it in a simplified, framework-free approach. This isn't about rejecting frameworks—it's about **staying Cursor-native and maintaining control**.
+
+## What is Spec-Driven Development?
+
+SDD represents a paradigm shift where:
+
+1. **Specifications are the source of truth** — Not just documentation, but executable guides
+2. **AI participates in the entire lifecycle** — From spec generation to implementation
+3. **Structured workflow** — Intent → Spec → Design → Tasks → Implementation
+
+## Popular Spec Frameworks
+
+| Framework | Type | How It Works |
+|-----------|------|--------------|
+| **OpenSpec** | Local-first framework | Freely customizable, can run with zero cost using local LLMs (Ollama, LM Studio, etc.). No unified monitoring interface. |
+| **Spec-Kit** | Template + CLI + Slash Commands | Doesn't call LLM directly—token consumption depends on which AI agent you connect. |
+| **Kiro Spec** | Full IDE (VS Code-based) | Built-in spec system with Requirements → Design → Tasks workflow. Deeply integrated IDE experience. |
+
+### Framework Benefits
+
+- **Structured guidance** — Predefined workflows help maintain consistency
+- **Automated spec generation** — AI creates specs from prompts or prototypes
+- **Change tracking** — Clear history of spec evolution (especially OpenSpec)
+- **Multi-tool compatibility** — Work with various AI coding assistants
+
+## Why We Don't Use Them
+
+<Callout type="info">
+We embrace SDD philosophy, but prefer a simplified, Cursor-native implementation.
+</Callout>
+
+### 1. Avoid Tool Conflicts
+
+Spec frameworks introduce their own workflows, commands, and conventions. When combined with Cursor:
+
+- **Overlapping responsibilities** — Framework commands vs Cursor Agent capabilities
+- **Context fragmentation** — Specs managed outside Cursor's context window
+- **Workflow friction** — Switching between framework CLI and Cursor chat
+
+### 2. Maintain Controllability
+
+By implementing SDD principles directly with Cursor + Rules:
+
+- **Full visibility** — Every prompt and rule is explicit and editable
+- **Iterative refinement** — Adjust workflow based on actual results
+- **No external dependencies** — Everything lives in the project repository
+
+### 3. Integration with Existing Workflows
+
+Enterprise teams with Jira, established code review processes, and documentation standards may find framework-imposed structures conflicting with existing practices.
+
+### 4. Simplicity
+
+**Cursor Agent + Rules is already powerful enough.** Additional tools mean:
+
+- Increased learning curve
+- Added environment complexity
+- Separate maintenance overhead
+
+## Our Simplified SDD Approach
+
+We distilled the core SDD principles into the [Draft-Final Mode](./draft-final-mode):
+
+```
+specs/
+├── 001-feature-name/
+│   ├── draft.md      # Intent capture (like spec input)
+│   ├── final.md      # AI-refined solution (like spec output)
+│   └── references/   # Supporting materials
+```
+
+**Core principles adopted:**
+
+| SDD Principle | Our Implementation |
+|---------------|-------------------|
+| Spec-first thinking | Write draft.md before coding |
+| AI-augmented refinement | Cursor refines draft → final |
+| Structured workflow | Draft → Review → Final → Code |
+| Knowledge preservation | All specs committed to Git |
+
+## When to Use Spec Frameworks
+
+Frameworks are valuable when:
+
+- **Starting fresh** — No existing workflows to integrate with
+- **Solo development** — Framework provides structure you might lack
+- **Learning SDD** — Frameworks teach best practices by example
+- **Need specific features** — Like OpenSpec's delta-based change tracking
+
+## Summary
+
+| Approach | Best For |
+|----------|----------|
+| **Spec Frameworks** | New projects, solo devs, learning SDD |
+| **Simplified (Cursor-native)** | Teams with existing workflows, Cursor-centric development |
+
+The SDD philosophy is powerful regardless of implementation. We chose the simplified path to **stay Cursor-native, avoid tool conflicts, and maintain full control** over our workflow.
+
+## Next Steps
+
+See [Draft-Final Mode](./draft-final-mode) for our implementation, then [Workflow Practice](./workflow-practice) for the complete development workflow.
