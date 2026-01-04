@@ -38,13 +38,13 @@ This Wiki is organized following the **Effective Cursor Methodology (Six Steps)*
    ├── Installation & Configuration
    ├── Extensions
    ├── Model Selection
-   └── MCP Tools
+   ├── MCP Tools
+   └── Collaboration Software
 
 1. Tech Stack Selection
    ├── AI Era Favorites
    ├── Frontend Stack
-   ├── Backend Stack
-   └── Collaboration Tools
+   └── Backend Stack
 
 2. Engineering Architecture
    ├── Project Structure Optimization

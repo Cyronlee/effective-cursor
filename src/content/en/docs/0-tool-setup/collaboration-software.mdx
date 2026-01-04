@@ -1,0 +1,142 @@
+---
+title: "Collaboration Software"
+---
+
+# Collaboration Software
+
+> In the AI-assisted development era, tool selection matters more than ever
+
+In AI-assisted development workflows, collaboration tools are not just "assistants" — they're critical components for ensuring code quality, accelerating iterations, and maintaining project context. Choose the right tools, and AI transforms from "occasional helper" to "full-time collaborator."
+
+## Version Control: Git
+
+### Why Git is Essential
+
+In AI-assisted development, Git's importance is amplified:
+
+- **Prevent AI from Breaking Code** - AI might mistakenly modify critical code; Git lets you roll back anytime
+- **Quickly Compare Changes** - When AI generates large amounts of code, Git diff helps you spot issues fast
+- **Safe Experimentation** - Use branches to let AI experiment freely without affecting the main branch
+- **Foundation for Collaboration** - Team collaboration and CI/CD are built on Git
+
+### Recommended Configuration
+
+```bash
+# Set up a commit template
+git config --global commit.template ~/.gitmessage
+
+# Enable automatic spelling correction
+git config --global help.autocorrect 1
+
+# Global ignore file
+git config --global core.excludesfile ~/.gitignore_global
+```
+
+## Git Client: Fork
+
+### Why Fork is Recommended
+
+In fast-iterating AI projects with frequent code changes, Fork's visualization capabilities are especially valuable:
+
+- **Quick Diff Review** - Visual comparison helps you rapidly review AI-generated code changes
+- **Timeline Preview** - In rapid iterations, intuitive commit history helps you understand project evolution
+- **Clear Branch Management** - AI often needs to switch between branches for experiments; Fork makes this intuitive
+- **Friendly Conflict Resolution** - When AI-generated code creates conflicts, visual tools greatly reduce resolution difficulty
+
+### Alternatives
+
+- **GitKraken** - Feature-rich, supports team collaboration
+- **Sourcetree** - From Atlassian, free to use
+- **Command line** - Most direct approach; AI can also generate Git commands
+
+## API Testing: Bruno
+
+### Why Bruno Works Well with AI
+
+Bruno's biggest advantage is **file-based Git management**, allowing AI to directly participate in API documentation maintenance:
+
+- **Git-Friendly** - API requests are stored as `.bru` files, directly version-controlled
+- **AI-Maintainable** - AI can read and write `.bru` files, automatically updating API documentation
+- **Local-First** - No cloud account required; you have full control over your data
+- **Team Sync** - Share API collections via Git, ensuring the team uses the same test cases
+
+```
+collections/
+├── api/
+│   ├── users/
+│   │   ├── get-user.bru         # AI can update directly
+│   │   └── create-user.bru      # AI can update directly
+│   └── orders/
+│       └── list-orders.bru
+└── environments/
+    ├── local.bru
+    └── production.bru
+```
+
+## Documentation Tools: Nextra
+
+### Why Documentation Tools Matter
+
+In AI-assisted development, documentation isn't just for humans — it's key to providing **project context** for AI:
+
+- **Rapid Project Understanding** - AI can read Markdown docs to quickly grasp project architecture and conventions
+- **Context Transfer** - Attach documentation files to AI conversations to provide necessary background
+- **Knowledge Accumulation** - Good documentation helps AI generate code that better fits project conventions
+- **Version Sync** - Markdown files can be version-controlled alongside code, maintaining consistency
+
+### Why Nextra is Recommended
+
+[Nextra](https://nextra.site) is a Next.js-based documentation framework, particularly suitable for AI-assisted development:
+
+- **MDX Support** - Embed React components in documentation; AI can maintain both docs and components
+- **File-based Routing** - File structure defines navigation structure; AI can easily understand and modify
+- **TypeScript-Friendly** - Configuration files use TypeScript, providing type hints for AI-generated code
+- **Built-in Search** - Automatically generates search index with no extra configuration
+- **Fast Hot Reload** - Based on Next.js, excellent development experience
+
+### AI Collaboration Advantages
+
+When using Nextra, AI can:
+
+1. **Edit Documentation Directly** - Attach `.mdx` files in conversations for AI to update content
+2. **Sync Navigation Updates** - Modify `_meta.tsx` files; AI understands navigation structure
+3. **Auto-generate Examples** - Embed interactive code examples in documentation
+4. **Maintain Multilingual Docs** - AI can maintain Chinese and English docs simultaneously with consistent structure
+
+### Alternatives
+
+- **Docusaurus** - React-powered, from Meta, feature-complete
+- **VitePress** - Vue-powered, lightweight and fast
+- **GitBook** - Team knowledge base, suitable for non-technical users
+
+### Documentation Best Practices
+
+1. **Docs as Code** - Write in Markdown/MDX, version control with code
+2. **Structured Organization** - Clear directory structure helps AI locate information
+3. **Keep Updated** - Have AI update related docs when modifying code
+4. **Context Attachment** - Attach relevant documentation files when conversing with AI to provide context
+5. **Use Frontmatter** - Add metadata at the beginning of docs to help AI understand document types
+
+## Design Collaboration: Figma + MCP
+
+### Advantages of Figma MCP
+
+Through Figma MCP, AI can directly read design files:
+- **Design to Code** - AI understands elements, styles, and layouts in design files
+- **Maintain Consistency** - Automatically extract colors, fonts, and other specs from the design system
+- **Accelerate Development** - Reduce time converting from design to code
+
+See the [MCP Tools](/en/docs/0-tool-setup/mcp-tools) section for details.
+
+## Summary
+
+| Tool Type | Recommended | Core Value |
+|-----------|-------------|------------|
+| Version Control | Git | Prevent AI errors, enable rollback anytime |
+| Git Client | Fork | Quick diff review, timeline preview |
+| API Testing | Bruno | Git file management, AI-maintainable |
+| Documentation | Docusaurus/VitePress/Nextra | Maintain project context, quickly attach to AI conversations |
+| Design Collaboration | Figma + MCP | Design files directly to code |
+
+Choose the right collaboration software to make AI not just a "code writing tool," but truly integrated into your development workflow.
+

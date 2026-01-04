@@ -2,6 +2,8 @@
 title: "安装与配置"
 ---
 
+import { ImageZoom, Callout } from 'nextra/components'
+
 # 安装与配置
 
 > 快速上手 Cursor，开启 AI 辅助开发之旅
@@ -30,6 +32,39 @@ Cursor 会自动索引你的项目以提供更精准的代码建议。你可以�
 | AI 聊天 | `Cmd + L` | `Ctrl + L` |
 | 内联编辑 | `Cmd + K` | `Ctrl + K` |
 | 代码补全 | `Tab` | `Tab` |
+
+## Agent 配置
+
+### Auto-Run 模式
+
+开启 Auto-Run 模式后，Agent 可以自动执行工具调用（如命令执行、文件写入等），无需每次手动确认，大大提升开发效率。
+
+在 `Settings` → `Cursor Settings` → `Features` → `Agent` 中配置：
+
+<ImageZoom src="/img/installation/auto-run.png" alt="Agent Auto-Run 配置" style={{ width: '400px', borderRadius: '8px', marginTop: '16px' }}/>
+
+#### 推荐配置
+
+- **Auto-Run Mode**: `Auto-Run in Sandbox` - 在沙箱中自动运行，兼顾效率与安全
+- **Auto-Run Network Access**: `Ask Every Time` - 涉及网络访问时询问，避免意外的网络请求
+- **Allow Git Writes Without Approval**: `✅ 开启` - 允许 Git 操作自动执行
+- **Browser Protection**: `✅ 开启` - 防止 Agent 自动打开浏览器
+- **File-Deletion Protection**: `根据需要` - 是否需要确认文件删除
+- **Dotfile Protection**: `✅ 开启` - 保护 `.gitignore` 等配置文件
+- **External-File Protection**: `✅ 开启` - 防止修改工作区外的文件
+
+#### 安全提示
+
+<Callout type="warning">
+开启 Auto-Run 后，Agent 将自动执行工具调用。请注意：
+
+- **谨慎使用外部数据源** - 避免引入可能包含恶意指令的外部 prompt（Be cautious of potential prompt injection risks from external sources）
+- **审查生成的命令** - 在关键操作前，检查 Agent 计划执行的命令
+- **定期 Git 提交** - 保持小步提交，方便随时回滚
+- **使用分支开发** - 在独立分支上让 Agent 自由尝试
+
+Auto-Run 在正确使用时能大幅提升效率，但需要你对项目和 Agent 行为有基本的掌控意识。
+</Callout>
 
 ## 下一步
 

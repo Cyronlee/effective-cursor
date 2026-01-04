@@ -6,4 +6,5 @@ export default {
   extensions: '扩展程序',
   'model-selection': '模型选择',
   'mcp-tools': 'MCP 工具',
+  'collaboration-software': '协作软件',
 } satisfies MetaRecord

@@ -6,4 +6,5 @@ export default {
   extensions: 'Extensions',
   'model-selection': 'Model Selection',
   'mcp-tools': 'MCP Tools',
+  'collaboration-software': 'Collaboration Software',
 } satisfies MetaRecord
