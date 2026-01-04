@@ -13,7 +13,7 @@ export default {
     },
   },
   docs: {
-    title: '使用手册',
+    title: '工程化实践',
     type: 'page',
   },
   rules: {

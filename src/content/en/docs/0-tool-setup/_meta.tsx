@@ -1,7 +1,7 @@
 import type { MetaRecord } from 'nextra'
 
 export default {
-  index: 'Tool Setup',
+  index: 'Introduction',
   installation: 'Installation & Configuration',
   extensions: 'Extensions',
   'model-selection': 'Model Selection',

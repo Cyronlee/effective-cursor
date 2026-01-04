@@ -1,7 +1,7 @@
 import type { MetaRecord } from 'nextra'
 
 export default {
-  index: 'Workflow',
+  index: 'Introduction',
   'modes-overview': 'Modes Overview',
   'context-management': 'Context Management',
   'direct-mode': 'Direct Mode',

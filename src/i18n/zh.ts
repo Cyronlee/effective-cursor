@@ -31,7 +31,6 @@ export default {
   heroSubtitle: '从入门到精通，掌握 AI 辅助编程的最佳实践',
   heroDescription: '基于实战经验，助你充分发挥 Cursor 的强大能力',
 
-  // 六大核心模块（方法论六步走）
   categories: [
     {
       title: '0. 工具就绪',

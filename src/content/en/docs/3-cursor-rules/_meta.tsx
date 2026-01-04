@@ -1,7 +1,7 @@
 import type { MetaRecord } from 'nextra'
 
 export default {
-  index: 'Cursor Rules',
+  index: 'Introduction',
   'how-rules-work': 'How Rules Work',
   'best-practices': 'Rules Writing Best Practices',
   'development-sequence': 'Rules Iteration and Accumulation',

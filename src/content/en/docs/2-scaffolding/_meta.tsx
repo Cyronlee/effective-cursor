@@ -1,7 +1,7 @@
 import type { MetaRecord } from 'nextra'
 
 export default {
-  index: 'Engineering Architecture',
+  index: 'Introduction',
   'directory-structure': 'Project Structure Optimization',
   'database-schema': 'Database Schema',
   'static-analysis': 'Static Analysis Tools',

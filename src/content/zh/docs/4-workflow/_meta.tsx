@@ -1,7 +1,7 @@
 import type { MetaRecord } from 'nextra'
 
 export default {
-  index: '规范工作流',
+  index: '简介',
   'modes-overview': '模式总览',
   'context-management': '上下文管理',
   'direct-mode': 'Direct 模式',

@@ -13,7 +13,7 @@ export default {
     },
   },
   docs: {
-    title: 'Docs',
+    title: 'Engineering Practice',
     type: 'page',
   },
   rules: {
