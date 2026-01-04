@@ -1,7 +1,7 @@
 'use client'
 
 import { cn } from '@/lib/utils'
-import { AtSign, Globe, Image, ChevronDown, ArrowUp, FolderOpen } from 'lucide-react'
+import { AtSign, Globe, Image, ChevronDown, ArrowUp, FolderOpen, Infinity } from 'lucide-react'
 
 interface ChatExampleProps {
   children: string
@@ -35,7 +35,7 @@ export function ChatExample({
   children,
   maxHeight,
   mode = 'Agent',
-  model = 'claude-4.5-sonnet',
+  model = 'claude-4.5-opus',
 }: ChatExampleProps) {
   const lines = children.split('\n')
 
@@ -61,7 +61,7 @@ export function ChatExample({
             className="flex items-center gap-1.5 px-2 py-1 rounded-md text-[#999] hover:bg-[#333] transition-colors cursor-default"
             disabled
           >
-            <span className="text-purple-400 font-semibold">∞</span>
+            <Infinity className="w-3.5 h-3.5" />
             <span className="text-sm text-[#ccc]">{mode}</span>
             <ChevronDown className="w-3.5 h-3.5" />
           </button>
