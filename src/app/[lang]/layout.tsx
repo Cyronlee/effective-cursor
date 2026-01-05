@@ -3,6 +3,7 @@ import type { Metadata } from 'next'
 
 import type { I18nLangAsyncProps, I18nLangKeys } from '@/i18n'
 import { Analytics } from "@vercel/analytics/next"
+import { GoogleAnalytics } from '@next/third-parties/google'
 import Script from 'next/script'
 import { Footer, LastUpdated, Layout, Navbar } from 'nextra-theme-docs'
 import { Banner, Head, Search } from 'nextra/components'
@@ -178,6 +179,7 @@ export default async function RootLayout({ children, params }: LayoutProps<'/[la
           </Layout>
         </ThemeProvider>
       </body>
+      <GoogleAnalytics gaId="G-5M8NECM2LJ" />
       <Analytics />
       <BaiduTrack />
     </html>
