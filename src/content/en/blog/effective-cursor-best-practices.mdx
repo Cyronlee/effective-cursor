@@ -1,0 +1,119 @@
+---
+title: "Effective Cursor: Building an Engineering System for AI-Assisted Development"
+---
+
+# Effective Cursor: Building an Engineering System for AI-Assisted Development
+
+![Effective Cursor Wiki](/img/title/wiki-hero.png)
+
+📘 **Wiki:** https://effective-cursor.vercel.app
+
+---
+
+Over the past six months, our team has fully adopted Cursor for two new projects. We evolved from casual "just ask it" usage to a systematic engineering practice. This Wiki distills our hands-on experience, aiming to help you build a truly effective AI-assisted development system.
+
+## What Problems Does This Wiki Solve?
+
+Getting started with Cursor is easy—open the chat, describe your needs, accept the code. But turning it into a real productivity multiplier for your team requires solving key challenges:
+
+- **Tech Stack Selection**: Why does AI perform brilliantly on some projects but struggle on others?
+- **Engineering Architecture**: How do you ensure quality of AI-generated code?
+- **Rules Writing**: Why don't those "awesome cursorrules" from GitHub actually work?
+- **Team Workflow**: How can the entire team consistently leverage AI's potential?
+
+## Key Insights
+
+### 1. Choose AI-Friendly Technologies
+
+Not all technologies are equally suited for AI-assisted development. We've identified the [core characteristics of AI-friendly tech](/en/docs/1-tech-stack/ai-friendly-languages):
+
+| Characteristic | Why It Matters |
+|----------------|----------------|
+| **Strong Type System** | Type checkers provide instant feedback, acting as AI's "auto-proofreader" |
+| **Declarative Syntax** | AI excels at understanding "what" rather than "how" |
+| **Convention over Configuration** | Less boilerplate means AI can focus on business logic |
+
+> 💡 TypeScript + React + Tailwind + shadcn/ui is a highly AI-friendly combination.
+
+### 2. Architecture First, Let AI Run on Rails
+
+Many believe AI can "freestyle" a system—this is a trap.
+
+> Without solid engineering foundations, AI tends toward drift, tech debt, or low-quality output.
+
+Just as an executive chef must design the kitchen layout before the team can work efficiently. Our [Engineering Architecture section](/en/docs/2-scaffolding) covers how to build the infrastructure for AI-assisted development.
+
+### 3. Rules: Only Write Project-Specific Requirements
+
+This was our biggest pitfall. The [awesome-cursorrules](https://github.com/PatrickJS/awesome-cursorrules) repo on GitHub is popular, but much of it is noise—"Write clean code", "Follow best practices"—things LLMs already know.
+
+Valuable Rules are **your project's unique hard requirements**:
+
+```markdown
+// ❌ Ineffective Rules
+- Use meaningful variable names
+- Follow React best practices
+
+// ✅ Effective Rules  
+- API clients go in `src/clients/`, wrapped with SWR
+- Date formatting uses `formatDate()` from `@/lib/date-time-utils.ts`
+- Run `npm run lint` and `npm run build` after code generation
+```
+
+See [Rules Best Practices](/en/docs/3-cursor-rules/best-practices) for details.
+
+### 4. Four Workflow Modes, Choose as Needed
+
+Our team identified [four Cursor usage patterns](/en/docs/4-workflow/modes-overview):
+
+| Mode | Team Usage | Best For |
+|------|------------|----------|
+| **Draft-Final** | 36% | Complex features, unfamiliar domains |
+| **Direct** | 32% | Quick validation, bug fixes |
+| **Document** | 22% | Complex business logic requiring full specs |
+| **Manual** | 10% | Fine-tuning, configuration changes |
+
+The [Draft-Final mode](/en/docs/4-workflow/draft-final-mode) is our go-to for complex tasks:
+
+1. **Draft** — Developer quickly captures requirements
+2. **Final** — AI retrieves project context, generates complete technical spec
+3. **Code** — Implement according to the spec
+
+Recommended directory structure:
+
+```
+specs/
+├── 001-order-export/
+│   ├── draft.md          # Original requirement draft
+│   └── final.md          # AI-refined technical spec
+├── 002-user-auth/
+│   ├── draft.md
+│   └── final.md
+└── 003-payment-integration/
+    ├── draft.md
+    └── final.md
+```
+
+Key advantage: **Gain full visibility before generating code—typically completing complex tasks in just 3 interactions**.
+
+### 5. Build a Feedback Loop
+
+AI-assisted development requires continuous optimization. We've established a [metrics framework](/en/docs/5-feedback/feedback-metrics) and [retrospective practices](/en/docs/5-feedback/retrospective-practice) to track and improve our team's AI collaboration effectiveness.
+
+## Wiki Overview
+
+| Chapter | Core Objective |
+|---------|----------------|
+| [0. Tool Setup](/en/docs/0-tool-setup) | Configure an efficient Cursor development environment |
+| [1. Tech Stack](/en/docs/1-tech-stack) | Choose AI-friendly technologies |
+| [2. Engineering Architecture](/en/docs/2-scaffolding) | Build engineering infrastructure |
+| [3. Cursor Rules](/en/docs/3-cursor-rules) | Make AI automatically follow project conventions |
+| [4. Workflow](/en/docs/4-workflow) | Deeply integrate AI into development process |
+| [5. Feedback & Iteration](/en/docs/5-feedback) | Continuously optimize AI collaboration |
+
+We also provide ready-to-use [Rules Templates](/en/rules) and [Prompt Templates](/en/prompts).
+
+---
+
+This Wiki is continuously improving. Star our [GitHub repo](https://github.com/cyronlee/effective-cursor), and feel free to contribute via Issues or PRs!
+

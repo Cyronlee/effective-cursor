@@ -25,4 +25,8 @@ export default {
     type: 'page',
     display: 'hidden',
   },
+  blog: {
+    title: 'Blog',
+    type: 'page',
+  },
 } satisfies MetaRecord

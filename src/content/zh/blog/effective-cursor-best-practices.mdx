@@ -1,0 +1,122 @@
+---
+title: "高效使用 Cursor：工程化体系构建与最佳实践"
+---
+
+# 高效使用 Cursor：工程化体系构建与最佳实践
+
+
+过去半年，我们团队在两个新项目中全面采用 Cursor 进行开发，从最初的"随便问问"逐步演进为一套系统化的工程实践。这份文档是我们实战经验的总结，目标是帮助你构建真正高效的 AI 辅助开发体系。
+
+📘 **文档地址：** https://effective-cursor.vercel.app 
+
+🇨🇳 **国内访问：** http://effective-cursor.cyron.space
+
+![Effective Cursor Wiki](/img/title/wiki-hero.png)
+
+## 这份文档解决什么问题？
+
+Cursor 入门门槛很低——打开聊天窗口、描述需求、接受代码。但要让它成为团队生产力的倍增器，需要解决几个关键问题：
+
+- **技术选型**：为什么有些项目 AI 表现出色，有些却频繁出错？
+- **工程架构**：AI 生成的代码质量如何保障？
+- **Rules 编写**：GitHub 上的"Rules 大全"为何抄过来不管用？
+- **协作流程**：如何让整个团队都能稳定地发挥 AI 的价值？
+
+## 核心洞见
+
+### 1. 选择 AI 友好的技术栈
+
+并非所有技术都适合 AI 辅助开发。我们总结了 [AI 友好技术的核心特征](/zh/docs/1-tech-stack/ai-friendly-languages)：
+
+| 特征 | 为什么重要 |
+|------|-----------|
+| **强类型系统** | 类型检查器提供即时反馈，成为 AI 的"自动校对员" |
+| **声明式语法** | AI 擅长理解"是什么"而非"怎么做" |
+| **约定优于配置** | 减少样板代码，让 AI 专注业务逻辑 |
+
+> 💡 TypeScript + React + Tailwind + shadcn/ui 是一个高度 AI 友好的组合。
+
+### 2. 架构先行，让 AI 在轨道上运行
+
+很多人认为可以让 AI "自由发挥"构建系统——这是个坑。
+
+> 没有良好的工程化基础，AI 容易导致偏差、技术债或低质量输出。
+
+就像行政总厨必须先设计好厨房布局，才能让团队高效运作。[工程架构章节](/zh/docs/2-scaffolding) 详细介绍了如何建立 AI 辅助开发的基础设施。
+
+### 3. Rules 只写项目独有的规定
+
+这是我们踩过最大的坑。GitHub 上的 [awesome-cursorrules](https://github.com/PatrickJS/awesome-cursorrules) 是热门项目，但大量 Rules 都是无效内容——"Write clean code"、"Follow best practices" 这类大模型早已掌握的通用知识。
+
+真正有价值的 Rules 是**你项目里独有的硬性规定**：
+
+```markdown
+// ❌ 无效 Rule
+- 使用有意义的变量名
+- 遵循 React 最佳实践
+
+// ✅ 有效 Rule  
+- API 客户端统一放在 `src/clients/` 目录，使用 SWR 封装
+- 日期格式化使用 `formatDate()` from `@/lib/date-time-utils.ts`
+- 每次生成代码后执行 `npm run lint` 和 `npm run build` 验证
+```
+
+详见 [Rules 编写最佳实践](/zh/docs/3-cursor-rules/best-practices)。
+
+### 4. 四种工作模式，按需选择
+
+我们团队归纳出 [四种 Cursor 使用模式](/zh/docs/4-workflow/modes-overview)：
+
+| 模式 | 团队占比 | 适用场景 |
+|------|----------|----------|
+| **Draft-Final** | 36% | 复杂功能、不熟悉领域 |
+| **Direct** | 32% | 快速验证、Bug 修复 |
+| **Document** | 22% | 需要完整技术方案的复杂业务 |
+| **Manual** | 10% | 细节调整、配置修改 |
+
+其中 [Draft-Final 模式](/zh/docs/4-workflow/draft-final-mode) 是处理复杂任务的首选：
+
+1. **Draft** — 开发者快速记录需求要点
+2. **Final** — AI 检索项目上下文，生成完整技术方案
+3. **Code** — 按方案实现代码
+
+推荐的目录组织方式：
+
+```
+specs/
+├── 001-order-export/
+│   ├── draft.md          # 原始需求草稿
+│   ├── api-docs.md       # API 文档
+│   ├── design.png        # 设计图
+│   └── final.md          # AI 完善的技术方案
+├── 002-user-auth/
+│   ├── draft.md
+│   └── final.md
+└── 003-payment-integration/
+    ├── draft.md
+    └── final.md
+```
+
+这种模式的优势：**在生成代码前建立全局视野，平均只需 3 次交互即可完成复杂任务**。
+
+### 5. 建立反馈闭环
+
+AI 辅助开发需要持续优化。我们建立了 [量化指标体系](/zh/docs/5-feedback/feedback-metrics) 和 [复盘机制](/zh/docs/5-feedback/retrospective-practice)，持续追踪团队的 AI 协作效果。
+
+## 文档内容概览
+
+| 章节 | 核心目标 |
+|------|----------|
+| [0. 工具就绪](/zh/docs/0-tool-setup) | 配置高效的 Cursor 开发环境 |
+| [1. 技术选型](/zh/docs/1-tech-stack) | 选择 AI 友好的技术栈 |
+| [2. 工程架构](/zh/docs/2-scaffolding) | 建立工程化基础保障 |
+| [3. Cursor Rules](/zh/docs/3-cursor-rules) | 让 AI 自动遵守项目规范 |
+| [4. 规范工作流](/zh/docs/4-workflow) | 将 AI 深度融入开发流程 |
+| [5. 反馈与迭代](/zh/docs/5-feedback) | 持续优化 AI 协作效果 |
+
+我们还提供了可直接使用的 [Rules 模板库](/zh/rules) 和 [Prompt 模板库](/zh/prompts)。
+
+---
+
+文档持续完善中，欢迎 Star [GitHub 仓库](https://github.com/cyronlee/effective-cursor)，也欢迎通过 Issue 或 PR 贡献你的经验！
+
