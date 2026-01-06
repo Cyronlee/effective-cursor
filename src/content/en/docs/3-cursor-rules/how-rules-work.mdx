@@ -26,7 +26,7 @@ This article focuses on the working principles of **project rules**.
 ## How Rules Work
 
 <Callout type="info">
-Large language models don't retain memory between completions. Rules provide persistent, reusable context at the **prompt level**.
+Large language models don't retain memory between completions. Rules provide persistent, reusable context at the **prompt level**. If you need a more flexible memory system, see [Managing Memory with Rules](./memory-management).
 </Callout>
 
 When rules are applied, their content is added to the **beginning** of the model's context. This provides consistent guidance for AI when generating code, understanding edits, or assisting with workflows.
@@ -203,4 +203,6 @@ If `alwaysApply` is `true`, the rule will be applied to every chat session. Othe
 ## Next Steps
 
 Now that you understand how rules work, learn [how to write high-quality rules](./best-practices).
+
+If your project needs to manage extensive domain knowledge, explore [Managing Memory with Rules](./memory-management).
 

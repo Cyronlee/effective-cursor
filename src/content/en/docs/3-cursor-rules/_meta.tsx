@@ -5,5 +5,6 @@ export default {
   'how-rules-work': 'How Rules Work',
   'best-practices': 'Rules Writing Best Practices',
   'development-sequence': 'Rules Iteration and Accumulation',
+  'memory-management': 'Managing Memory with Rules',
   'meta-prompt': 'Meta Prompts for Generating Rules',
 } satisfies MetaRecord

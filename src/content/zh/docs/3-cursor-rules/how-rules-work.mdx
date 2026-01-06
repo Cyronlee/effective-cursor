@@ -70,7 +70,7 @@ Project Rules 位于 `.cursor/rules` 目录中，**受版本控制**，作用范
 
 <Callout type="info">
 大型语言模型在不同补全之间不会保留记忆。Rules 在**提示级别**提供持久、可重用的上下文。
-简单来说就是为了解决每次 Chat 都要重复输入相同的指令。
+简单来说就是为了解决每次 Chat 都要重复输入相同的指令。如果你需要更灵活的记忆系统，可以参考 [使用 Rules 管理记忆](./memory-management)。
 </Callout>
 
 当 Rules 被应用后，其内容会被加入到模型上下文的**开头**。这为 AI 在生成代码、理解编辑或协助处理工作流时提供一致的指导。
@@ -172,3 +172,5 @@ Use this structure when creating a new feature...
 ## 下一步
 
 现在你已经理解了 Rules 的工作原理，接下来学习[如何编写高质量的 Rules](./best-practices)。
+
+如果你的项目需要管理大量领域知识，可以了解 [使用 Rules 管理记忆](./memory-management)。

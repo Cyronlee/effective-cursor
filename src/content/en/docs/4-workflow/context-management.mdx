@@ -140,10 +140,8 @@ Follow conventions in @docs/api-conventions.md
 
 ## Cursor Memory
 
-<Callout type="warning">
-**Feature Under Exploration**
-
-Our team hasn't adopted Cursor Memory at scale yet. Below is our preliminary exploration.
+<Callout type="info">
+**Learn More**: We have a dedicated article on [Managing Memory with Rules](/en/docs/3-cursor-rules/memory-management), including our local memory system practice.
 </Callout>
 
 ### What is Memory
@@ -165,13 +163,14 @@ Cursor Memory allows AI to remember information across sessions, including:
 
 | Dimension | Rules | Memory |
 |-----------|-------|--------|
-| Storage location | Project `.cursor/rules/` | Cursor cloud |
-| Sharing scope | Team (via Git) | Personal |
-| Management | File-based | AI auto-managed |
-| Use case | Project standards | Personal preferences |
+| Storage location | Project `.cursor/rules/` | Cursor cloud or local `.memory/` |
+| Sharing scope | Team (via Git) | Team-shareable (local) or Personal (cloud) |
+| Management | File-based | File or AI auto-managed |
+| Use case | Project standards | Domain knowledge, troubleshooting history |
+| Determinism | ✅ High - You know what's applied | ⚠️ Low - Agent reads on-demand |
 
 <Callout type="info">
-**Our recommendation:** Use Rules for project standards (version controlled, team shared), Memory for personal preferences.
+**Our recommendation:** For most projects, Rules are sufficient. If you have extensive domain knowledge that needs progressive disclosure by AI, consider using a [local memory system](/en/docs/3-cursor-rules/memory-management).
 </Callout>
 
 ## Prompt Techniques

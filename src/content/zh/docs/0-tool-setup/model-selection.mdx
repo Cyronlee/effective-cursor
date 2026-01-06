@@ -45,6 +45,8 @@ Cursor 支持多种 AI 模型，每种模型都有其特点和适用场景。选
 | 日常编码 | claude-4.5-opus-high | 2x | 最强的模型，性价比高，适合日常编码 |
 | 简单任务 | claude-4.5-sonnet | 1x | 节省配额，适合简单任务 |
 
+> **上下文使用技巧**：使用 Opus 等强模型时，在一次请求中用掉更多上下文更划算。这使得 [渐进式记忆披露](/zh/docs/3-cursor-rules/memory-management) 等技术特别有价值——让 Agent 在一次会话中按需读取尽可能多的相关上下文。
+
 ## Usage 消耗对比
 
 <ImageZoom 

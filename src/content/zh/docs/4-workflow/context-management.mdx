@@ -140,10 +140,8 @@ alwaysApply: false
 
 ## Cursor Memory
 
-<Callout type="warning">
-**探索中的功能**
-
-目前我们团队还没有大规模使用 Cursor Memory 功能，以下是我们的初步探索。
+<Callout type="info">
+**深入了解**：我们有一篇专门的文章介绍 [使用 Rules 管理记忆](/zh/docs/3-cursor-rules/memory-management)，包括本地记忆系统的实践方案。
 </Callout>
 
 ### Memory 是什么
@@ -165,13 +163,14 @@ Cursor Memory 允许 AI 记住跨会话的信息，包括：
 
 | 维度 | Rules | Memory |
 |------|-------|--------|
-| 存储位置 | 项目 `.cursor/rules/` | Cursor 云端 |
-| 共享范围 | 团队（通过 Git） | 个人 |
-| 管理方式 | 文件管理 | AI 自动管理 |
-| 适用场景 | 项目规范 | 个人偏好 |
+| 存储位置 | 项目 `.cursor/rules/` | Cursor 云端或本地 `.memory/` |
+| 共享范围 | 团队（通过 Git） | 可团队共享（本地）或个人（云端） |
+| 管理方式 | 文件管理 | 文件或 AI 自动管理 |
+| 适用场景 | 项目规范 | 领域知识、问题排查历史 |
+| 确定性 | ✅ 高 - 你知道哪些被应用 | ⚠️ 低 - Agent 按需读取 |
 
 <Callout type="info">
-**我们的建议：** 项目规范使用 Rules（可版本控制、团队共享），个人偏好使用 Memory。
+**我们的建议：** 对于大多数项目，Rules 就足够了。如果你有大量领域知识需要 AI 渐进式读取，可以考虑使用 [本地记忆系统](/zh/docs/3-cursor-rules/memory-management)。
 </Callout>
 
 ## Prompt 技巧
