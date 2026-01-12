@@ -1,12 +1,10 @@
 ---
-title: "AI-Friendly Languages"
+title: "AI-Friendly Technologies"
 ---
 
-# AI-Friendly Languages
+# AI-Friendly Technologies
 
-> What makes a technology an "AI favorite"?
-
-AI models are trained on massive codebases, but not all code is equally learnable. Some languages and frameworks are inherently easier for LLMs to understand and generate accurately. Understanding these characteristics helps you build an AI-optimized development environment.
+The performance of current large language models (LLMs) in code generation and development assistance is influenced by multiple factors including training data distribution, toolchain integration, and language characteristics. Certain technical features can significantly improve AI-assisted accuracy and iteration efficiency in practice. This article summarizes these insights to help you build a development environment more suitable for AI assistance.
 
 ## Core Characteristics of AI-Friendly Technologies
 
@@ -18,7 +16,7 @@ AI models are trained on massive codebases, but not all code is equally learnabl
 AI generates code → Type checker reports errors → AI fixes → Repeat until clean
 ```
 
-This is far more reliable than AI "self-checking" its output. The type system acts as an objective validator:
+This is far more reliable than AI "self-checking" its output. The type system acts as an objective validator, providing clear feedback for both humans and AI:
 
 ```typescript
 // ✅ Strong types - Compiler catches AI mistakes instantly
@@ -42,27 +40,32 @@ The same principle applies to schema validators like Zod — they catch invalid 
 
 > 💡 Learn how to set up this feedback loop in [Static Analysis Tools](/en/docs/2-scaffolding/static-analysis)
 
-**Best examples**: TypeScript, Zod, GraphQL, JSON Schema, Go, Rust
+**Typical examples**: TypeScript, Python (type hints), Go, Rust, Java, C#, Zod, GraphQL, JSON Schema
 
 ### 2. Declarative / Semantic Syntax
 
-**Why it matters**: AI excels at understanding "what" over "how". Declarative code expresses intent directly.
+**Why it matters**: Declarative code expresses intent directly, making it easier to understand and generate. Current practical experience shows that declarative frameworks and languages have higher success rates in AI-assisted development.
 
 ```tsx
-// ✅ Declarative - AI understands the intent immediately
+// ✅ Declarative - Intent is immediately clear
 <Card className="p-4 shadow-lg">
   <CardTitle>Welcome</CardTitle>
   <CardContent>Hello, world!</CardContent>
 </Card>
 
-// ❌ Imperative - AI must trace through logic
+// ❌ Imperative - Requires tracing execution logic
 const card = document.createElement('div')
 card.style.padding = '16px'
 card.style.boxShadow = '0 4px 6px rgba(0,0,0,0.1)'
 // ... more DOM manipulation
 ```
 
-**Best examples**: React, SQL, Dockerfile, Mermaid, Tailwind CSS
+Note that while declarative code is better at expressing intent, imperative code is also heavily represented in training data. Therefore, mainstream LLMs also perform well in certain imperative scenarios (such as native DOM operations and traditional OOP patterns).
+
+**Typical examples**:
+- **Frontend**: React, Vue, Svelte, Tailwind CSS
+- **Backend**: SQL, GraphQL, YAML
+- **Tools**: Dockerfile, Terraform, Markdown, Mermaid
 
 ### 3. Minimal Syntax / High Information Density
 
@@ -74,11 +77,16 @@ card.style.boxShadow = '0 4px 6px rgba(0,0,0,0.1)'
 | Traditional CSS | ~30+ tokens (selector + properties) |
 | Inline styles | ~40+ tokens (verbose object notation) |
 
-**Best examples**: Tailwind CSS, Go, Markdown, YAML
+> **Note**: The above are rough estimates. Actual token consumption depends on the specific tokenizer and context length. In long-context iterations, Tailwind's long className strings may also increase token consumption, requiring trade-offs based on the scenario.
+
+**Typical examples**:
+- **Styling**: Tailwind CSS, UnoCSS
+- **Languages**: Go, Python, Kotlin
+- **Markup**: Markdown, YAML, TOML
 
 ### 4. Atomic / Composable Design
 
-**Why it matters**: Small, reusable units are easier to assemble than monolithic blocks. AI can mix and match components like LEGO.
+**Why it matters**: Small, reusable units are easier to assemble than monolithic blocks. Current practical experience shows that codebases based on atomic components are better suited for AI-assisted iteration.
 
 ```typescript
 // ✅ Composable - AI can assemble from parts
@@ -98,7 +106,10 @@ const UserCard = () => (
 )
 ```
 
-**Best examples**: shadcn/ui, React hooks, GraphQL fields, Zod schemas
+**Typical examples**:
+- **Component libraries**: shadcn/ui, Radix UI, Ant Design, Element Plus
+- **State management**: React hooks, Vuex/Pinia modules, Redux slices
+- **Schemas**: GraphQL fields, Zod schemas, Prisma models
 
 ### 5. Convention over Configuration
 
@@ -114,23 +125,30 @@ app/
 
 No router configuration needed. AI just creates files in the right place.
 
-**Best examples**: Next.js, Spring Boot, FastAPI, Rails
+**Typical examples**:
+- **Frontend**: Next.js, Nuxt, SvelteKit, Remix
+- **Backend**: Spring Boot, FastAPI, Ruby on Rails, Django
+- **Tools**: Vite, Maven, Gradle
 
 ### 6. Fast Feedback Loop
 
-**Why it matters**: Instant preview enables rapid AI → generate → verify → refine cycles.
+**Why it matters**: Instant preview enables rapid AI → generate → verify → refine cycles. Practical experience shows that faster feedback leads to higher AI-assisted iteration efficiency.
 
 | Tool | Feedback Time | AI Workflow Impact |
 |------|--------------|-------------------|
 | Vite HMR | \<100ms | Real-time validation |
 | Playwright | ~1s | Instant test results |
+| TypeScript | \<1s | Instant type checking |
 | Docker build | ~10s | Quick deployment verification |
 
-**Best examples**: Vite, Playwright, Hot Module Replacement
+**Typical examples**:
+- **Dev servers**: Vite, Next.js Fast Refresh, Webpack HMR
+- **Testing tools**: Vitest, Jest, Playwright
+- **Type checking**: TypeScript, mypy, go build
 
 ### 7. Human + AI Dual Readability
 
-**Why it matters**: Code that reads like documentation is easier to understand, modify, and prompt about.
+**Why it matters**: Code that reads like documentation is easier to understand, modify, and prompt about. When code semantics are clear, AI can more accurately understand context and generate relevant code.
 
 ```sql
 -- ✅ Self-documenting query
@@ -144,49 +162,46 @@ HAVING order_count > 5
 -- The query literally describes what it does
 ```
 
-**Best examples**: SQL, Markdown, Zod schemas, GraphQL
+**Typical examples**:
+- **Query languages**: SQL, GraphQL, LINQ
+- **Schema definitions**: Zod, TypeScript interfaces, Protocol Buffers
+- **Markup languages**: Markdown, AsciiDoc, reStructuredText
+- **Diagram languages**: Mermaid, PlantUML, DOT
 
-### 8. Active Community + Fresh Training Data
+### 8. Active Community + Rich Training Data
 
-**Why it matters**: AI knowledge comes from training data. Active communities produce more examples, tutorials, and patterns for AI to learn from.
+**Why it matters**: AI knowledge comes from training data. Active communities produce more examples, tutorials, and patterns for AI to learn from. Practical experience shows that mainstream technologies usually have higher accuracy in code generation.
 
 import { Callout } from 'nextra/components'
 
 <Callout type="info">
-Technologies like React, Next.js, and Tailwind have massive GitHub activity and documentation, meaning AI has seen millions of usage examples.
+Mainstream technologies (such as React, Vue, Django, Spring Boot, etc.) have massive GitHub activity and documentation, meaning AI has seen millions of usage examples and typically performs more consistently with these technology stacks.
 </Callout>
 
-### 9. Deep Tool Integration
+**Metrics to consider**:
+- GitHub Stars and Contributors count
+- Stack Overflow question volume
+- Official documentation completeness
+- Ecosystem maturity (package managers, toolchains, etc.)
 
-**Why it matters**: Direct integration with AI tools (Cursor, Copilot, v0) enables advanced features like inline completions and automated refactoring.
+## Practical Recommendations
 
-| Tool | Integration Examples |
-|------|---------------------|
-| Cursor | TypeScript intelligence, React refactoring |
-| Copilot | Context-aware completions across languages |
-| v0 | Tailwind + shadcn UI generation |
+Based on these characteristics, when choosing a technology stack, consider:
 
-## Recommended Languages
+1. **Prioritize strongly-typed languages**: TypeScript, Python (with type hints), Go, Rust, Java typically perform better in AI-assisted development
+2. **Choose declarative frameworks**: React/Vue/Svelte (frontend), SQL (data queries), Terraform (infrastructure), etc.
+3. **Focus on fast feedback**: Set up your development environment with hot reload, type checking, and automated testing
+4. **Embrace conventions**: Use frameworks with convention over configuration like Next.js, Spring Boot, etc.
+5. **Establish atomic design**: Use component libraries (shadcn/ui, Ant Design, etc.) and modular architecture
 
-Based on these characteristics, here are the most AI-friendly programming languages:
+<Callout type="warning">
+**Important reminder**: These characteristics are not absolute rules. The best technology for your project depends on team experience, existing codebase, performance requirements, and many other factors. AI-friendliness is just one consideration in technology selection.
+</Callout>
 
-| Language | AI-Friendly Strengths |
-|----------|----------------------|
-| **TypeScript** | Strong types, massive ecosystem, deep tool integration |
-| **Python** | Clean syntax, type hints support, AI/ML native |
-| **Go** | Minimal syntax, explicit error handling, fast compilation |
-| **Rust** | Strict type system, ownership model as documentation |
-| **SQL** | Purely declarative, self-documenting queries |
+## Further Reading
 
-## What to Avoid
+Now that you understand AI-friendly characteristics, see how they apply to specific technology stacks:
 
-Some characteristics make technologies harder for AI:
-
-- **Dynamic typing without hints** — Leads to ambiguous generation
-- **Heavy metaprogramming** — Magic code confuses AI understanding
-- **XML-heavy configuration** — Verbose, low information density
-- **Implicit conventions** — Undocumented patterns AI can't learn
-
-## Next Steps
-
-Now that you understand AI-friendly characteristics, let's see how they apply to specific frontend technologies.
+- [Frontend Stack](/en/docs/1-tech-stack/frontend-stack) - Practices for React, Vue, Next.js and other frontend frameworks
+- [Backend Stack](/en/docs/1-tech-stack/backend-stack) - Practices for Spring Boot, FastAPI, Django and other backend frameworks
+- [Markup Languages](/en/docs/1-tech-stack/markup-languages) - Best practices for Markdown, Mermaid and other markup languages
