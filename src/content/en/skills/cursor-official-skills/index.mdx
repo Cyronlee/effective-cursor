@@ -1,0 +1,60 @@
+---
+title: "Cursor Official Skills"
+---
+
+import { Callout, Cards } from 'nextra/components'
+
+# Cursor Official Skills
+
+<Callout type="info">
+Cursor comes with a set of built-in official skills to help you use AI-assisted programming more efficiently. These skills are stored in `~/.cursor/skills-cursor/` and are automatically managed by Cursor.
+</Callout>
+
+## Official Skills List
+
+Cursor provides the following official skills:
+
+<Cards>
+  <Cards.Card icon={<span className="icon-[carbon--rule]" />} title="create-rule" href="./create-rule" />
+  <Cards.Card icon={<span className="icon-[carbon--skill-level]" />} title="create-skill" href="./create-skill" />
+  <Cards.Card icon={<span className="icon-[carbon--user-multiple]" />} title="create-subagent" href="./create-subagent" />
+  <Cards.Card icon={<span className="icon-[carbon--migrate]" />} title="migrate-to-skills" href="./migrate-to-skills" />
+  <Cards.Card icon={<span className="icon-[carbon--settings]" />} title="update-cursor-settings" href="./update-cursor-settings" />
+</Cards>
+
+## How to Use Official Skills
+
+### Method 1: Automatic Triggering
+
+The agent will automatically determine whether to invoke a skill based on context. For example, when you say "help me create a new rule," the agent will automatically use the `create-rule` skill.
+
+### Method 2: Manual Invocation
+
+Type `/` in the agent chat box, then search for the skill name to manually invoke it:
+
+```
+/create-rule
+```
+
+### Method 3: Skills with Disabled Auto-Invocation
+
+Some skills have `disable-model-invocation: true` set, meaning they will not be automatically invoked and can only be explicitly triggered via `/skill-name`. For example:
+
+- `create-subagent`
+- `migrate-to-skills`
+
+<Callout type="warning">
+**Warning**: Do not modify the contents of `~/.cursor/skills-cursor/`. These files are automatically managed by Cursor. If you want to create custom skills, use `.cursor/skills/` (project-level) or `~/.cursor/skills/` (user-level) directories.
+</Callout>
+
+## Skill Details
+
+Click the links below to view the complete documentation for each official skill:
+
+| Skill Name | Purpose | Invocation Method |
+|-----------|---------|-------------------|
+| [create-rule](./create-rule) | Create Cursor Rules | Auto / `/create-rule` |
+| [create-skill](./create-skill) | Create Agent Skills | Auto / `/create-skill` |
+| [create-subagent](./create-subagent) | Create custom subagents | `/create-subagent` |
+| [migrate-to-skills](./migrate-to-skills) | Migrate rules and commands to skills | `/migrate-to-skills` |
+| [update-cursor-settings](./update-cursor-settings) | Update Cursor settings | Auto / `/update-cursor-settings` |

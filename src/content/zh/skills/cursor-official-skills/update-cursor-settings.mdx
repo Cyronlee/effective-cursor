@@ -1,0 +1,321 @@
+---
+title: "update-cursor-settings - 更新 Cursor 设置"
+---
+
+import { Callout, Tabs } from 'nextra/components'
+
+# update-cursor-settings
+
+<Callout type="info">
+**Skill 名称**: update-cursor-settings  
+**调用方式**: 自动触发 / `/update-cursor-settings`  
+**用途**: 修改 Cursor/VSCode 用户设置
+</Callout>
+
+## Skill 描述
+
+修改 settings.json 中的 Cursor/VSCode 用户设置。当用户想要更改编辑器设置、偏好设置、配置、主题、字体大小、Tab 大小、保存时格式化、自动保存、键盘绑定或任何 settings.json 值时使用。
+
+## 完整 Skill 文档
+
+<Tabs items={['中文翻译', '英文原文']}>
+<Tabs.Tab>
+
+````markdown
+---
+name: update-cursor-settings
+description: 修改 settings.json 中的 Cursor/VSCode 用户设置。当用户想要更改编辑器设置、偏好设置、配置、主题、字体大小、Tab 大小、保存时格式化、自动保存、键盘绑定或任何 settings.json 值时使用。
+---
+# 更新 Cursor 设置
+
+此技能指导你修改 Cursor/VSCode 用户设置。当用户想要更改编辑器设置、偏好设置、配置、主题、键盘绑定或任何 `settings.json` 值时使用。
+
+## 设置文件位置
+
+| 操作系统 | 路径 |
+|----|------|
+| macOS | ~/Library/Application Support/Cursor/User/settings.json |
+| Linux | ~/.config/Cursor/User/settings.json |
+| Windows | %APPDATA%\Cursor\User\settings.json |
+
+## 修改设置前
+
+1. **读取现有设置文件**以了解当前配置
+2. **保留现有设置** - 仅添加/修改用户请求的内容
+3. **验证 JSON 语法**以避免破坏编辑器
+
+## 修改设置
+
+### 步骤 1: 读取当前设置
+
+```typescript
+// 首先读取设置文件
+const settingsPath = "~/Library/Application Support/Cursor/User/settings.json";
+// 使用 Read 工具获取当前内容
+```
+
+### 步骤 2: 识别要更改的设置
+
+常见设置类别：
+- **编辑器**: `editor.fontSize`、`editor.tabSize`、`editor.wordWrap`、`editor.formatOnSave`
+- **工作台**: `workbench.colorTheme`、`workbench.iconTheme`、`workbench.sideBar.location`
+- **文件**: `files.autoSave`、`files.exclude`、`files.associations`
+- **终端**: `terminal.integrated.fontSize`、`terminal.integrated.shell.*`
+- **Cursor 特定**: 以 `cursor.` 或 `aipopup.` 为前缀的设置
+
+### 步骤 3: 更新设置
+
+修改 settings.json 时：
+1. 解析现有 JSON（处理注释 - VSCode 设置支持带注释的 JSON）
+2. 添加或更新请求的设置
+3. 保留所有其他现有设置
+4. 使用适当的格式（2 空格缩进）写回
+
+### 示例: 更改字体大小
+
+如果用户说"让字体更大"：
+
+```json
+{
+  "editor.fontSize": 16
+}
+```
+
+### 示例: 启用保存时格式化
+
+如果用户说"保存时格式化我的代码"：
+
+```json
+{
+  "editor.formatOnSave": true
+}
+```
+
+### 示例: 更改主题
+
+如果用户说"使用深色主题"或"更改我的主题"：
+
+```json
+{
+  "workbench.colorTheme": "Default Dark Modern"
+}
+```
+
+## 重要说明
+
+1. **JSON 支持注释**: VSCode/Cursor 的 settings.json 支持注释（`//` 和 `/* */`）。读取时，注意可能存在注释。写入时，尽可能保留注释。
+
+2. **可能需要重启**: 某些设置立即生效，其他设置需要重新加载窗口或重启 Cursor。如果需要重启，请告知用户。
+
+3. **备份**: 对于重大更改，考虑提及用户可以通过设置文件中的 Ctrl/Cmd+Z 撤销，或者如果被跟踪则通过还原 git 更改撤销。
+
+4. **工作区 vs 用户设置**:
+   - 用户设置（此技能涵盖的内容）: 全局应用于所有项目
+   - 工作区设置（`.vscode/settings.json`）: 仅应用于当前项目
+
+## 常见用户请求 → 设置
+
+| 用户请求 | 设置 |
+|--------------|---------|
+| "更大/更小的字体" | `editor.fontSize` |
+| "更改 tab 大小" | `editor.tabSize` |
+| "保存时格式化" | `editor.formatOnSave` |
+| "自动换行" | `editor.wordWrap` |
+| "更改主题" | `workbench.colorTheme` |
+| "隐藏迷你地图" | `editor.minimap.enabled` |
+| "自动保存" | `files.autoSave` |
+| "行号" | `editor.lineNumbers` |
+| "括号匹配" | `editor.bracketPairColorization.enabled` |
+| "光标样式" | `editor.cursorStyle` |
+| "平滑滚动" | `editor.smoothScrolling` |
+
+## 工作流程
+
+1. 读取 ~/Library/Application Support/Cursor/User/settings.json
+2. 解析 JSON 内容
+3. 添加/修改请求的设置
+4. 将更新的 JSON 写回文件
+5. 告知用户设置已更改以及是否需要重新加载
+````
+
+</Tabs.Tab>
+<Tabs.Tab>
+
+````markdown
+---
+name: update-cursor-settings
+description: Modify Cursor/VSCode user settings in settings.json. Use when the user wants to change editor settings, preferences, configuration, themes, font size, tab size, format on save, auto save, keybindings, or any settings.json values.
+---
+# Updating Cursor Settings
+
+This skill guides you through modifying Cursor/VSCode user settings. Use this when the user wants to change editor settings, preferences, configuration, themes, keybindings, or any `settings.json` values.
+
+## Settings File Location
+
+| OS | Path |
+|----|------|
+| macOS | ~/Library/Application Support/Cursor/User/settings.json |
+| Linux | ~/.config/Cursor/User/settings.json |
+| Windows | %APPDATA%\Cursor\User\settings.json |
+
+## Before Modifying Settings
+
+1. **Read the existing settings file** to understand current configuration
+2. **Preserve existing settings** - only add/modify what the user requested
+3. **Validate JSON syntax** before writing to avoid breaking the editor
+
+## Modifying Settings
+
+### Step 1: Read Current Settings
+
+```typescript
+// Read the settings file first
+const settingsPath = "~/Library/Application Support/Cursor/User/settings.json";
+// Use the Read tool to get current contents
+```
+
+### Step 2: Identify the Setting to Change
+
+Common setting categories:
+- **Editor**: `editor.fontSize`, `editor.tabSize`, `editor.wordWrap`, `editor.formatOnSave`
+- **Workbench**: `workbench.colorTheme`, `workbench.iconTheme`, `workbench.sideBar.location`
+- **Files**: `files.autoSave`, `files.exclude`, `files.associations`
+- **Terminal**: `terminal.integrated.fontSize`, `terminal.integrated.shell.*`
+- **Cursor-specific**: Settings prefixed with `cursor.` or `aipopup.`
+
+### Step 3: Update the Setting
+
+When modifying settings.json:
+1. Parse the existing JSON (handle comments - VSCode settings support JSON with comments)
+2. Add or update the requested setting
+3. Preserve all other existing settings
+4. Write back with proper formatting (2-space indentation)
+
+### Example: Changing Font Size
+
+If user says "make the font bigger":
+
+```json
+{
+  "editor.fontSize": 16
+}
+```
+
+### Example: Enabling Format on Save
+
+If user says "format my code when I save":
+
+```json
+{
+  "editor.formatOnSave": true
+}
+```
+
+### Example: Changing Theme
+
+If user says "use dark theme" or "change my theme":
+
+```json
+{
+  "workbench.colorTheme": "Default Dark Modern"
+}
+```
+
+## Important Notes
+
+1. **JSON with Comments**: VSCode/Cursor settings.json supports comments (`//` and `/* */`). When reading, be aware comments may exist. When writing, preserve comments if possible.
+
+2. **Restart May Be Required**: Some settings take effect immediately, others require reloading the window or restarting Cursor. Inform the user if a restart is needed.
+
+3. **Backup**: For significant changes, consider mentioning the user can undo via Ctrl/Cmd+Z in the settings file or by reverting git changes if tracked.
+
+4. **Workspace vs User Settings**:
+   - User settings (what this skill covers): Apply globally to all projects
+   - Workspace settings (`.vscode/settings.json`): Apply only to the current project
+
+## Common User Requests → Settings
+
+| User Request | Setting |
+|--------------|---------|
+| "bigger/smaller font" | `editor.fontSize` |
+| "change tab size" | `editor.tabSize` |
+| "format on save" | `editor.formatOnSave` |
+| "word wrap" | `editor.wordWrap` |
+| "change theme" | `workbench.colorTheme` |
+| "hide minimap" | `editor.minimap.enabled` |
+| "auto save" | `files.autoSave` |
+| "line numbers" | `editor.lineNumbers` |
+| "bracket matching" | `editor.bracketPairColorization.enabled` |
+| "cursor style" | `editor.cursorStyle` |
+| "smooth scrolling" | `editor.smoothScrolling` |
+
+## Workflow
+
+1. Read ~/Library/Application Support/Cursor/User/settings.json
+2. Parse the JSON content
+3. Add/modify the requested setting(s)
+4. Write the updated JSON back to the file
+5. Inform the user the setting has been changed and whether a reload is needed
+````
+
+</Tabs.Tab>
+</Tabs>
+
+## 设置文件位置
+
+| 操作系统 | 路径 |
+|---------|------|
+| macOS | `~/Library/Application Support/Cursor/User/settings.json` |
+| Linux | `~/.config/Cursor/User/settings.json` |
+| Windows | `%APPDATA%\Cursor\User\settings.json` |
+
+## 常见设置类别
+
+- **编辑器设置**: `editor.fontSize`（字体大小）、`editor.tabSize`（Tab 大小）、`editor.wordWrap`（自动换行）、`editor.formatOnSave`（保存时格式化）
+- **工作台设置**: `workbench.colorTheme`（颜色主题）、`workbench.iconTheme`（图标主题）、`workbench.sideBar.location`（侧边栏位置）
+- **文件设置**: `files.autoSave`（自动保存）、`files.exclude`（排除文件）、`files.associations`（文件关联）
+- **终端设置**: `terminal.integrated.fontSize`（终端字体大小）、`terminal.integrated.shell.*`（终端 Shell）
+- **Cursor 特定设置**: 以 `cursor.` 或 `aipopup.` 为前缀的设置
+
+## 常见用户请求映射
+
+| 用户请求 | 对应设置 |
+|---------|---------|
+| "更大/更小的字体" | `editor.fontSize` |
+| "更改 Tab 大小" | `editor.tabSize` |
+| "保存时格式化" | `editor.formatOnSave` |
+| "自动换行" | `editor.wordWrap` |
+| "更改主题" | `workbench.colorTheme` |
+| "隐藏迷你地图" | `editor.minimap.enabled` |
+| "自动保存" | `files.autoSave` |
+| "行号" | `editor.lineNumbers` |
+| "括号匹配" | `editor.bracketPairColorization.enabled` |
+| "光标样式" | `editor.cursorStyle` |
+| "平滑滚动" | `editor.smoothScrolling` |
+
+## 使用场景
+
+当你想要做以下事情时，Agent 会自动调用此 Skill：
+
+- 更改编辑器设置
+- 修改偏好设置
+- 配置主题
+- 调整字体大小
+- 设置 Tab 大小
+- 启用保存时格式化
+- 配置自动保存
+- 修改键盘绑定
+- 修改任何 `settings.json` 中的值
+
+## 重要提示
+
+<Callout type="warning">
+1. **JSON 支持注释**: VSCode/Cursor 的 settings.json 支持注释（`//` 和 `/* */`）
+2. **可能需要重启**: 某些设置会立即生效，其他设置可能需要重新加载窗口或重启 Cursor
+3. **用户设置 vs 工作区设置**: 此 Skill 修改的是用户设置（全局生效），而不是工作区设置（仅当前项目）
+</Callout>
+
+## 相关文档
+
+- [Cursor 工具设置](/zh/docs/0-tool-setup)
+- [VSCode 设置文档](https://code.visualstudio.com/docs/getstarted/settings)

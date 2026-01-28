@@ -20,6 +20,10 @@ export default {
     title: 'Cursor Rules',
     type: 'page',
   },
+  skills: {
+    title: 'Skills',
+    type: 'page',
+  },
   prompts: {
     title: '提示词',
     type: 'page',

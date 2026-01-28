@@ -11,15 +11,12 @@ src/content/
 ├── zh/          # 中文
 │   ├── _meta.tsx
 │   ├── index.mdx (HomepageHero)
-│   └── docs/
-│       ├── _meta.tsx
-│       └── *.mdx
+│   ├── blog/
+│   ├── docs/
+│   ├── prompts/
+│   ├── rules/
+│   ├── skills/
 └── en/          # 英文（结构完全同步）
-
-### 添加新文档（必须严格执行）
-1. 在 zh/docs/ 和 en/docs/ 下创建同名 MDX 文件
-2. 更新对应 _meta.tsx 添加导航项
-3. 确保中英文内容结构完全一致
 
 ### mdx文档编写规范
 - 文件名：kebab-case

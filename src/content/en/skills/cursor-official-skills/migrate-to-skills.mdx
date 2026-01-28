@@ -1,0 +1,117 @@
+---
+title: "migrate-to-skills - Migrate to Skills"
+---
+
+import { Callout } from 'nextra/components'
+
+# migrate-to-skills
+
+<Callout type="info">
+**Skill Name**: migrate-to-skills  
+**Invocation**: `/migrate-to-skills` (manual only)  
+**Purpose**: Migrate rules and slash commands to Skills format
+</Callout>
+
+<Callout type="warning">
+This skill has `disable-model-invocation: true`, meaning the agent will not automatically invoke it. You must explicitly type `/migrate-to-skills` in the chat to use it.
+</Callout>
+
+## Skill Description
+
+Convert 'Applied intelligently' Cursor rules (.cursor/rules/*.mdc) and slash commands (.cursor/commands/*.md) to Agent Skills format (.cursor/skills/). Use when the user wants to migrate rules or commands to skills, convert .mdc rules to SKILL.md format, or consolidate commands into the skills directory.
+
+## Complete Skill Documentation
+
+This skill automates the migration of legacy rules and commands to the new Skills format. The complete SKILL.md contains:
+
+- **Migration Locations**: Project and user-level file discovery
+- **Finding Files to Migrate**: Rules (with specific criteria) and commands (all)
+- **Conversion Formats**: .mdc → SKILL.md and .md → SKILL.md transformations
+- **Detailed Workflow**: Step-by-step migration process
+- **Critical Requirement**: Preserve body content verbatim, no modifications
+
+### Key Highlights
+
+**What Gets Migrated:**
+
+**Dynamic Rules** - Migrate if:
+- Has `description` field
+- NO `globs` pattern
+- NO `alwaysApply: true`
+
+**Slash Commands** - All commands are migrated with `disable-model-invocation: true`
+
+**What Doesn't Get Migrated:**
+- Rules with `alwaysApply: true`
+- Rules with specific `globs` patterns
+- Files in `~/.cursor/worktrees`
+- Files in `~/.cursor/skills-cursor` (reserved for built-in skills)
+
+**Conversion Examples:**
+
+Rules: `.mdc` → `SKILL.md`
+```markdown
+# Before: .cursor/rules/my-rule.mdc
+---
+description: What this rule does
+alwaysApply: false
+---
+Body content...
+
+# After: .cursor/skills/my-rule/SKILL.md
+---
+name: my-rule
+description: What this rule does
+---
+Body content...
+```
+
+Commands: `.md` → `SKILL.md`
+```markdown
+# Before: .cursor/commands/commit.md
+# Commit current work
+Instructions...
+
+# After: .cursor/skills/commit/SKILL.md
+---
+name: commit
+description: Commit current work with standardized message format
+disable-model-invocation: true
+---
+# Commit current work
+Instructions...
+```
+
+## Migration Process
+
+1. Creates skills directories if needed
+2. Discovers files to migrate
+3. Converts each file to skill format
+4. **Preserves body content exactly** (no reformatting or improvements)
+5. Deletes original files after migration
+6. Provides undo capability if requested
+
+<Callout type="info">
+After migration, if you want to restore the original files, simply ask the agent to "undo the migration" or "restore the original files."
+</Callout>
+
+## Full Skill Content
+
+For the complete skill documentation with all details and workflow steps, see the original SKILL.md file at:
+
+`~/.cursor/skills-cursor/migrate-to-skills/SKILL.md`
+
+## Use Cases
+
+You can manually invoke this skill when you want to:
+
+- Migrate pre-Cursor 2.4 rules to new Skills format
+- Convert slash commands to skills
+- Migrate "applied intelligently" rules from `.cursor/rules/*.mdc`
+- Migrate commands from `.cursor/commands/*.md` to `.cursor/skills/`
+
+## Related Documentation
+
+- [Migration Guide from Rules to Skills](/en/docs/4-cursor-skills/migration-guide)
+- [Cursor Rules Guide](/en/docs/3-cursor-rules)
+- [Agent Skills Guide](/en/docs/4-cursor-skills)

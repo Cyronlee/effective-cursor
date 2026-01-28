@@ -1,0 +1,60 @@
+---
+title: "Cursor 官方技能"
+---
+
+import { Callout, Cards } from 'nextra/components'
+
+# Cursor 官方 Skills
+
+<Callout type="info">
+Cursor 内置了一系列官方 Skills，帮助你更高效地使用 AI 辅助编程。这些 Skills 存储在 `~/.cursor/skills-cursor/` 目录中，由 Cursor 自动管理。
+</Callout>
+
+## 官方 Skills 列表
+
+Cursor 提供以下官方 Skills：
+
+<Cards>
+  <Cards.Card icon={<span className="icon-[carbon--rule]" />} title="create-rule" href="./create-rule" />
+  <Cards.Card icon={<span className="icon-[carbon--skill-level]" />} title="create-skill" href="./create-skill" />
+  <Cards.Card icon={<span className="icon-[carbon--user-multiple]" />} title="create-subagent" href="./create-subagent" />
+  <Cards.Card icon={<span className="icon-[carbon--migrate]" />} title="migrate-to-skills" href="./migrate-to-skills" />
+  <Cards.Card icon={<span className="icon-[carbon--settings]" />} title="update-cursor-settings" href="./update-cursor-settings" />
+</Cards>
+
+## 如何使用官方 Skills
+
+### 方式一：自动触发
+
+Agent 会根据上下文自动判断是否需要调用某个 Skill。例如，当你说"帮我创建一个新的 rule"时，Agent 会自动使用 `create-rule` Skill。
+
+### 方式二：手动调用
+
+在 Agent 对话框中输入 `/`，然后搜索 Skill 名称即可手动调用：
+
+```
+/create-rule
+```
+
+### 方式三：禁用自动调用的 Skills
+
+某些 Skills 设置了 `disable-model-invocation: true`，这意味着它们不会被自动调用，只能通过 `/skill-name` 的方式显式触发。例如：
+
+- `create-subagent`
+- `migrate-to-skills`
+
+<Callout type="warning">
+**注意**: 请勿修改 `~/.cursor/skills-cursor/` 目录中的内容，这些文件由 Cursor 自动管理。如果你想创建自定义 Skills，请使用 `.cursor/skills/`（项目级）或 `~/.cursor/skills/`（用户级）目录。
+</Callout>
+
+## Skill 详细说明
+
+点击下方链接查看每个官方 Skill 的完整说明：
+
+| Skill 名称 | 用途 | 调用方式 |
+|---------|------|---------|
+| [create-rule](./create-rule) | 创建 Cursor Rules | 自动 / `/create-rule` |
+| [create-skill](./create-skill) | 创建 Agent Skills | 自动 / `/create-skill` |
+| [create-subagent](./create-subagent) | 创建自定义子代理 | `/create-subagent` |
+| [migrate-to-skills](./migrate-to-skills) | 将 Rules 和命令迁移到 Skills | `/migrate-to-skills` |
+| [update-cursor-settings](./update-cursor-settings) | 更新 Cursor 设置 | 自动 / `/update-cursor-settings` |

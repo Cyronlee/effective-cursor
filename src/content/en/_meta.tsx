@@ -20,6 +20,10 @@ export default {
     title: 'Cursor Rules',
     type: 'page',
   },
+  skills: {
+    title: 'Skills',
+    type: 'page',
+  },
   prompts: {
     title: 'Prompts',
     type: 'page',

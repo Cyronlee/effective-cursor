@@ -1,0 +1,126 @@
+---
+title: "Cursor Agent Skills"
+---
+
+import { Callout, Cards } from 'nextra/components'
+
+# Cursor Agent Skills
+
+<Callout type="info">
+Agent Skills is an open standard for extending specialized capabilities to AI agents. Skills encapsulate domain-specific knowledge and workflows that agents can invoke to perform specific tasks.
+</Callout>
+
+## What are Skills?
+
+Skills are portable, version-controlled packages that teach agents how to perform domain-specific tasks. Skills can contain both instructional content and executable scripts or code.
+
+- **Portable**: Skills work with any agent that supports the Agent Skills standard.
+- **Version-controlled**: Skills are stored as files that can be tracked in your repository or installed via GitHub links.
+- **Executable**: Skills can include scripts and code that agents execute to complete tasks.
+- **Progressive**: Skills load resources on-demand for efficient context usage.
+
+## How Skills Work
+
+When Cursor starts, it automatically discovers and loads skills from the skills directories, making them available to the agent. The agent sees all available skills and decides when to invoke them based on the current context.
+
+You can also manually invoke skills by typing `/` in the agent chat and searching for the skill name.
+
+## Skills Directories
+
+Skills are automatically loaded from the following locations:
+
+| Location | Scope |
+|----------|-------|
+| `.cursor/skills/` | Project-level |
+| `.claude/skills/` | Project-level (Claude compatible) |
+| `.codex/skills/` | Project-level (Codex compatible) |
+| `~/.cursor/skills/` | User-level (global) |
+| `~/.claude/skills/` | User-level (global, Claude compatible) |
+| `~/.codex/skills/` | User-level (global, Codex compatible) |
+
+Each skill should be a folder containing a `SKILL.md` file:
+
+```
+.cursor/
+└── skills/
+    └── my-skill/
+        └── SKILL.md
+```
+
+Skills can also include optional directories for scripts, reference files, and resources:
+
+```
+.cursor/
+└── skills/
+    └── deploy-app/
+        ├── SKILL.md
+        ├── scripts/
+        │   ├── deploy.sh
+        │   └── validate.py
+        ├── references/
+        │   └── REFERENCE.md
+        └── assets/
+            └── config-template.json
+```
+
+## SKILL.md Format
+
+Each skill is defined in a `SKILL.md` file with YAML frontmatter:
+
+````markdown
+---
+name: my-skill
+description: Brief description of what this skill does and when to use it.
+---
+
+# My Skill
+
+Detailed instructions for the agent.
+
+## When to Use
+
+- Use this skill when...
+- This skill is suitable for...
+
+## Instructions
+
+- Step-by-step guidance for the agent
+- Domain-specific conventions
+- Best practices and patterns
+- Use the question tool if clarification is needed
+````
+
+### Frontmatter Fields
+
+| Field | Required | Description |
+|-------|----------|-------------|
+| `name` | Yes | Skill identifier. Lowercase letters, numbers, and hyphens only. Must match parent folder name. |
+| `description` | Yes | Describes what the skill does and when to use it. Used by agent to determine relevance. |
+| `license` | No | License name or reference to accompanying license file. |
+| `compatibility` | No | Runtime requirements (system packages, network access, etc.). |
+| `metadata` | No | Arbitrary key-value map for additional metadata. |
+| `disable-model-invocation` | No | When `true`, the skill will only be used when explicitly invoked via `/skill-name`. The agent will not automatically invoke it based on context. |
+
+## Quick Navigation
+
+<Cards>
+  <Cards.Card icon={<span className="icon-[carbon--skill-level-advanced]" />} title="Official Skills" href="./cursor-official-skills" />
+</Cards>
+
+## Learn More
+
+Agent Skills is an open standard. Learn more at [agentskills.io](https://agentskills.io).
+
+## Related Documentation
+
+Want to learn more about creating and using Skills? Check out these guides:
+
+| Topic | Link | Use Case |
+|-------|------|----------|
+| How Skills Work | [View](/en/docs/4-cursor-skills/how-skills-work) | Understand skill loading and invocation mechanisms |
+| Best Practices | [View](/en/docs/4-cursor-skills/best-practices) | Learn how to write effective skills |
+| Skill Examples | [View](/en/docs/4-cursor-skills/examples) | See real-world skill examples |
+
+## Contributing
+
+If you have high-quality Cursor Skills to share, we welcome PRs to our [GitHub repository](https://github.com/cyronlee/effective-cursor).

@@ -1,0 +1,78 @@
+---
+title: "create-skill - Creating Agent Skills"
+---
+
+import { Callout } from 'nextra/components'
+
+# create-skill
+
+<Callout type="info">
+**Skill Name**: create-skill  
+**Invocation**: Auto-triggered / `/create-skill`  
+**Purpose**: Guide users through creating effective Agent Skills
+</Callout>
+
+## Skill Description
+
+Guides users through creating effective Agent Skills for Cursor. Use when the user wants to create, write, or author a new skill, or asks about skill structure, best practices, or SKILL.md format.
+
+## Complete Skill Documentation
+
+This skill provides comprehensive guidance on creating Agent Skills for Cursor. The complete SKILL.md contains:
+
+- **Requirements Gathering**: How to collect essential information before creating a skill
+- **Skill File Structure**: Directory layout and required files
+- **SKILL.md Format**: Frontmatter requirements and content structure
+- **Writing Effective Descriptions**: Critical best practices for skill discovery
+- **Core Authoring Principles**: Including conciseness, progressive disclosure, and appropriate degrees of freedom
+- **Common Patterns**: Template, examples, workflow, conditional workflow, and feedback loop patterns
+- **Utility Scripts**: When and how to include executable scripts
+- **Anti-Patterns to Avoid**: Common mistakes to prevent
+- **Complete Examples**: Full working examples of well-structured skills
+
+### Key Highlights
+
+**Storage Locations:**
+
+| Type | Path | Scope |
+|------|------|-------|
+| Personal | `~/.cursor/skills/skill-name/` | Available across all your projects |
+| Project | `.cursor/skills/skill-name/` | Shared with anyone using the repository |
+
+**Important:** Never create skills in `~/.cursor/skills-cursor/`. This directory is reserved for Cursor's internal built-in skills.
+
+**Description Best Practices:**
+
+1. Write in third person (injected into system prompt)
+2. Be specific and include trigger terms
+3. Include both WHAT the skill does and WHEN to use it
+
+**Core Principles:**
+
+- Keep SKILL.md under 500 lines
+- Use progressive disclosure for detailed content
+- Only add context the agent doesn't already have
+- Match specificity to task fragility
+
+## Full Skill Content
+
+For the complete skill documentation with all examples and detailed guidance, see the original SKILL.md file at:
+
+`~/.cursor/skills-cursor/create-skill/SKILL.md`
+
+The full content includes approximately 500 lines of detailed guidance covering all aspects of skill creation, from initial requirements gathering to final verification checklists.
+
+## Use Cases
+
+The agent will automatically invoke this skill when you want to:
+
+- Create a new skill
+- Write or author skills
+- Ask about skill structure
+- Learn about best practices
+- Understand SKILL.md format
+
+## Related Documentation
+
+- [Agent Skills Guide](/en/docs/4-cursor-skills)
+- [Skills Best Practices](/en/docs/4-cursor-skills/best-practices)

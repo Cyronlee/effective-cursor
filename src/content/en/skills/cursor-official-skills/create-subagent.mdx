@@ -1,0 +1,91 @@
+---
+title: "create-subagent - Creating Custom Subagents"
+---
+
+import { Callout } from 'nextra/components'
+
+# create-subagent
+
+<Callout type="info">
+**Skill Name**: create-subagent  
+**Invocation**: `/create-subagent` (manual only)  
+**Purpose**: Create custom subagents for specialized AI tasks
+</Callout>
+
+<Callout type="warning">
+This skill has `disable-model-invocation: true`, meaning the agent will not automatically invoke it. You must explicitly type `/create-subagent` in the chat to use it.
+</Callout>
+
+## Skill Description
+
+Create custom subagents for specialized AI tasks. Use when the user wants to create a new type of subagent, set up task-specific agents, configure code reviewers, debuggers, or domain-specific assistants with custom prompts.
+
+## Complete Skill Documentation
+
+This skill guides you through creating custom subagents for Cursor. The complete SKILL.md contains:
+
+- **When to Use Subagents**: Preserving context, specializing behavior, and reusing configurations
+- **Subagent Locations**: Project-level vs user-level storage and priority rules
+- **File Format**: YAML frontmatter structure and markdown body as system prompt
+- **Writing Effective Descriptions**: Critical for delegation decisions
+- **Example Subagents**: Code reviewer, debugger, and data scientist examples
+- **Creation Workflow**: Step-by-step process from scope decision to testing
+- **Best Practices**: Focus, detailed descriptions, version control, and proactive language
+- **Troubleshooting**: Common issues and solutions
+
+### Key Highlights
+
+**Subagent Locations:**
+
+| Location | Scope | Priority |
+|----------|-------|----------|
+| `.cursor/agents/` | Current project | Higher |
+| `~/.cursor/agents/` | All your projects | Lower |
+
+**File Format:**
+
+```markdown
+---
+name: code-reviewer
+description: Reviews code for quality and best practices
+---
+
+You are a code reviewer. When invoked, analyze the code and provide
+specific, actionable feedback on quality, security, and best practices.
+```
+
+**Description Best Practices:**
+
+- Be specific about capabilities
+- Include "use proactively" to encourage automatic delegation
+- Clearly state when to invoke the subagent
+
+## Subagents vs Skills
+
+| Feature | Subagent | Skill |
+|---------|----------|-------|
+| **Purpose** | Specialized AI assistant in isolated context | Provides guidance and knowledge to agent |
+| **System Prompt** | Has its own complete system prompt | No system prompt, just instructions |
+| **Context** | Independent conversation context | Shares main agent's context |
+| **Use Cases** | Isolated exploration, specialized behavior | Domain knowledge, workflow guidance |
+
+## Full Skill Content
+
+For the complete skill documentation with all examples and detailed guidance, see the original SKILL.md file at:
+
+`~/.cursor/skills-cursor/create-subagent/SKILL.md`
+
+## Use Cases
+
+You can manually invoke this skill when you want to:
+
+- Create a new subagent type
+- Set up task-specific agents
+- Configure code reviewers
+- Configure debuggers
+- Configure domain-specific assistants
+
+## Related Documentation
+
+- [Subagents Guide](/en/docs/5-cursor-subagents)
+- [Subagents Best Practices](/en/docs/5-cursor-subagents/best-practices)

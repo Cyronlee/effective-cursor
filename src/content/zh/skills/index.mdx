@@ -1,0 +1,126 @@
+---
+title: "Cursor Agent Skills"
+---
+
+import { Callout, Cards } from 'nextra/components'
+
+# Cursor Agent Skills
+
+<Callout type="info">
+Agent Skills 是一个用于为 AI 智能体扩展专门能力的开放标准。Skills 将特定领域的知识和工作流封装起来，智能体可以调用这些 Skills 来执行特定任务。
+</Callout>
+
+## 什么是 Skills？
+
+skills 是一系列可移植、支持版本控制的文件，用于让 Agent 学会如何执行特定领域的任务。Skills 既可以包含说明性指令，也可以包含 Agent 可运行的脚本或代码。
+
+- **可移植**: Skills 适用于任何支持 Agent Skills 标准的 Agent。
+- **受版本控制**: Skills 以文件形式存储，可以在你的代码仓库中追踪其变更，或通过 GitHub 仓库链接进行安装。
+- **可执行**: Skills 可以包含脚本和代码，由 Agent 执行以完成任务。
+- **渐进式**: Skills 按需加载资源，使上下文使用更加高效。
+
+## Skill 的工作原理
+
+Cursor 启动时，会自动从 Skills 目录中发现并加载 Skills，并将它们提供给 Agent 使用。Agent 会看到所有可用 Skills，并根据当前上下文决定何时调用它们。
+
+你也可以在 Agent 对话中输入 `/` 并搜索 Skills 名称来手动调用 Skills。
+
+## Skills 目录
+
+Skills 会自动从以下位置加载：
+
+| 位置 | 作用域 |
+|-----|-------|
+| `.cursor/skills/` | 项目级 |
+| `.claude/skills/` | 项目级（兼容 Claude） |
+| `.codex/skills/` | 项目级（兼容 Codex） |
+| `~/.cursor/skills/` | 用户级（全局） |
+| `~/.claude/skills/` | 用户级（全局，兼容 Claude） |
+| `~/.codex/skills/` | 用户级（全局，兼容 Codex） |
+
+每个 Skill 应为一个包含 `SKILL.md` 文件的文件夹：
+
+```
+.cursor/
+└── skills/
+    └── my-skill/
+        └── SKILL.md
+```
+
+Skills 还可以包含脚本、参考文件和资源等可选目录：
+
+```
+.cursor/
+└── skills/
+    └── deploy-app/
+        ├── SKILL.md
+        ├── scripts/
+        │   ├── deploy.sh
+        │   └── validate.py
+        ├── references/
+        │   └── REFERENCE.md
+        └── assets/
+            └── config-template.json
+```
+
+## SKILL.md 文件格式
+
+每个 Skill 都在带有 YAML 前置信息（frontmatter）的 `SKILL.md` 文件中定义：
+
+````markdown
+---
+name: my-skill
+description: 简要描述此技能的功能及使用时机。
+---
+
+# 我的技能
+
+为 Agent 提供的详细指令。
+
+## 使用时机
+
+- 在以下情况使用此技能...
+- 此技能适用于...
+
+## 指令
+
+- 为 Agent 提供的分步指导
+- 特定领域的约定
+- 最佳实践和模式
+- 如需向用户澄清需求,请使用提问工具
+````
+
+### Frontmatter 字段
+
+| 字段 | 必填 | 说明 |
+|-----|------|------|
+| `name` | Yes | Skill 标识符。仅限小写字母、数字和连字符。必须与父文件夹名称一致。 |
+| `description` | Yes | 描述 Skill 的作用及其使用场景。由代理用于判断相关性。 |
+| `license` | No | 许可证名称或对随附许可证文件的引用。 |
+| `compatibility` | No | 运行环境要求（系统软件包、网络访问等）。 |
+| `metadata` | No | 用于额外元数据的任意键值映射。 |
+| `disable-model-invocation` | No | 当为 `true` 时，该 Skill 仅会在通过 `/skill-name` 显式调用时才会被使用。代理不会基于上下文自动调用它。 |
+
+## 快速导航
+
+<Cards>
+  <Cards.Card icon={<span className="icon-[carbon--skill-level-advanced]" />} title="官方 Skills" href="./cursor-official-skills" />
+</Cards>
+
+## 了解更多
+
+Agent Skills 是一项开放标准。详见 [agentskills.io](https://agentskills.io)。
+
+## 相关文档
+
+想要深入了解如何创建和使用 Skills？参考以下指南：
+
+| 主题 | 链接 | 适合场景 |
+|-----|------|---------|
+| Skills 工作原理 | [查看](/zh/docs/4-cursor-skills/how-skills-work) | 理解 Skill 的加载和调用机制 |
+| 编写 Skill 最佳实践 | [查看](/zh/docs/4-cursor-skills/best-practices) | 学习如何写出高效的 Skill |
+| Skill 示例 | [查看](/zh/docs/4-cursor-skills/examples) | 查看实际的 Skill 案例 |
+
+## 贡献
+
+如果你有优质的 Cursor Skills 想要分享，欢迎提交 PR 到我们的 [GitHub 仓库](https://github.com/cyronlee/effective-cursor)。
