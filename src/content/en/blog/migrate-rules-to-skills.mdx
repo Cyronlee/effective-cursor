@@ -1,0 +1,498 @@
+---
+title: "Cursor Finally Supports Skills - Migrate from Rules with One Command"
+---
+
+# Cursor Finally Supports Skills - Migrate from Rules with One Command
+
+**On January 22, 2026, Cursor finally released Agent Skills in the stable version!**
+
+This feature has been tested in the nightly channel for a while, and now all users can use it. If you're already using Cursor Rules to customize AI behavior, congratulations—you're ahead of most developers. And **Agent Skills** brings a completely new way of extension that might change how you organize AI instructions.
+
+This article will help you understand the essential differences between Rules and Skills, and how to migrate intelligently—**not simply converting all Rules to Skills, but putting each in its proper place**.
+
+## Rules and Skills: Two Different Extension Mechanisms
+
+Let's clarify a core concept first: **Rules and Skills are not replacements, but complements**.
+
+### Rules: Static Context
+
+Rules provide **persistent instructions** that the Agent sees at the start of every conversation. Best for:
+
+- 🔧 **Project commands**: `npm run build`, `bun test`, and other common commands
+- 📐 **Code style**: ES modules vs CommonJS, naming conventions, etc.
+- 📁 **Project structure**: Where API routes go, how components are organized
+- 🔗 **Reference examples**: Pointing to canonical examples in your codebase
+
+```markdown
+# .cursor/rules/project-conventions.mdc
+---
+alwaysApply: true
+---
+# Project Conventions
+
+## Commands
+- `bun run build` : Build the project
+- `bun run typecheck` : Run type checking
+- `bun run test` : Run tests
+
+## Code Style
+- Use ES modules (import/export), not CommonJS (require)
+- Reference `components/Button.tsx` for standard component structure
+
+## Workflow
+- Always run typecheck after code changes
+- API routes go in `app/api/` directory
+```
+
+### Skills: Dynamic Capabilities
+
+Skills are **on-demand** specialized capability packages, loaded only when the Agent determines them relevant. Best for:
+
+- ⚡ **Custom commands**: Reusable workflows triggered via `/command-name`
+- 🔄 **Automation flows**: Combined with Hooks for automation
+- 📚 **Domain knowledge**: Detailed instructions for specific tasks (deployment, database migrations, etc.)
+
+```markdown
+# .cursor/skills/deploy-app/SKILL.md
+---
+name: deploy-app
+description: Deploy the application to staging or production. Use when deploying code, releasing, or switching environments.
+---
+# Deploy Application
+
+Deploy the application using the following scripts.
+
+## Usage
+
+Run the deployment script: `scripts/deploy.sh <environment>`
+
+Where `<environment>` is `staging` or `production`.
+
+## Pre-deployment Validation
+
+Run the validation script before deploying: `python scripts/validate.py`
+```
+
+## Why Does This Distinction Matter?
+
+The key is **context window efficiency**:
+
+| Feature | Rules | Skills |
+|---------|-------|--------|
+| Loading | Every conversation start | On-demand |
+| Context usage | Always occupied | Only when needed |
+| Best for | Short, frequently used | Detailed, specific scenarios |
+| Trigger | Auto-applied | Agent decides or `/command` |
+
+If you put everything in Rules, the Agent's context window gets filled with instructions that might not be needed. Skills' on-demand loading lets you provide rich capabilities without sacrificing efficiency.
+
+## Limitations of the Official Migration Command
+
+Cursor 2.4 includes a built-in `/migrate-to-skills` command, but its migration strategy is quite simple:
+
+**Will migrate**:
+- Rules set to "Apply Intelligently" (has `description`, no `globs`, no `alwaysApply: true`)
+- All slash commands
+
+**Won't migrate**:
+- Rules with `alwaysApply: true`
+- Rules with `globs` patterns
+
+This mechanical migration **doesn't consider whether the content itself is suitable for being a Skill**. For example, an "Apply Intelligently" rule containing project-level code style conventions would actually be better kept as a Rule.
+
+## Smart Migration: Putting Rules and Skills in Their Proper Places
+
+Based on [Cursor's official best practices](https://cursor.com/blog/agent-best-practices), I've designed a smarter migration strategy.
+
+### Decision Criteria
+
+**Content that should remain as Rules**:
+
+1. **Project command lists**: build, test, lint, and other common commands
+2. **Code style conventions**: naming rules, import patterns, file organization
+3. **References to canonical files**: pointing to standard examples in codebase
+4. **Workflow instructions**: like "run typecheck after code changes"
+5. **Short and frequently used**: content that might be needed in every conversation
+
+**Content that should migrate to Skills**:
+
+1. **Detailed operation flows**: multi-step deployment, release, database migration, etc.
+2. **Scenario-specific instructions**: detailed knowledge needed only in specific tasks
+3. **Reusable workflows**: PR creation, issue handling, code review, etc.
+4. **Capabilities with scripts**: flows requiring script execution or complex commands
+5. **Long content**: detailed instructions exceeding 50 lines
+
+### Smart Migration Command
+
+Enter the following prompt in Agent chat to perform smart migration analysis:
+
+````markdown
+## Task: Intelligently Analyze and Migrate Cursor Rules to Skills
+
+Please analyze all Cursor Rules in the project and decide which should migrate to Skills and which should remain as Rules based on best practices.
+
+### Scope
+
+Scan rule files in these locations:
+- Project level: `{workspaceFolder}/**/.cursor/rules/*.mdc`
+- Project commands: `{workspaceFolder}/**/.cursor/commands/*.md`
+- User commands: `~/.cursor/commands/*.md`
+
+Ignore:
+- `~/.cursor/worktrees` directory
+- `~/.cursor/skills-cursor` directory (system built-in)
+
+### Classification Criteria
+
+**Keep as Rules** - content with these characteristics:
+1. Project command lists (build, test, lint, etc.)
+2. Code style conventions (naming, imports, file organization)
+3. References to canonical files in the project
+4. Short workflow instructions (< 30 lines)
+5. High-frequency content that might be needed in every conversation
+6. Rules with `alwaysApply: true`
+7. Rules with `globs` patterns (for specific file types)
+
+**Migrate to Skills** - content with these characteristics:
+1. Detailed multi-step operation flows (deployment, release, migration, etc.)
+2. Detailed instructions needed only in specific scenarios
+3. Reusable workflows (PR, issue, review, etc.)
+4. Flows containing or referencing executable scripts
+5. Long detailed guides (> 50 lines)
+6. Content that was originally slash commands
+
+### Execution Steps
+
+1. **Scan Phase**
+   - List all found rule and command files
+   - Read each file's content
+
+2. **Analysis Phase**
+   - Classify each file
+   - Output analysis table:
+
+   | File | Current Type | Recommendation | Reason |
+   |------|--------------|----------------|--------|
+   | xxx.mdc | Rule | Keep | Contains project command list, frequently used |
+   | yyy.mdc | Rule | Migrate | Detailed deployment flow, specific scenario |
+   | zzz.md | Command | Migrate | Reusable PR workflow |
+
+3. **Confirmation Phase**
+   - Present analysis results, wait for user confirmation
+   - User can adjust individual file handling
+
+4. **Execution Phase** (after user confirmation)
+   - For files marked "Migrate":
+     - Create `SKILL.md` in `.cursor/skills/{name}/`
+     - Keep original content, add correct frontmatter
+     - Add `disable-model-invocation: true` for slash commands
+     - Delete original file
+   - For files marked "Keep":
+     - Make no changes
+     - If it's an "Apply Intelligently" rule but content suits Rules, suggest adding `alwaysApply: true`
+
+5. **Report Phase**
+   - Output migration summary
+   - List newly created Skills
+   - List retained Rules
+   - Provide undo instructions
+
+### SKILL.md Format
+
+Migrated Skill file format:
+
+```markdown
+---
+name: skill-name
+description: Describe what this skill does and when to use it
+disable-model-invocation: true  # Only add this line for slash commands
+---
+# Title
+
+Original content (unchanged)...
+```
+
+### Notes
+
+- `name` field must be lowercase letters and hyphens
+- `description` is crucial for Agent to discover the skill, must be accurate
+- **Strictly preserve original content**, do not modify, reformat, or "improve"
+- If user requests undo, perform reverse operation to restore original files
+````
+
+### Migration Example
+
+Suppose you have this Rules structure:
+
+```
+.cursor/rules/
+├── project-commands.mdc      # Project command list
+├── code-style.mdc            # Code style conventions
+├── deployment-guide.mdc      # Detailed deployment flow
+├── api-conventions.mdc       # API conventions (for *.api.ts)
+└── pr-workflow.mdc           # PR creation workflow
+```
+
+After smart migration:
+
+```
+.cursor/
+├── rules/
+│   ├── project-commands.mdc  # Keep - frequently used commands
+│   ├── code-style.mdc        # Keep - code style conventions
+│   └── api-conventions.mdc   # Keep - has globs constraint
+└── skills/
+    ├── deployment-guide/
+    │   └── SKILL.md          # Migrate - detailed flow, specific scenario
+    └── pr-workflow/
+        └── SKILL.md          # Migrate - reusable workflow
+```
+
+## Best Practice Recommendations
+
+### 1. Start Simple
+
+> Only add rules when you find the Agent repeatedly making the same mistakes. Don't over-optimize before you truly understand your patterns.
+
+Don't rush to create lots of Rules or Skills. Observe the Agent's behavior and add targeted ones.
+
+### 2. Keep Rules Concise
+
+Rules should focus on essentials:
+- ✅ Reference files instead of copying content
+- ✅ List key commands and patterns
+- ❌ Don't copy entire style guides (use linter)
+- ❌ Don't document all possible commands (Agent already knows common tools)
+
+### 3. Provide Rich Details in Skills
+
+Skills can contain detailed step-by-step instructions, script references, edge case handling, etc. Since they only load when needed, don't worry about context usage.
+
+### 4. Commit to Git
+
+Commit both Rules and Skills to Git so the whole team benefits. When the Agent makes mistakes, update the corresponding rule or skill.
+
+### 5. Enhance Skills with Hooks
+
+Skills can be combined with Hooks for powerful automation, like:
+
+```json
+// .cursor/hooks.json
+{
+  "version": 1,
+  "hooks": {
+    "stop": [{
+      "command": "bun run .cursor/hooks/verify-tests.ts"
+    }]
+  }
+}
+```
+
+This Hook can make the Agent keep working until all tests pass.
+
+## Summary
+
+| | Rules | Skills |
+|---|-------|--------|
+| **Position** | Static context | Dynamic capabilities |
+| **Loading** | Every conversation | On-demand |
+| **Best for** | Short, frequent, normative | Detailed, specific scenarios, procedural |
+| **Format** | `.mdc` files | `SKILL.md` + optional scripts |
+| **Trigger** | Auto/Globs | Agent decides / `/command` |
+
+**Migration is not the goal—making AI understand and execute your intent more efficiently is**.
+
+Use the smart migration strategy in this article to let your Rules and Skills each do their job, building an efficient Cursor development environment.
+
+## Advanced: Auto-Extract Rules and Skills from Codebase
+
+If you're starting from scratch, or want Cursor to automatically analyze your project and generate appropriate Rules and Skills, use the following command.
+
+This command will scan your codebase, analyze project structure, tech stack, configuration files, and code patterns, then automatically generate:
+- **Rules**: Project-level conventions and standards
+- **Skills**: Reusable workflows and specialized capabilities
+
+### Codebase Scan and Extract Command
+
+Enter the following prompt in Agent chat:
+
+````markdown
+## Task: Scan Codebase and Auto-Extract Rules and Skills
+
+Please comprehensively analyze the current project's codebase and automatically generate appropriate Cursor Rules and Agent Skills.
+
+### Step 1: Project Analysis
+
+Scan and analyze the following:
+
+1. **Project Configuration**
+   - `package.json` / `Cargo.toml` / `pyproject.toml` and other dependency files
+   - `tsconfig.json` / `jsconfig.json` and other compiler configs
+   - `.eslintrc` / `prettier.config` / `biome.json` and other code style configs
+   - `Dockerfile` / `docker-compose.yml` and other container configs
+   - CI/CD config files (`.github/workflows/`, `.gitlab-ci.yml`, etc.)
+
+2. **Project Structure**
+   - Directory organization (src/, app/, lib/, components/, etc.)
+   - File naming conventions (kebab-case, camelCase, PascalCase)
+   - Module organization patterns (by feature, by domain, by layer)
+
+3. **Code Patterns**
+   - Import/export style (ES modules, CommonJS)
+   - Component structure (functional, class, composition API)
+   - State management (Redux, Zustand, Pinia, Context)
+   - API call patterns (fetch, axios, SWR, React Query)
+   - Error handling patterns
+   - Test organization
+
+4. **Common Commands**
+   - Extract from package.json scripts
+   - Extract from Makefile
+   - Extract from README
+
+5. **Existing Documentation**
+   - README.md
+   - CONTRIBUTING.md
+   - docs/ directory
+   - Existing .cursor/rules/ files
+
+### Step 2: Generate Rules
+
+Based on analysis, generate the following Rules (in `.cursor/rules/` directory):
+
+**1. project-overview.mdc** (always apply)
+```markdown
+---
+alwaysApply: true
+---
+# Project Overview
+
+## Tech Stack
+[Extract from analysis]
+
+## Project Structure
+[Extract directory descriptions from analysis]
+
+## Common Commands
+[Extract from package.json scripts, etc.]
+```
+
+**2. code-style.mdc** (always apply)
+```markdown
+---
+alwaysApply: true
+---
+# Code Style
+
+[Code style conventions extracted from analysis]
+[Reference canonical example files in the project]
+```
+
+**3. File-type specific Rules** (using globs)
+```markdown
+---
+globs: ["*.tsx", "*.jsx"]
+---
+# React Component Conventions
+
+[Specific conventions for this file type]
+```
+
+### Step 3: Generate Skills
+
+Based on analysis, generate the following Skills (in `.cursor/skills/` directory):
+
+**1. Generate workflow Skills based on project type**
+
+For example, if it's a Web project:
+- `create-component/SKILL.md`: Standard flow for creating new components
+- `create-api-route/SKILL.md`: Standard flow for creating API routes
+- `add-feature/SKILL.md`: Complete flow for adding new features
+
+If there's CI/CD:
+- `deploy/SKILL.md`: Deployment flow
+- `release/SKILL.md`: Release flow
+
+If there are tests:
+- `add-tests/SKILL.md`: Add tests to existing code
+- `tdd/SKILL.md`: Test-driven development flow
+
+**2. Git workflow Skills**
+- `pr/SKILL.md`: Create Pull Request
+- `fix-issue/SKILL.md`: Standard flow for fixing issues
+
+### Step 4: Output Report
+
+After completion, output:
+
+1. **Analysis Summary**
+   - Identified tech stack
+   - Identified code patterns
+   - Identified project conventions
+
+2. **Generated Files List**
+   | Type | File Path | Description |
+   |------|-----------|-------------|
+   | Rule | .cursor/rules/xxx.mdc | Description |
+   | Skill | .cursor/skills/xxx/SKILL.md | Description |
+
+3. **Recommendations**
+   - Content that may need manual additions
+   - Suggested additional Rules or Skills
+
+### Notes
+
+- **Don't copy entire documents**: Rules should reference files, not copy content
+- **Keep it concise**: Rules focus on key points, detailed content goes in Skills
+- **Use canonical examples**: Reference standard files in the project as examples in Rules
+- **Follow naming conventions**: File names use kebab-case, Skill name uses lowercase letters and hyphens
+- **Provide accurate descriptions**: This is crucial for Agent to discover Skills
+````
+
+### Usage Example
+
+After running the command, Cursor will automatically analyze your project and generate a structure like this:
+
+```
+.cursor/
+├── rules/
+│   ├── project-overview.mdc     # Project overview, tech stack, common commands
+│   ├── code-style.mdc           # Code style conventions
+│   ├── react-components.mdc     # React component conventions (globs: *.tsx)
+│   └── api-routes.mdc           # API route conventions (globs: */api/*)
+└── skills/
+    ├── create-component/
+    │   └── SKILL.md             # Standard flow for creating components
+    ├── create-api-route/
+    │   └── SKILL.md             # Flow for creating API routes
+    ├── pr/
+    │   └── SKILL.md             # Flow for creating PRs
+    └── deploy/
+        └── SKILL.md             # Deployment flow
+```
+
+This way, you have a Cursor configuration customized to your actual project, not a generic template copied from the internet.
+
+## Summary
+
+| | Rules | Skills |
+|---|-------|--------|
+| **Position** | Static context | Dynamic capabilities |
+| **Loading** | Every conversation | On-demand |
+| **Best for** | Short, frequent, normative | Detailed, specific scenarios, procedural |
+| **Format** | `.mdc` files | `SKILL.md` + optional scripts |
+| **Trigger** | Auto/Globs | Agent decides / `/command` |
+
+**Migration is not the goal—making AI understand and execute your intent more efficiently is**.
+
+This article provides two practical commands:
+1. **Smart Migration Command**: Analyze existing Rules, intelligently decide to keep or migrate
+2. **Codebase Scan Command**: Start from scratch, auto-extract project conventions to generate Rules and Skills
+
+Let your Rules and Skills each do their job, building an efficient Cursor development environment.
+
+---
+
+> 📌 **Note**: Agent Skills feature requires Cursor 2.4 or later.
+
+> 💬 Questions or suggestions? Feel free to discuss in comments or submit an Issue to the [GitHub repo](https://github.com/cyronlee/effective-cursor).
