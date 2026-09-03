@@ -1,0 +1,133 @@
+---
+title: "Harness Engineering"
+---
+
+import { Callout } from 'nextra/components'
+
+# Harness Engineering
+
+> Designing the environment around the agent — not just the prompts
+
+## Definition
+
+**Harness engineering** is the practice of designing everything around the model that determines how an agent behaves: its configuration, tools, execution environment, context, orchestration, and verification. The working definition, popularized by Mitchell Hashimoto in early 2026:
+
+> Anytime you find an agent makes a mistake, engineer a solution so it never makes that mistake again.
+
+Every agent failure is treated as a harness bug. The response is not to complain about the model, but to tighten the harness: add a rule, restrict a tool, add a hook, or add a verification step so the mistake cannot recur the same way.
+
+## The Six Harness Layers
+
+Harness layers are the checklist you design against. For each layer we list what it is, its Cursor counterpart, and what to watch out for.
+
+### 1. Configuration
+
+| Aspect | Detail |
+|--------|--------|
+| **What it is** | System prompts, AGENTS.md, CLAUDE.md, rule files, skill files, subagent prompts |
+| **Cursor counterpart** | `AGENTS.md`, `.cursor/rules/*.mdc`, `.cursor/skills/`, `.cursor/agents/*.md` |
+| **Watch out for** | Drift — configuration only helps while it matches reality. Revisit it when the codebase changes |
+
+This is the layer most teams start with, and it is covered in depth by [How Rules Work](/en/docs/3-agent-harness/how-rules-work), [AGENTS.md Cross-Tool Standard](/en/docs/3-agent-harness/agents-md) and [Writing Best Practices](/en/docs/3-agent-harness/best-practices).
+
+### 2. Tools
+
+| Aspect | Detail |
+|--------|--------|
+| **What it is** | Everything the agent can do: shell, file editing, grep, text processing, browser |
+| **Cursor counterpart** | Bash, built-in edit and search tools, MCP servers, browser tool |
+| **Watch out for** | Tool sprawl — every added tool is also added attack surface and context cost; disable what you do not need |
+
+### 3. Execution Environment
+
+| Aspect | Detail |
+|--------|--------|
+| **What it is** | Sandboxing, isolated worktrees, runtimes, observability |
+| **Cursor counterpart** | Git worktrees, Auto-Run, Cloud Agents VM with `.cursor/environment.json` snapshots |
+| **Watch out for** | A too-permissive sandbox cannot compensate for a fuzzy success criterion — boundaries and contracts must come from elsewhere |
+
+A *runnable* environment with explicit build/test commands is the prerequisite for agent self-correction; see [Verify Closed Loop](/en/docs/3-agent-harness/verify-closed-loop).
+
+### 4. Context Machinery
+
+| Aspect | Detail |
+|--------|--------|
+| **What it is** | Compaction, memory, just-in-time (JIT) retrieval |
+| **Cursor counterpart** | Auto-compact, `.memory/`, progressive-disclosure skills |
+| **Watch out for** | Context is a budget — retrieve on demand instead of loading everything up front |
+
+See [Memory Management](/en/docs/3-agent-harness/memory-management) for the local-memory pattern.
+
+### 5. Orchestration
+
+| Aspect | Detail |
+|--------|--------|
+| **What it is** | Subagent spawning, planner/generator/evaluator splits, handoffs between agents |
+| **Cursor counterpart** | Subagents (`explore`, `bash`, `browser`), parallel flows, Cloud handoffs |
+| **Watch out for** | Over-delegation — isolating a trivial task costs more than it saves |
+
+See [Subagents](/en/docs/3-agent-harness/subagents).
+
+### 6. Hooks and Middleware
+
+| Aspect | Detail |
+|--------|--------|
+| **What it is** | Deterministic interventions: pre-commit checks, destructive-action interception, audit |
+| **Cursor counterpart** | `.cursor/hooks.json` (preToolUse, afterFileEdit, stop, ...), plugin hooks |
+| **Watch out for** | Hooks must be fast and predictable, or they become noise the agent learns to ignore |
+
+See [Hooks: Deterministic Constraints](/en/docs/3-agent-harness/hooks).
+
+## Four Design Facets That Cannot Substitute for Each Other
+
+Optimi's harness engineering guide stresses that four design facets are **not interchangeable** — improving one does not fix gaps in the others:
+
+| Facet | Question It Answers |
+|-------|--------------------|
+| **Task contract** | What exactly should be done, and what are the success criteria? |
+| **Repository context** | Can the agent read and understand the codebase? |
+| **Tool & execution boundaries** | What may the agent touch, and what is off-limits? |
+| **Evaluation** | How do we know the result is correct? |
+
+- A good contract cannot compensate for an unreadable repository.
+- A permissive sandbox cannot compensate for vague success criteria.
+- A task contract example: `allowed_paths`, `required_checks`, `change_budget`, `non_goals`.
+
+## Where Harness Engineering Is Heading
+
+### Agentic Harness Engineering (AHE)
+
+AHE treats the harness itself as an evolvable artifact, driven by observability. Its three pillars:
+
+- **Component observability** — every editable harness component has a file-level representation (rules, hooks, skills are all just files).
+- **Experience observability** — distill millions of tokens of agent traces into consumable evidence.
+- **Decision observability** — feed that evidence into the next round of harness decisions.
+
+In the AHE paper, 10 rounds of automated harness evolution improved Terminal-Bench 2 pass@1 from **69.7% to 77.0%**, outperforming manually designed harnesses. The evolved harnesses also transferred across model families, suggesting they encode general engineering experience rather than benchmark tricks.
+
+### Code as Agent Harness
+
+A complementary viewpoint: code is no longer just the *output* of an agent — it is the operational substrate through which agents reason, act, model their environment, and verify by execution. This perspective organizes the harness into three layers:
+
+| Layer | Role |
+|-------|------|
+| **Harness Interface** | Code connects reasoning, action, and environment modeling |
+| **Harness Mechanisms** | Planning, memory, tool use, feedback-driven control |
+| **Scaling** | Single agent → multiple agents, coordinated through shared code artifacts, review, and verification |
+
+Open challenges include verifying under incomplete feedback, improving harnesses without regressions, and keeping multi-agent state consistent.
+
+<Callout type="info">
+Practical takeaway: the harness is a first-class engineering artifact. Write it as files, version it, observe how it performs, and evolve it — exactly like the code it produces.
+</Callout>
+
+## Reference Sources
+
+- `materials/01-harness/idam-ai-harness-engineering.md`
+- `materials/01-harness/optimi-harness-engineering-coding-agents.md`
+- `materials/01-harness/arxiv-2604-agentic-harness-engineering.md`
+- `materials/01-harness/arxiv-2605-code-as-agent-harness.md`
+
+## Next Steps
+
+Now that you see the full harness, the next pages go layer by layer, starting with the configuration layer: [How Rules Work](/en/docs/3-agent-harness/how-rules-work).

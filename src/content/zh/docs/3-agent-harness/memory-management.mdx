@@ -8,6 +8,8 @@ import { Callout, FileTree } from 'nextra/components'
 
 > 构建本地知识库，让 AI Agent 渐进式披露
 
+记忆与上下文检索属于 harness 的 **context machinery 层**（与 compaction、JIT retrieval 同级的能力）。这里的渐进式披露（progressive disclosure）与 Skills 的「按需加载」是同一思想：Agent 不需要一上来就吃下全部知识，而是先拿到指针，需要时再读全文。
+
 ## 你需要记忆吗？
 
 **对于大多数项目，Rules 就够了。**
@@ -23,7 +25,7 @@ import { Callout, FileTree } from 'nextra/components'
 - 希望 AI 从过去的实现中学习
 
 <Callout type="info">
-记忆是渐进式披露的——Agent 根据需要读取。如果某些规则必须始终生效，请使用 [Always Apply Rules](./how-rules-work#rules-应用方式)。
+记忆是渐进式披露的——Agent 根据需要读取。如果某些规则必须始终生效，请使用 [Always Apply Rules](/zh/docs/3-agent-harness/how-rules-work#rules-应用方式)。
 </Callout>
 
 ## 本地记忆实践
@@ -174,6 +176,6 @@ graph LR
 
 ## 下一步
 
-- [Rules 的工作原理](./how-rules-work) - 了解 Rules 基础
-- [Rules 编写最佳实践](./best-practices) - 编写有效的 Rules
+- [Rules 的工作原理](/zh/docs/3-agent-harness/how-rules-work) - 了解 Rules 基础
+- [Rules 编写最佳实践](/zh/docs/3-agent-harness/best-practices) - 编写有效的 Rules
 - [上下文管理](/zh/docs/4-workflow/context-management) - 更广泛的上下文策略

@@ -1,0 +1,110 @@
+---
+title: "Harness 工程化"
+---
+
+import { Callout } from 'nextra/components'
+
+# Harness 工程化
+
+> 围绕 Agent 设计环境，把「希望 Agent 怎么做」变成环境里已有的约束
+
+## 什么是 Harness Engineering
+
+Harness engineering 是**围绕 coding agent 的环境设计**：task contract、仓库上下文、工具与执行边界、反馈、发布控制。
+
+它的核心工作定义来自 Hashimoto 2026 年的名句：
+
+<Callout type="info">
+**Anytime you find an agent makes a mistake, engineer a solution so it never makes that mistake again.**  
+每当发现 agent 犯错，就用工程手段解决它，让它永不再犯。
+</Callout>
+
+换句话说，harness engineering 把 scaffolding 当作**一等工程产物**：每次 agent 犯错，就收紧 harness。公开讨论也因此从「选哪个模型」转向「设计脚手架」——同一个模型在不同 harness 下的表现可以差很多。
+
+## 六层组件清单
+
+一个典型的 harness 由六层组件构成，每一层我们给出「是什么 + Cursor 对应 + 注意事项」：
+
+### 1. Configuration（配置层）
+
+- **是什么**：system prompts、AGENTS.md、CLAUDE.md、skill 文件、subagent prompts。
+- **Cursor 对应**：AGENTS.md、.cursor/rules、.cursor/skills、子代理指令。
+- **注意事项**：配置是「声明式约束」，靠 agent 自觉遵循；内容要具体、简短，避免稀释注意力。载体选择详见 [AGENTS.md 跨工具标准](/zh/docs/3-agent-harness/agents-md)。
+
+### 2. Tools（工具层）
+
+- **是什么**：bash、文件编辑、grep、MCP、浏览器。
+- **Cursor 对应**：内置工具 + MCP servers + 浏览器。
+- **注意事项**：工具面决定 agent 的能力边界；MCP 按需加载可省 token；危险工具要配 hooks 拦截。
+
+### 3. Execution environment（执行环境）
+
+- **是什么**：sandbox、隔离 worktree、runtimes、observability。
+- **Cursor 对应**：worktree、Auto-Run、Cloud Agents 隔离 VM、.cursor/environment.json 环境快照。
+- **注意事项**：可运行环境 + 明确 build/test 命令是 agent 自我纠错的前提（详见 [验证闭环](/zh/docs/3-agent-harness/verify-closed-loop)）。
+
+### 4. Context machinery（上下文机制）
+
+- **是什么**：compaction、memory、JIT retrieval。
+- **Cursor 对应**：自动压缩、.memory/、渐进式披露（Progressive Disclosure）。
+- **注意事项**：LLM 没有跨 completion 记忆，上下文机制决定「它还记得什么、需要时能否找到」。详见 [记忆管理](/zh/docs/3-agent-harness/memory-management)。
+
+### 5. Orchestration（编排层）
+
+- **是什么**：subagent 生成、planner/generator/evaluator、handoffs。
+- **Cursor 对应**：Subagents、主 Agent 委派、本地 ↔ Cloud 会话 handoff。
+- **注意事项**：任务分解粒度要匹配收益——简单任务隔离成本可能更慢。详见 [Subagents](/zh/docs/3-agent-harness/subagents)。
+
+### 6. Hooks and middleware（钩子与中间件）
+
+- **是什么**：pre-commit、destructive-action 拦截、格式化与审计。
+- **Cursor 对应**：.cursor/hooks.json（preToolUse、afterFileEdit、stop 等）。
+- **注意事项**：这是唯一的**确定性约束**层——不靠 agent 自觉，而是强制执行。详见 [Hooks 确定性约束](/zh/docs/3-agent-harness/hooks)。
+
+## 四个不可互相替代的设计面
+
+harness 设计有四个独立维度，**任何一项都不能补偿另一项的缺失**：
+
+| 设计面 | 说明 | 缺失时的后果 |
+|--------|------|-------------|
+| **Task contract** | 范围、约束、成功标准（allowed_paths、required_checks、non_goals） | agent 拿到模糊目标，产出不可判定的结果 |
+| **Repository context** | 仓库可读性、项目指令、决策注释 | 好的 contract 也不能补偿不可读的仓库 |
+| **Tool / execution boundaries** | 工具集与 sandbox 边界 | 宽松的 sandbox 不能补偿模糊的成功标准 |
+| **Evaluation** | 验证信号与统一入口 | agent 只能「生成后碰运气」 |
+
+<Callout type="warning">
+常见误配：只加规则（configuration）却没有任何评估（evaluation）信号，或只收紧 sandbox 却把 success criteria 留给 agent 猜。四个面缺一不可。
+</Callout>
+
+## AHE：让 Harness 自我进化
+
+Agentic Harness Engineering（AHE，arXiv 2604.25850）提出用**可观测性驱动 harness 级别的自动进化**，三大支柱：
+
+- **Component observability**：每个可编辑 harness 组件都有 file-level 表示（rules、skills、prompts 都是文件）；
+- **Experience observability**：把百万 token 轨迹蒸馏为可消费的证据；
+- **Decision observability**：用证据支撑下一轮 harness 修改决策。
+
+实证结果：10 轮 AHE 迭代把 Terminal-Bench 2 pass@1 从 **69.7% 提升到 77.0%**，超过人工设计的 harness；且进化出的 harness 可跨模型家族迁移——说明它沉淀的是通用工程经验，而非 benchmark 特化。这与「看到错误就改 rule/harness」的日常实践是同一逻辑的自动化版本。
+
+## 代码即 Agent Harness
+
+另一个视角（arXiv 2605.18747，Code as Agent Harness survey）指出：代码不再是单纯的生成目标，而是 agent 推理、行动、环境建模、基于执行验证的**操作基底**。该视角提出三层结构：
+
+| 层 | 内容 |
+|----|------|
+| **Harness Interface** | 代码连接推理、行动、环境建模 |
+| **Harness Mechanisms** | planning、memory、tool use、feedback-driven control |
+| **Scaling** | 单 agent → 多 agent，共享代码产物支撑协调、review、验证 |
+
+这解释了为什么「让仓库对 agent 友好」本身就是 harness 工程：严格类型、有意义的测试、一致的模块模式、决策点注释、AGENTS.md——这些 signal 让 agent 从「编造」变成「基于事实推理」。
+
+## 下一步
+
+理解了 harness 的分层，接下来进入具体的 configuration 层：先看 [Rules 工作原理](/zh/docs/3-agent-harness/how-rules-work)，再了解 [AGENTS.md 跨工具标准](/zh/docs/3-agent-harness/agents-md)。
+
+## 参考来源
+
+- materials/01-harness/idam-ai-harness-engineering.md
+- materials/01-harness/optimi-harness-engineering-coding-agents.md
+- materials/01-harness/arxiv-2604-agentic-harness-engineering.md
+- materials/01-harness/arxiv-2605-code-as-agent-harness.md

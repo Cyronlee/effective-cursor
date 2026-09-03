@@ -1,0 +1,101 @@
+---
+title: "验证闭环"
+---
+
+import { Callout } from 'nextra/components'
+
+# 验证闭环
+
+> Plan → Execute → Verify，通过才交付
+
+## 核心叙事：Plan → Execute → Verify
+
+一个可靠的 agent 工作循环分为三阶段：
+
+| 阶段 | 内容 | 关键产物 |
+|------|------|---------|
+| **Plan** | 明确范围、约束、成功标准 | task contract（允许改哪里、必须过哪些检查、不做哪些事） |
+| **Execute** | 改代码、跑工具 | 变更 + 中间验证 |
+| **Verify** | 统一 verify 入口或 CI；失败则修，通过才交付 | 验证证据（测试通过、lint 干净） |
+
+<Callout type="info">
+**可运行环境 + 明确 build/test 命令是 agent 自我纠错的前提**。没有验证信号，agent 只能「生成后碰运气」——它不知道自己的输出是否真的能构建、能通过测试。这解释了为什么「工具就绪」（第 2 章）与「验证闭环」是 harness 的一体两面。
+</Callout>
+
+## Plan：task contract
+
+任务开始前先用文字把成功标准固定下来。一个典型的 task contract 结构：
+
+```markdown
+# Task Contract
+- 目标：把支付流程接入新的 PSP（模拟环境）
+- allowed_paths: src/payments/**, src/shared/api/**
+- required_checks: pnpm check、pnpm test:e2e 支付相关用例
+- change_budget: 改 <= 20 个文件
+- non_goals: 不做支付 UI 重构、不动数据库 schema
+```
+
+好的 contract 不能补偿不可读的仓库；同样，宽松的 sandbox 不能补偿模糊的成功标准。详见 [Harness 工程化](/zh/docs/3-agent-harness/harness-engineering) 的「四个不可互相替代的设计面」。
+
+## Verify：统一验证入口
+
+「每个 agent 自己猜怎么验证」会得到不可靠、不一致的结果。更优的做法是提供**一个 LLM 可调用的统一 verify 入口**。
+
+### 案例：Spotify Honk 的 Verify tool
+
+Spotify 的内部背景 coding agent Honk 维护一个 **Verify tool**：它是 LLM 可调用的单一验证入口，底层 fan-out 到 Maven / Yarn / Bazel / 自定义脚本，把验证从 agent 手里抽象出来：
+
+```
+┌─────────────┐
+│  Agent      │
+│   │         │
+│   ▼         │
+│  Verify     │  ← LLM 可调用的统一入口
+│   │         │
+│   ▼         │
+│  Maven / Yarn / Bazel / scripts
+└─────────────┘
+```
+
+agent runtime 与 verification runtime 解耦：agent 推 branch，CI 抽象层做验证，通过后才允许开 PR。这让「大量 agent 并行工作但质量可控」成为可能。
+
+### 在 Cursor 中的落地
+
+不一定要像 Honk 那样建设专门的验证平台，同一思路可以小成本落地：
+
+- 在 AGENTS.md 里写死标准命令：`pnpm check` 表示什么、`pnpm test` 跑什么（见 [AGENTS.md](/zh/docs/3-agent-harness/agents-md)）；
+- 让 Hooks 在每次编辑后自动触发快的验证（如 formatter / lint），见 [Hooks](/zh/docs/3-agent-harness/hooks)；
+- 大型改动至少要求 `pnpm build` 与相关单测通过，再交付或开 PR。
+
+## Cloud 验证链路
+
+Cloud Agents 把「可运行环境」推向极致：每个 agent 在隔离 VM 中运行，带完整桌面环境：
+
+1. **环境快照**：提交 `.cursor/environment.json`，把环境固化为可复用快照；
+2. **启动 dev server**：在 VM 中启动应用；
+3. **浏览器验证**：用 browser 工具打开页面、点击 UI、确认行为符合预期；
+4. **PR 附证据**：验证通过后再推 PR，并附上截图 / 视频 / 日志。
+
+这正是「Plan → Execute → Verify」在最大范围上的实现——验证不再是口头承诺，而是带证据的可复现过程。
+
+## 警告：无验证信号的仓库会削弱闭环
+
+<Callout type="warning">
+
+**无测试、无标准命令的仓库会削弱闭环**。Honk 的经验表明，没有充分测试（如部分数据管道项目）时，「验证—修正」循环会退化为「生成—碰运气」：agent 改了却无法确认对不对，长期看只会积累隐性错误。
+
+</Callout>
+
+## 互链
+
+- [第 2 章 · 工具链](/zh/docs/2-scaffolding/ci-cd) - lint / test / CI 是验证信号的基础设施；
+- [第 4 章 · 工作流](/zh/docs/4-workflow) - 如何把验证嵌入日常开发流程；
+- [本章 · Hooks](/zh/docs/3-agent-harness/hooks) - repair loop 的确定性触发机制；
+- [第 5 章 · 反馈](/zh/docs/5-feedback) - 从反馈中迭代 harness。
+
+## 参考来源
+
+- materials/06-engineering-loop/plan-execute-verify-and-environment.md
+- materials/04-legacy-brownfield/spotify-honk-verify-tool.md
+- materials/01-harness/optimi-harness-engineering-coding-agents.md
+- materials/03-cursor-official/cursor-docs-cloud-agents.md

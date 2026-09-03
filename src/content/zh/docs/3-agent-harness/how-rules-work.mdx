@@ -1,0 +1,104 @@
+---
+title: "Rules 工作原理"
+---
+
+import { Callout, FileTree } from 'nextra/components'
+
+# Rules 工作原理
+
+> 理解项目 Rules 如何影响 AI 的行为
+
+## 什么是 Rules
+
+Rules 为 AI Agent 提供 **system-level 指令**。大型语言模型在不同 completion 之间没有记忆，Rules 在**提示级别**提供持久、可重用的上下文——解决「每次 Chat 都要重复输入相同指令」的问题。
+
+按 2026 年的视角，Cursor 中的规则类载体有四类：
+
+| 类型 | 存储位置 | 作用范围 | 适用场景 |
+|------|---------|---------|---------|
+| **Project Rules** | `.cursor/rules/*.mdc` | 当前代码库 | 项目特定规范，路径级精准匹配 |
+| **User Rules** | 全局配置 | 所有 Cursor 项目 | 个人偏好与通用约定 |
+| **Team Rules** | 控制台管理 | 团队所有项目 | 企业级规范（Team/Enterprise） |
+| **AGENTS.md** | 项目根目录 | 当前代码库 | **跨工具**项目契约（第一推荐载体） |
+
+<Callout type="info">
+**2026 推荐**：AGENTS.md 已成为跨工具标准——20+ 工具（Cursor、Codex、Copilot、Windsurf、Gemini CLI、Aider 等）原生读取，6 万+ 仓库采用。它是项目级契约的「第一推荐」载体；Project Rules（.mdc）则适合需要 globs 精准匹配的 path-specific 补充。完整对比与组合方式见 [AGENTS.md 跨工具标准](/zh/docs/3-agent-harness/agents-md)。
+</Callout>
+
+本文重点介绍 Project Rules（`.cursor/rules`）。它的优势：
+
+- ✅ **受版本控制** - 可 Git 管理、协作共享
+- ✅ **精准匹配** - 通过 globs 限定生效范围
+- ✅ **沉淀领域知识** - 将与代码库相关的专业知识固化
+
+## Rules 文件夹结构
+
+Project Rules 存放在 `.cursor/rules/` 目录下，每个 Rule 对应一个 `.mdc` 文件：
+
+<FileTree>
+  <FileTree.Folder name=".cursor" defaultOpen>
+    <FileTree.Folder name="rules" defaultOpen>
+      <FileTree.File name="global-rules.mdc" />
+      <FileTree.File name="routing-rules.mdc" />
+      <FileTree.File name="api-rules.mdc" />
+      <FileTree.File name="ui-rules.mdc" />
+    </FileTree.Folder>
+  </FileTree.Folder>
+</FileTree>
+
+## Rules 应用方式
+
+通过 frontmatter 配置可以控制 Rules 的应用方式：
+
+| 类型 | 配置 | 何时应用 |
+|------|------|---------|
+| **Always Apply** | `alwaysApply: true` | 应用于每个聊天会话 |
+| **Apply Intelligently** | `alwaysApply: false` + `description` | Agent 根据描述判断相关性后应用 |
+| **Apply to Specific Files** | `globs: ["pattern"]` | 当文件匹配指定模式时应用 |
+| **Apply Manually** | 无特殊配置 | 在对话中被 @ 提及时应用（如 `@my-rule`） |
+
+## Rules 文件结构
+
+每个 `.mdc` 文件包含 frontmatter 元数据和正文内容：
+
+````markdown
+---
+description: "This rule provides standards for frontend components"
+globs: ["src/components/**"]
+alwaysApply: false
+---
+
+- 使用 TypeScript 定义所有组件
+- 组件必须使用 PascalCase 命名
+- 导出的函数必须指定返回类型
+````
+
+### Frontmatter 字段说明
+
+| 字段 | 类型 | 说明 |
+|------|------|------|
+| `description` | string | Rule 描述，供 AI 判断是否应用此 Rule |
+| `globs` | string[] | 文件匹配模式，限定 Rule 作用范围 |
+| `alwaysApply` | boolean | 是否始终应用于每个聊天会话 |
+
+<Callout type="warning">
+如果 `alwaysApply` 为 `true`，该 Rule 会应用于每个聊天会话。否则，Agent 将根据 description 判断是否需要应用。始终生效的 Rule 数量要克制——每次会话生效的 Rules 建议控制在 3 个以内。
+</Callout>
+
+## 旧 .cursorrules 格式说明
+
+`.cursorrules` 是 legacy 格式：Cursor 仍兼容它，但：
+
+- 不支持 globs 精准匹配、没有 frontmatter 结构；
+- 维护方式（单文件、无类型区分）已过时。
+
+**建议**：把已有 `.cursorrules` 迁移到 Project Rules（`.mdc`，需要路径匹配时）或 AGENTS.md（需要跨工具共享时）。
+
+## 下一步
+
+现在你已经理解了 Rules 的工作原理，接下来学习[如何编写高质量的 Rules](/zh/docs/3-agent-harness/best-practices)；需要把项目级契约做成跨工具标准时，直接看 [AGENTS.md](/zh/docs/3-agent-harness/agents-md)。
+
+## 参考来源
+
+- materials/02-agents-md-rules/cursor-docs-rules.md
+

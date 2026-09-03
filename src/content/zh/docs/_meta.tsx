@@ -5,7 +5,7 @@ export default {
   '0-tool-setup': '0. 工具就绪',
   '1-tech-stack': '1. 技术选型',
   '2-scaffolding': '2. 工程架构',
-  '3-cursor-rules': '3. 制定 Cursor Rules',
+  '3-agent-harness': '3. Agent Harness',
   '4-workflow': '4. 规范工作流',
   '5-feedback': '5. 反馈与迭代',
 } satisfies MetaRecord

@@ -8,8 +8,10 @@ import { Callout } from 'nextra/components'
 
 > 让 AI 严格执行你项目的独特要求
 
+本章的编写原则属于 **harness configuration 层**：它们对 AGENTS.md 与 .mdc 两类载体通用，既适用于 Cursor 的 Project Rules，也适用于跨工具的项目契约。关于载体选择见「AGENTS.md 跨工具标准」，Rules 基础见「Rules 工作原理」。
+
 <Callout type="info">
-本文假设你已了解 [Rules 的工作原理](./how-rules-work)，包括 Rules 类型、应用方式和文件结构。
+本文假设你已了解 [Rules 的工作原理](/zh/docs/3-agent-harness/how-rules-work)，包括 Rules 类型、应用方式和文件结构。
 </Callout>
 
 ## 核心理念
@@ -83,7 +85,7 @@ Cursor Rules 的唯一使命是：**让 AI 生成的代码符合你项目的独�
 
 ### 3. 分文件、精准匹配 <a id="split-files"></a>
 
-在 `.cursor/rules/` 目录下按主题拆分 Rules 文件，使用 `globs` 限定作用域。关于 Rules 的四种应用方式，请参考 [Rules 应用方式](./how-rules-work#rules-应用方式)。
+在 `.cursor/rules/` 目录下按主题拆分 Rules 文件，使用 `globs` 限定作用域。关于 Rules 的四种应用方式，请参考 [Rules 应用方式](/zh/docs/3-agent-harness/how-rules-work#rules-应用方式)。
 
 | Rules 文件 | 作用范围 | 何时触发 |
 |---------|---------|---------|
@@ -150,7 +152,7 @@ const { data, error, isLoading } = useSWR(
 
 ## Rules 结构模板
 
-关于 `.mdc` 文件的完整格式规范，请参考 [Rules 文件结构](./how-rules-work#rules-文件结构)。一个完整的 Rules 文件通常包含以下部分：
+关于 `.mdc` 文件的完整格式规范，请参考 [Rules 文件结构](/zh/docs/3-agent-harness/how-rules-work#rules-文件结构)。一个完整的 Rules 文件通常包含以下部分：
 
 ```markdown
 ---
@@ -202,4 +204,4 @@ Project Rules 必须提交到 Git，这样可以：
 
 ## 下一步
 
-了解了编写原则后，接下来我们看看[在开发过程中何时编写这些 Rules](./development-sequence)。
+了解了编写原则后，接下来我们看看[在开发过程中何时编写这些 Rules](/zh/docs/3-agent-harness/development-sequence)，以及如何把项目级契约放进 [AGENTS.md](/zh/docs/3-agent-harness/agents-md)。

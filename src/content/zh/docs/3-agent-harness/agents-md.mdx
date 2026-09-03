@@ -1,0 +1,127 @@
+---
+title: "AGENTS.md 跨工具标准"
+---
+
+import { Callout, FileTree } from 'nextra/components'
+
+# AGENTS.md 跨工具标准
+
+> 项目根目录的「README for agents」
+
+## 定位：README for agents
+
+AGENTS.md 是放在**项目根目录**的约定 markdown 文件：给 coding agents 提供安装、构建、测试、约定、边界等操作上下文。它本质上是「给 agent 看的 README」—— README 给人讲项目怎么用，AGENTS.md 给 agent 讲项目怎么干活。
+
+它是 **vendor-neutral 的开放约定**：
+
+- 被 **20+ 工具**原生读取：Cursor、Codex、Copilot、Windsurf、Gemini CLI、Aider 等；
+- 已有 **60,000+ 仓库**采用；
+- 与 Linux Foundation Agentic AI Foundation 相关治理关联。
+
+<Callout type="info">
+**为什么叫「第一推荐」载体**：写一份 AGENTS.md，所有兼容工具开箱即用，不用为每个工具各维护一份规则。Cursor 的 Project Rules 更精准（globs、四种应用方式），但那是 path-specific 的补充；项目级的基础契约应该放 AGENTS.md。
+</Callout>
+
+## 为什么需要它
+
+**纯 prompt 靠不住**——「Improve performance, make no mistakes」这类模糊指令很难得到可靠结果。同时，**代码无法自解释的地方**需要外部上下文：
+
+- 架构选择背后的原因（为什么用 A 不用 B）；
+- 外部约束（依赖的公司内部服务、合规要求）；
+- 「不要动 X，因为……」的 do-not-touch 路径及原因；
+- 构建 / 测试 / PR 的标准流程。
+
+Agent 不从需求工作，而是**对现有代码做模式匹配**。弱类型、无测试、不一致模式、无决策注释的仓库，agent 只能编造；AGENTS.md 提供代码无法推断的上下文，是 agent-friendly 信号之一。
+
+## 内容模板
+
+一个 50 行左右的 AGENTS.md 通常包含以下部分：
+
+<FileTree>
+  <FileTree.File name="AGENTS.md" />
+</FileTree>
+
+````markdown
+# AGENTS.md
+
+## Dev Environment
+- Node 22+ / pnpm 9
+- Python 3.12（数据脚本用）
+- 本地开发：pnpm dev，端口 5173
+
+## Build & Test
+- Build: pnpm build
+- Lint: pnpm lint（提交前必须通过）
+- Test: pnpm test（单元）+ pnpm test:e2e（E2E）
+- Fast check: pnpm check（lint + typecheck + 单测，agent 每步改动后跑）
+
+## PR Requirements
+- 提交信息遵循 Conventional Commits
+- 必须附测试或说明为什么不需要
+- CI 全绿才可合并
+
+## Do Not Touch
+- `src/generated/` - 自动生成，改它会被覆盖（由 codegen 重新生成）
+- `infra/prod/` - 生产配置，走变更管理流程
+
+## Architecture Conventions
+- 页面组件放 `src/app/`，业务逻辑放 `src/features/`，跨模块共享放 `src/shared/`
+- 数据获取统一走 `@/shared/api` 封装，禁止直接 fetch
+- 状态管理用 Zustand，复杂异步用 TanStack Query
+
+## Don't Break These
+- 所有 export 必须带 JSDoc（公司 API 文档自动生成依赖它）
+- 禁止在 reducer 中做副作用
+````
+
+核心是**把「栈 + 命令 + 边界 + 约定」这四个最常被问的东西写清楚**，而不是写满泛泛而谈的规范。编写原则见 [编写最佳实践](/zh/docs/3-agent-harness/best-practices)。
+
+## 与 Rules / Skills / MCP 的分工
+
+| 载体 | 定位 | 典型内容 |
+|------|------|---------|
+| **AGENTS.md** | 可移植项目契约，多数 agent 会话开始时读 | 50 行：栈、命令、do-not-touch、约定 |
+| **Rules（.mdc）** | 同内容 + 路径级覆盖 | globs 限定：api-rules 只管 `src/clients/**` |
+| **Skills** | 可重复工作流，按需加载 | review 流程、release 步骤、迁移脚本 |
+| **MCP** | 运行时工具与数据 | 数据库、内部 API、实时数据 |
+
+经验法则：**每个 session 都需要 → rules 或 AGENTS.md；仅部分任务 → skill；需要 live data → MCP。**
+
+推荐组合（避免重复）：
+
+```
+AGENTS.md          → 50 行：stack、commands、do-not-touch
+.cursor/rules/     → path-specific 补充
+.cursor/skills/    → 程序性深度
+MCP servers        → 运行时工具与数据
+```
+
+## CLAUDE.md bridge
+
+Claude Code 不原生读取 AGENTS.md。跑 Claude Code 的团队，在 `CLAUDE.md` 加一行引用即可：
+
+```markdown
+# CLAUDE.md
+
+遵循项目根目录的 AGENTS.md 中的约定与命令。
+```
+
+或用 symlink 指向 AGENTS.md。多数团队以 AGENTS.md 为 canonical，工具专用文件只放差异。
+
+## 嵌套与优先级
+
+- **sub-AGENTS.md**：子目录可放自己的 AGENTS.md，覆盖子项目约定；
+- **AGENTS.override.md**：项目级覆盖全局 AGENTS.md（多层级标准时使用）。
+
+## 下一步
+
+写好 AGENTS.md 后，把它和 [Rules 的工作原理](/zh/docs/3-agent-harness/how-rules-work) 一起构成 configuration 层；[Hooks](/zh/docs/3-agent-harness/hooks) 可以把其中的硬性要求变成确定性约束。
+
+## 参考来源
+
+- materials/02-agents-md-rules/agents-md-spec.md
+- materials/02-agents-md-rules/redhat-agents-md-and-skills.md
+- materials/02-agents-md-rules/webreference-rules-vs-agents-vs-skills.md
+- materials/02-agents-md-rules/getunblocked-claude-vs-agents-vs-cursor.md
+- materials/04-legacy-brownfield/agentpatterns-codebase-readiness.md
+

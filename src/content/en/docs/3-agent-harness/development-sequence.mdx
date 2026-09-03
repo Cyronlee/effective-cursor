@@ -1,22 +1,28 @@
 ---
-title: "Rules Iteration and Accumulation"
+title: "Rules and Conventions Across Development Phases"
 ---
 
-# Rules Iteration and Accumulation
+import { Callout } from 'nextra/components'
+
+# Rules and Conventions Across Development Phases
 
 > Write the right rules at the right time
 
 ## Core Philosophy
 
-Cursor Rules are not something you write once and forget. They are a **system of standards that accumulates as your project evolves**.
+Project conventions are not something you write once and forget. They are a **system of standards that accumulates as your project evolves**.
 
 Many people want to write a perfect set of rules at the project's beginning, only to end up with rules that are either too vague or disconnected from actual architecture. The correct approach is: **Architecture first, rules follow**.
 
+<Callout type="info">
+**AGENTS.md is the project's "root file".** Establish its first version right after scaffolding — stack, commands, do-not-touch paths — then extend it in the same phases below. This keeps the cross-tool contract in sync with harness evolution. See [AGENTS.md Cross-Tool Standard](/en/docs/3-agent-harness/agents-md).
+</Callout>
+
 ## When to Write Rules
 
-### Phase 1: After Scaffolding is Complete
+### Phase 1: After Scaffolding Is Complete
 
-When you finish project initialization and determine the basic tech stack and directory structure, immediately write **global rules**.
+When you finish project initialization and determine the basic tech stack and directory structure, immediately write **global rules** and the first `AGENTS.md`.
 
 | Timing | Rules to Add |
 |--------|--------------|
@@ -26,7 +32,7 @@ When you finish project initialization and determine the basic tech stack and di
 | Toolchain configured | lint, build, test commands |
 
 ```markdown
-# Example: Global rules to add immediately after project init
+# Example: Add immediately after project init
 
 ## Tech Stack
 - Vite + React + TypeScript
@@ -59,7 +65,7 @@ Whenever you add new architectural layers or functional modules to your project,
 | State management | `store-rules.mdc` | Store organization, state update patterns |
 | Form handling | `form-rules.mdc` | Form validation, error handling, submission flow |
 
-**Key principle: When architecture decisions land, rules must sync.**
+**Key principle: when architecture decisions land, rules must sync.**
 
 ```mermaid
 graph LR
@@ -81,13 +87,11 @@ In daily development, when you find AI repeatedly making certain types of mistak
 | AI handles errors incorrectly | Add error handling code examples |
 | AI ignores auth checks | Add `<ProtectedRoute>` usage standards |
 
-**Iteration principle: Problem → Rule → Verify → Optimize**
+**Iteration principle: Problem → Rule → Verify → Optimize** — the same harness-engineering loop described in [Verify Closed Loop](/en/docs/3-agent-harness/verify-closed-loop).
 
 ## Recommended Rule Composition
 
 A healthy rule system should follow the **"less is more"** principle. Too many rules not only consume tokens but also conflict with each other, reducing AI execution effectiveness.
-
-### Recommended Rule Structure
 
 | Rule Type | Quantity | Description |
 |-----------|----------|-------------|
@@ -102,7 +106,7 @@ A healthy rule system should follow the **"less is more"** principle. Too many r
 - 1 Global Rules (always active)
 - 1-2 File-matched Rules (auto-triggered based on current file)
 
-This means you need to carefully design `globs` patterns to ensure rules are **mutually exclusive or have low overlap**:
+This means you need to carefully design `globs` patterns so rules are **mutually exclusive or have low overlap**:
 
 ```yaml
 # ✅ Good design: globs are mutually exclusive, won't trigger together
@@ -140,7 +144,7 @@ npm create vite@latest my-app -- --template react-ts
 npx shadcn@latest init
 ```
 
-**Immediately create**: `global-rules.mdc`
+**Immediately create**: `AGENTS.md` (root file) + `global-rules.mdc`
 
 ### Week 1: Building Core Architecture
 
@@ -174,5 +178,4 @@ npx shadcn@latest init
 
 ## Next Steps
 
-Sometimes you may need to write rules from scratch for a new tech stack. Next, we'll share [meta prompts for generating Rules](./meta-prompt) to help you quickly generate rule frameworks.
-
+Sometimes you may need to write rules from scratch for a new tech stack. Next, we'll share [meta prompts for generating Rules](/en/docs/3-agent-harness/meta-prompt) to help you quickly generate rule frameworks.

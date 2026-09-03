@@ -8,6 +8,8 @@ import { Callout, Tabs } from 'nextra/components'
 
 > 用 AI 来帮你写 AI 的规则
 
+这套流程同样可用于生成 **AGENTS.md 骨架**：只需把模板里的「规则」替换为「项目契约」（技术栈、build/test 命令、目录职责、do-not-touch 路径），输出即可作为跨工具的项目文档。
+
 ## 什么是元提示词
 
 当你面对一个新项目或新技术栈时，从零开始编写 Cursor Rules 可能会让人无从下手。**元提示词（Meta Prompt）** 本质上是"用来生成提示词的提示词"——你告诉 AI 你的项目情况，AI 帮你生成适合的 Cursor Rules。
@@ -169,12 +171,12 @@ UI 库：[Shadcn/UI / Ant Design / Material UI]
 
 ## 参考资源
 
-- [Cursor Rules 最佳实践](./best-practices) - 规则编写的核心原则
-- [Rules 编写实战顺序](./development-sequence) - 何时编写什么规则
+- [Cursor Rules 最佳实践](/zh/docs/3-agent-harness/best-practices) - 规则编写的核心原则
+- [Rules 编写实战顺序](/zh/docs/3-agent-harness/development-sequence) - 何时编写什么规则
+- [AGENTS.md 跨工具标准](/zh/docs/3-agent-harness/agents-md) - 用同一模板生成项目契约
 - [Vite + Shadcn/UI 规则集](/zh/rules/vite-shadcnui) - 前端完整规则示例
 - [Spring Boot 规则集](/zh/rules/springboot) - 后端完整规则示例
 
 ## 下一步
 
-完成 Rules 的编写后，接下来我们将进入[第四章：规范工作流](../4-workflow)，学习如何将这些规则融入日常开发流程。
-
+完成 Rules 的编写后，接下来我们将进入[第四章：规范工作流](/zh/docs/4-workflow)，学习如何将这些规则融入日常开发流程。

@@ -1,12 +1,16 @@
 ---
-title: "Managing Memory with Rules"
+title: "Managing Memory"
 ---
 
 import { Callout, FileTree } from 'nextra/components'
 
-# Managing Memory with Rules
+# Managing Memory
 
-> Build a local knowledge base for progressive disclosure by AI Agent
+> Build a local knowledge base for progressive disclosure by the agent
+
+<Callout type="info">
+Memory and context retrieval belong to the **context machinery** layer of the harness (see [Harness Engineering](/en/docs/3-agent-harness/harness-engineering)). Progressive disclosure — the agent reads more only when a task needs it — is the same idea as Skills' on-demand loading: keep the baseline light, retrieve the depth lazily.
+</Callout>
 
 ## Do You Need Memory?
 
@@ -18,12 +22,13 @@ import { Callout, FileTree } from 'nextra/components'
 | **Use Cases** | Coding standards, tech stack conventions | Business knowledge, troubleshooting history |
 
 Memory is suitable when:
+
 - Extensive business domain knowledge needs AI understanding
 - Need to track troubleshooting history
 - Want AI to learn from past implementations
 
 <Callout type="info">
-Memory uses progressive disclosure—Agent reads based on needs. If certain rules must always apply, use [Always Apply Rules](./how-rules-work#rule-application-methods).
+Memory uses progressive disclosure — the agent reads based on needs. If certain rules must always apply, use [Always Apply Rules](/en/docs/3-agent-harness/how-rules-work#the-four-application-modes).
 </Callout>
 
 ## Our Local Memory Practice
@@ -31,8 +36,8 @@ Memory uses progressive disclosure—Agent reads based on needs. If certain rule
 We chose **local files** over embedding solutions:
 
 - **No tool call limits** - Cursor Agent can freely read local files
-- **Cost-effective with powerful models** - With Opus models, using more context in one request is economical
-- **Version controlled** - Memory evolves with your codebase
+- **Cost-effective with powerful models** - with Opus-class models, more context in one request is economical
+- **Version controlled** - memory evolves with your codebase
 
 ### Directory Structure
 
@@ -56,12 +61,13 @@ We chose **local files** over embedding solutions:
 
 ## Core Design: File System as Interaction Protocol
 
-**Key insight**: Rules only need to tell Agent "what .memory directory is". The detailed usage protocol lives in `.memory/README.md`.
+**Key insight**: Rules only need to tell the agent "what the `.memory` directory is". The detailed usage protocol lives in `.memory/README.md`.
 
 Benefits:
-- ✅ **Rules don't need dynamic maintenance** - Memory usage conventions can evolve independently in .memory
-- ✅ **Self-documenting** - Agent naturally gets the latest instructions by reading README.md
-- ✅ **Decoupled** - Memory system can expand independently without affecting Rules
+
+- ✅ **Rules don't need dynamic maintenance** - Memory usage conventions evolve independently inside `.memory`
+- ✅ **Self-documenting** - Agent gets the latest instructions by reading README.md
+- ✅ **Decoupled** - The memory system expands without touching rules
 
 ### Rules Configuration (Minimal)
 
@@ -82,7 +88,7 @@ Before starting complex tasks, read `.memory/README.md` to understand usage.
 ````markdown
 # Project Memory Knowledge Base
 
-This directory is the project memory, storing knowledge that AI Agent needs.
+This directory is the project memory, storing knowledge the AI Agent needs.
 
 ## 📖 Usage Protocol
 
@@ -152,7 +158,7 @@ pending → paid → shipped → delivered
 
 ## Progressive Disclosure
 
-Agent reads memory incrementally based on task needs:
+The agent reads memory incrementally based on task needs:
 
 ```mermaid
 graph LR
@@ -174,6 +180,6 @@ graph LR
 
 ## Next Steps
 
-- [How Rules Work](./how-rules-work) - Understand Rules basics
-- [Rules Writing Best Practices](./best-practices) - Write effective Rules
+- [How Rules Work](/en/docs/3-agent-harness/how-rules-work) - Understand Rules basics
+- [Rules Writing Best Practices](/en/docs/3-agent-harness/best-practices) - Write effective Rules
 - [Context Management](/en/docs/4-workflow/context-management) - Broader context strategies

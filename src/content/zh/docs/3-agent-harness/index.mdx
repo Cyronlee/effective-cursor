@@ -1,0 +1,80 @@
+---
+title: "Agent Harness 总览"
+---
+
+import { Cards, Callout } from 'nextra/components'
+
+# Agent Harness 总览
+
+> 让 AI 生成的代码被控制在可控范围内
+
+在前面的章节中，我们完成了工具配置、技术选型和工程架构。现在项目骨架已经搭建完成，是时候把**模型之外的一切**设计好——这就是本章的主角：**Agent Harness**。
+
+## 核心公式：Agent = Model + Harness
+
+**Agent 是模型与 Harness 的组合**。模型负责推理，而 Harness 是模型之外的一切：
+
+| Harness 组成 | 作用 |
+|-------------|------|
+| **System prompts / Rules** | 告诉 Agent「在这个项目里我们这样做」 |
+| **AGENTS.md / CLAUDE.md** | 跨工具的项目契约（栈、命令、边界） |
+| **Skill 文件** | 可复用的程序性知识与流程 |
+| **Subagent 指令** | 子任务的委派与分工 |
+| **工具** | bash、文件编辑、搜索、MCP、浏览器 |
+| **Sandbox / 执行环境** | 隔离、worktree、可运行环境 |
+| **Hooks** | 策略、格式化、审计、危险操作拦截 |
+| **反馈回路与恢复路径** | 验证、repair loop、跨会话记忆 |
+
+<Callout type="info">
+**关键判断**：一个**一般模型 + 优秀 Harness** 的表现，通常稳定胜过**优秀模型 + 糟糕 Harness**。原始模型不是 agent——有了状态、工具执行、反馈回路和可执行约束，才成为 agent。这也是为什么本章重心不在「选哪个模型」，而在「怎么搭脚手架」。
+</Callout>
+
+## Harness 组件一览
+
+下表把通用 Harness 组件映射到 Cursor 中的具体对应物（详见各子页）：
+
+| Harness 组件 | 含义 | Cursor 中的对应物 |
+|-------------|------|------------------|
+| **Configuration** | 系统指令、规则、契约 | AGENTS.md、.cursor/rules、Skills、子代理指令 |
+| **Tools** | Agent 可调用的工具集 | bash、文件编辑、MCP、浏览器 |
+| **Execution environment** | 运行与隔离 | worktree、Auto-Run、Cloud Agents VM |
+| **Context machinery** | 上下文与记忆管理 | compaction、.memory/、按需加载 |
+| **Orchestration** | 任务分解与编排 | Subagents、planner/generator/evaluator |
+| **Hooks & middleware** | 确定性约束与拦截 | hooks.json、preToolUse、afterFileEdit |
+| **Verification** | 验证与纠错信号 | lint/test/CI、统一 verify 入口 |
+
+## 本章阅读路径
+
+本章 10 个子页按「先理解、再配置、后闭环」组织：
+
+<Cards>
+  <Cards.Card title="Harness 工程化" href="/zh/docs/3-agent-harness/harness-engineering" description="Harness 的六层组件与四个不可替代的设计面" />
+  <Cards.Card title="Rules 工作原理" href="/zh/docs/3-agent-harness/how-rules-work" description="四类 Rules、四种应用方式与 .mdc 结构" />
+  <Cards.Card title="AGENTS.md 跨工具标准" href="/zh/docs/3-agent-harness/agents-md" description="跨工具项目契约：构建、测试、边界、约定" />
+  <Cards.Card title="编写最佳实践" href="/zh/docs/3-agent-harness/best-practices" description="六条编写原则：具体、简短、示例、迭代" />
+  <Cards.Card title="开发阶段演进" href="/zh/docs/3-agent-harness/development-sequence" description="项目演进中 Harness 逐步沉淀的节奏" />
+  <Cards.Card title="记忆管理" href="/zh/docs/3-agent-harness/memory-management" description=".memory/ 渐进式披露与上下文检索" />
+  <Cards.Card title="元提示词" href="/zh/docs/3-agent-harness/meta-prompt" description="三步生成 Rules / AGENTS.md 骨架" />
+  <Cards.Card title="Hooks 确定性约束" href="/zh/docs/3-agent-harness/hooks" description="把策略与审计变成可执行步骤，repair loop" />
+  <Cards.Card title="Subagents" href="/zh/docs/3-agent-harness/subagents" description="独立 context 的子任务代理与编排" />
+  <Cards.Card title="验证闭环" href="/zh/docs/3-agent-harness/verify-closed-loop" description="Plan → Execute → Verify，让交付可验证" />
+</Cards>
+
+## 团队实践也是 Harness 设计
+
+Harness 思维不限于 Cursor 的配置文件——团队的日常实践同样属于 harness 设计：
+
+- **.memory/ 渐进式披露**：把业务知识放进本地知识库，Agent 按需读取，而不是把所有东西塞进 Rules；
+- **手动 SDD（Spec-Driven Development）**：先写规格再实现，本质上是给 Agent 一个更清晰的 task contract；
+- **统一验证入口**：lint / test / CI 有标准命令，Agent 才能在失败后自我修正。
+
+这些实践的共同点：**把「希望 Agent 怎么做」变成「环境里已经设计好的约束与信号」**。
+
+## 下一步
+
+准备好了吗？先从 [Harness 工程化](/zh/docs/3-agent-harness/harness-engineering) 开始，理解 Harness 的分层结构与设计原则。
+
+## 参考来源
+
+- materials/01-harness/addy-osmani-agent-harness-engineering.md
+- materials/01-harness/idam-ai-harness-engineering.md

@@ -1,0 +1,90 @@
+---
+title: "Agent Harness Overview"
+---
+
+import { Callout } from 'nextra/components'
+
+# Agent Harness
+
+> Everything around the model — and how to engineer it
+
+## Agent = Model + Harness
+
+An AI coding agent is not just a model. It is a system made of two parts:
+
+**Agent = Model + Harness**
+
+The **harness** is everything outside the model that turns a raw LLM into an agent:
+
+- **System prompts** and instruction files (AGENTS.md, Rules, CLAUDE.md)
+- **Skill files** and subagent instructions
+- **Tools** (shell, file editing, search, MCP, browser)
+- **Execution environment** (sandbox, worktree, runtimes)
+- **Context machinery** (compaction, memory, retrieval)
+- **Orchestration** (subagents, handoffs)
+- **Hooks and feedback loops**
+- **Recovery and verification paths**
+
+A raw model is not an agent. It only becomes one when it gains state, tool execution, feedback loops, and enforceable constraints. Cursor, Claude Code, Codex, Aider and Cline are all *harnesses* — the underlying models are sometimes identical, and the experience difference comes mostly from the harness.
+
+<Callout type="info">
+This chapter is about the harness you control: rules and conventions that stay in sync with the codebase, deterministic checks, memory, and verification.
+</Callout>
+
+## The Key Judgment
+
+> **A decent model with a great harness consistently beats a great model with a bad harness.**
+
+This is the core claim of agent harness engineering. Instead of endlessly debating which frontier model to use, teams get more leverage from designing the environment around the model: what context it gets, which tools it can use, what checks it must pass, and how it recovers when it fails.
+
+## Harness Component Map
+
+Each harness layer maps to something concrete in Cursor:
+
+| Harness Layer | What It Covers | Cursor Counterpart |
+|---------------|----------------|--------------------|
+| **Configuration** | System prompts, AGENTS.md, rules, skills, subagent prompts | `AGENTS.md`, `.cursor/rules/`, `.cursor/skills/`, `.cursor/agents/` |
+| **Tools** | Shell, file editing, search, MCP, browser | Bash, built-in edit/grep tools, MCP servers, browser tool |
+| **Execution environment** | Sandboxing, isolation, runtimes, observability | Git worktrees, Auto-Run, Cloud Agents VM + `.cursor/environment.json` |
+| **Context machinery** | Compaction, memory, JIT retrieval | Auto-compact, `.memory/`, progressive-disclosure skills |
+| **Orchestration** | Subagent spawning, planner/generator/evaluator, handoffs | Subagents (`explore`, `bash`, `browser`), parallel flows |
+| **Hooks & middleware** | Pre-commit checks, destructive-action interception | `.cursor/hooks.json`, plugin hooks |
+| **Verification** | Checks, feedback loops, recovery | `lint`/`test`/CI, unified Verify entry, Cloud browser verification |
+
+You will see these layers again in [Harness Engineering](/en/docs/3-agent-harness/harness-engineering), where we go layer by layer.
+
+## What Changed in This Chapter
+
+Compared to previous editions of this wiki, this chapter is rebuilt around one idea: **rules and conventions are a harness engineering problem**, and the modern way to carry them is a cross-tool standard — `AGENTS.md` — plus project rules for path-level precision. The old recommendation ("do not use AGENTS.md, it is unstructured") is gone; see [AGENTS.md Cross-Tool Standard](/en/docs/3-agent-harness/agents-md) for why.
+
+## Reading Path
+
+| Page | What You Will Learn |
+|------|---------------------|
+| [Harness Engineering](/en/docs/3-agent-harness/harness-engineering) | The six harness layers, four non-negotiable design facets, and where harness engineering is heading |
+| [How Rules Work](/en/docs/3-agent-harness/how-rules-work) | The four rule types, the four application modes, and the `.mdc` format |
+| [AGENTS.md Cross-Tool Standard](/en/docs/3-agent-harness/agents-md) | The 2026 cross-tool standard: why it exists, how to write it, and how it composes with Rules, Skills and MCP |
+| [Writing Best Practices](/en/docs/3-agent-harness/best-practices) | The six principles for writing rules that actually change agent behavior |
+| [Development Phases](/en/docs/3-agent-harness/development-sequence) | When to write which rules as the project grows |
+| [Memory Management](/en/docs/3-agent-harness/memory-management) | The `.memory/` local memory system with progressive disclosure |
+| [Meta Prompts](/en/docs/3-agent-harness/meta-prompt) | Using AI to generate rules (or an AGENTS.md skeleton) for you |
+| [Hooks: Deterministic Constraints](/en/docs/3-agent-harness/hooks) | Turning policy and safety checks into executable steps of the agent loop |
+| [Subagents](/en/docs/3-agent-harness/subagents) | Independent agents with their own context, and when to delegate |
+| [Verify Closed Loop](/en/docs/3-agent-harness/verify-closed-loop) | The Plan → Execute → Verify cycle that lets agents self-correct |
+
+## Team Practices Are Harness Design
+
+Choices that look like "workflow preferences" are harness design decisions:
+
+- Keeping `.memory/` readable in a progressive-disclosure style so the agent loads only what a task needs — a context-machinery decision.
+- Doing manual spec-driven development (write the contract first, then let the agent implement against it) — an orchestration and verification decision.
+
+Every time an agent makes a mistake, treat it as a harness bug: **engineer a solution so it never makes that mistake again**, whether that means a new rule, a hook, or a verification step.
+
+## Reference Sources
+
+- `materials/01-harness/addy-osmani-agent-harness-engineering.md`
+
+## Next Steps
+
+Start with [Harness Engineering](/en/docs/3-agent-harness/harness-engineering) to understand the full picture, then dive into the specific layers.

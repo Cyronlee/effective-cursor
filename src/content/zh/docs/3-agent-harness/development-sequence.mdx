@@ -18,6 +18,8 @@ Cursor Rules 不是一次性写完的产物，而是**随项目演进逐步沉�
 
 当你完成项目初始化，确定了基础的技术栈和目录结构后，立即编写 **Global Rules**。
 
+AGENTS.md 是项目的「生根文件」：脚手架一完成，第一版就要建立（技术栈、build/test 命令、目录职责），之后随开发阶段按需扩充。它从第一天起就是跨工具的稳定锚点，后续每阶段的沉淀都可以先落进 AGENTS.md，再按需拆分成 path-specific 的 Rules。
+
 | 时机 | 要添加的 Rules |
 |-----|-------------|
 | 技术栈确定 | 列出所有核心依赖（React, TypeScript, Tailwind 等） |
@@ -108,4 +110,4 @@ Cursor Rules 不是一次性写完的产物，而是**随项目演进逐步沉�
 
 ## 下一步
 
-有时候你可能需要从零开始为一个新的技术栈编写 Rules。接下来我们将分享[用于生成 Rules 的元提示词](./meta-prompt)，帮助你快速生成 Rules 框架。
+有时候你可能需要从零开始为一个新的技术栈编写 Rules。接下来我们将分享[用于生成 Rules 的元提示词](/zh/docs/3-agent-harness/meta-prompt)，帮助你快速生成 Rules 框架；需要建立项目级契约时，也可以参考 [AGENTS.md 跨工具标准](/zh/docs/3-agent-harness/agents-md)。

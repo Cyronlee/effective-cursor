@@ -8,12 +8,14 @@ import { Callout, Tabs } from 'nextra/components'
 
 > Use AI to help you write AI rules
 
-## What is a Meta Prompt
-
-When facing a new project or tech stack, writing Cursor Rules from scratch can be overwhelming. **Meta Prompts** are essentially "prompts for generating prompts"—you tell AI about your project, and AI helps you generate suitable Cursor Rules.
+When facing a new project or tech stack, writing Cursor Rules from scratch can be overwhelming. **Meta Prompts** are essentially "prompts for generating prompts" — you tell AI about your project, and AI helps you generate suitable Cursor Rules.
 
 <Callout type="info">
-Meta prompts help you quickly generate rule frameworks, ensure rules cover key areas, and maintain format consistency. But they're just a starting point—truly effective rules come from continuous iteration during actual development.
+The same flow works for generating an **AGENTS.md skeleton**: just replace "rules" with "project contract" (stack, commands, do-not-touch, conventions). See [AGENTS.md Cross-Tool Standard](/en/docs/3-agent-harness/agents-md) for the target structure.
+</Callout>
+
+<Callout type="info">
+Meta prompts help you quickly generate rule frameworks, ensure rules cover key areas, and maintain format consistency. But they're just a starting point — truly effective rules come from continuous iteration during actual development.
 </Callout>
 
 ## Complete Examples
@@ -164,17 +166,17 @@ After generating rules, verify quality with this checklist:
 | **Scope** | Are globs configured correctly? |
 
 <Callout type="warning">
-Avoid writing "components should be single-purpose", "use ESLint", "function names should be semantic"—LLMs already know this. Only write project-specific rules that AI cannot infer.
+Avoid writing "components should be single-purpose", "use ESLint", "function names should be semantic" — LLMs already know this. Only write project-specific rules that AI cannot infer.
 </Callout>
 
 ## Reference Resources
 
-- [Cursor Rules Best Practices](./best-practices) - Core principles for rule writing
-- [Rules Development Sequence](./development-sequence) - When to write what rules
+- [Cursor Rules Best Practices](/en/docs/3-agent-harness/best-practices) - Core principles for rule writing
+- [Rules and Conventions Across Development Phases](/en/docs/3-agent-harness/development-sequence) - When to write what rules
+- [AGENTS.md Cross-Tool Standard](/en/docs/3-agent-harness/agents-md) - Generate the project contract with the same flow
 - [Vite + Shadcn/UI Rule Set](/en/rules/vite-shadcnui) - Complete frontend rule examples
 - [Spring Boot Rule Set](/en/rules/springboot) - Complete backend rule examples
 
 ## Next Steps
 
-After completing your Rules, let's move on to [Chapter 4: Workflow](../4-workflow) to learn how to integrate these rules into your daily development process.
-
+After completing your Rules, let's move on to [Chapter 4: Workflow](/en/docs/4-workflow) to learn how to integrate these rules into your daily development process.
