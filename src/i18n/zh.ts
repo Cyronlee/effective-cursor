@@ -51,10 +51,10 @@ export default {
       link: '/docs/2-scaffolding',
     },
     {
-      title: '3. Cursor Rules',
-      description: '理解 Rules 工作原理，掌握编写最佳实践，让 AI 自动遵守团队规范',
+      title: '3. Agent Harness',
+      description: '系统性构建 Agent 运行环境：AGENTS.md/Rules 契约、Hooks 约束、Subagents 分工与验证闭环',
       icon: 'settings',
-      link: '/docs/3-cursor-rules',
+      link: '/docs/3-agent-harness',
     },
     {
       title: '4. 规范工作流',
@@ -142,7 +142,7 @@ export default {
     items: [
       { label: '快速起步', link: '/docs' },
       { label: '模型选择', link: '/docs/0-tool-setup/model-selection' },
-      { label: 'Rules 最佳实践', link: '/docs/3-cursor-rules/best-practices' },
+      { label: 'Rules 最佳实践', link: '/docs/3-agent-harness/best-practices' },
       { label: '工作流实践', link: '/docs/4-workflow/workflow-practice' },
     ],
   },

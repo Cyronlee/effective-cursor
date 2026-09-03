@@ -20,7 +20,7 @@ This Wiki is organized following the **Effective Cursor Methodology (Six Steps)*
 | 0    | Tool Setup        | Make Cursor your truly handy development environment |
 | 1    | Tech Stack        | Choose the most AI-friendly tech stack           |
 | 2    | Engineering       | Establish engineering foundation                 |
-| 3    | Cursor Rules      | Make AI automatically follow team standards      |
+| 3    | Agent Harness     | Systematically build the agent runtime environment |
 | 4    | Workflow          | Deeply integrate AI into daily development       |
 | 5    | Feedback & Iteration | Continuously iterate to improve AI effectiveness |
 
@@ -53,11 +53,15 @@ This Wiki is organized following the **Effective Cursor Methodology (Six Steps)*
    ├── Automated Testing
    └── CI/CD Pipeline
 
-3. Cursor Rules
+3. Agent Harness
    ├── How Rules Work
    ├── Rules Writing Best Practices
    ├── Rules Iteration & Accumulation
-   └── Meta Prompts for Generating Rules
+   ├── Meta Prompts for Generating Rules
+   ├── AGENTS.md
+   ├── Hooks
+   ├── Subagents
+   └── Verification Loop
 
 4. Workflow
    ├── Modes Overview
@@ -112,7 +116,7 @@ src/content/
 │       ├── 0-tool-setup/  # Tool Setup
 │       ├── 1-tech-stack/  # Tech Stack Selection
 │       ├── 2-scaffolding/ # Engineering Architecture
-│       ├── 3-cursor-rules/# Cursor Rules
+│       ├── 3-agent-harness/# Agent Harness (Rules, AGENTS.md, Hooks, Subagents, verification)
 │       ├── 4-workflow/    # Workflow
 │       └── 5-feedback/    # Feedback & Iteration
 └── en/                    # English docs (same structure)

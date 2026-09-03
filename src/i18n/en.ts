@@ -52,10 +52,10 @@ export default {
       link: '/docs/2-scaffolding',
     },
     {
-      title: '3. Cursor Rules',
-      description: 'Understand how Rules work, master best practices, make AI automatically follow team standards',
+      title: '3. Agent Harness',
+      description: 'Build the agent runtime systematically: AGENTS.md/Rules contracts, Hooks constraints, Subagents delegation, and verification loops',
       icon: 'settings',
-      link: '/docs/3-cursor-rules',
+      link: '/docs/3-agent-harness',
     },
     {
       title: '4. Workflow',
@@ -143,7 +143,7 @@ export default {
     items: [
       { label: 'Getting Started', link: '/docs' },
       { label: 'Model Selection', link: '/docs/0-tool-setup/model-selection' },
-      { label: 'Rules Best Practices', link: '/docs/3-cursor-rules/best-practices' },
+      { label: 'Rules Best Practices', link: '/docs/3-agent-harness/best-practices' },
       { label: 'Workflow Practice', link: '/docs/4-workflow/workflow-practice' },
     ],
   },

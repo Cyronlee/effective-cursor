@@ -18,7 +18,7 @@
 | 0    | 工具就绪          | 让 Cursor 成为真正顺手的开发环境  |
 | 1    | 技术选型          | 选择对 AI 最友好的技术栈          |
 | 2    | 工程架构          | 建立工程化基础保障                |
-| 3    | 制定 Cursor Rules | 让 AI 自动遵守团队规范            |
+| 3    | Agent Harness     | 系统性构建 Agent 运行环境         |
 | 4    | 规范工作流        | 把 AI 深度融入日常开发流程        |
 | 5    | 反馈与迭代        | 持续迭代，提升 AI 辅助效果        |
 
@@ -51,11 +51,15 @@
    ├── 自动化测试
    └── CI/CD 流程
 
-3. 制定 Cursor Rules
+3. Agent Harness
    ├── Rules 的工作原理
    ├── Rules 编写最佳实践
    ├── Rules 迭代与沉淀
-   └── 生成 Rules 的元提示词
+   ├── 生成 Rules 的元提示词
+   ├── AGENTS.md
+   ├── Hooks
+   ├── Subagents
+   └── 验证闭环
 
 4. 规范工作流
    ├── 模式总览
@@ -110,7 +114,7 @@ src/content/
 │       ├── 0-tool-setup/  # 工具就绪
 │       ├── 1-tech-stack/  # 技术选型
 │       ├── 2-scaffolding/ # 工程架构
-│       ├── 3-cursor-rules/# 制定 Cursor Rules
+│       ├── 3-agent-harness/# Agent Harness（Rules、AGENTS.md、Hooks、Subagents、验证闭环）
 │       ├── 4-workflow/    # 规范工作流
 │       └── 5-feedback/    # 反馈与迭代
 └── en/                    # 英文文档 (结构同上)

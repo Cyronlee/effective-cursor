@@ -60,7 +60,7 @@ const settingsPath = "~/Library/Application Support/Cursor/User/settings.json";
 - **编辑器**: `editor.fontSize`、`editor.tabSize`、`editor.wordWrap`、`editor.formatOnSave`
 - **工作台**: `workbench.colorTheme`、`workbench.iconTheme`、`workbench.sideBar.location`
 - **文件**: `files.autoSave`、`files.exclude`、`files.associations`
-- **终端**: `terminal.integrated.fontSize`、`terminal.integrated.shell.*`
+- **终端**: `terminal.integrated.fontSize`、`terminal.integrated.profiles.windows`（Windows 终端配置，如 Command Prompt/cmd.exe）、`terminal.integrated.profiles.osx`（macOS 终端配置，如 zsh）
 - **Cursor 特定**: 以 `cursor.` 或 `aipopup.` 为前缀的设置
 
 ### 步骤 3: 更新设置
@@ -180,7 +180,7 @@ Common setting categories:
 - **Editor**: `editor.fontSize`, `editor.tabSize`, `editor.wordWrap`, `editor.formatOnSave`
 - **Workbench**: `workbench.colorTheme`, `workbench.iconTheme`, `workbench.sideBar.location`
 - **Files**: `files.autoSave`, `files.exclude`, `files.associations`
-- **Terminal**: `terminal.integrated.fontSize`, `terminal.integrated.shell.*`
+- **Terminal**: `terminal.integrated.fontSize`, `terminal.integrated.profiles.windows` (e.g., Command Prompt), `terminal.integrated.profiles.osx` (e.g., zsh)
 - **Cursor-specific**: Settings prefixed with `cursor.` or `aipopup.`
 
 ### Step 3: Update the Setting
@@ -274,7 +274,7 @@ If user says "use dark theme" or "change my theme":
 - **编辑器设置**: `editor.fontSize`（字体大小）、`editor.tabSize`（Tab 大小）、`editor.wordWrap`（自动换行）、`editor.formatOnSave`（保存时格式化）
 - **工作台设置**: `workbench.colorTheme`（颜色主题）、`workbench.iconTheme`（图标主题）、`workbench.sideBar.location`（侧边栏位置）
 - **文件设置**: `files.autoSave`（自动保存）、`files.exclude`（排除文件）、`files.associations`（文件关联）
-- **终端设置**: `terminal.integrated.fontSize`（终端字体大小）、`terminal.integrated.shell.*`（终端 Shell）
+- **终端设置**: `terminal.integrated.fontSize`（终端字体大小）、`terminal.integrated.profiles.windows`（Windows 终端配置，如 Command Prompt/cmd.exe）、`terminal.integrated.profiles.osx`（macOS 终端配置，如 zsh）
 - **Cursor 特定设置**: 以 `cursor.` 或 `aipopup.` 为前缀的设置
 
 ## 常见用户请求映射
