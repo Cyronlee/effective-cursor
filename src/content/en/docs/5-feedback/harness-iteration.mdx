@@ -1,0 +1,69 @@
+---
+title: "Harness Iteration"
+---
+
+import { Callout } from 'nextra/components'
+
+# Harness Iteration: Turn Feedback into Evolution
+
+> The target of feedback is not "tweak the prompt" — it's iterating the Agent Harness
+
+## Why iterate the harness
+
+[Chapter 3](/en/docs/3-agent-harness) established: **Agent = Model + Harness**. Almost every "AI mistake" you see in daily feedback is a harness problem — the model didn't change, but the environment around it (contracts, constraints, verification) has gaps. So the goal of a retrospective is to turn feedback into the **smallest harness change**, rather than gambling on prompt tweaks.
+
+**The core four-step loop:**
+
+1. **Record the error pattern** — How many times did this happen? In which scenarios does it recur?
+2. **Attribute it to a harness layer** — Configuration issue, missing deterministic constraint, or verification gap?
+3. **Make the smallest change** — one rule, one hook, one verification entry. The smaller, the better.
+4. **Verify it doesn't recur** — does the same kind of task avoid the mistake next time, naturally?
+
+## Three iteration targets
+
+Mapping to the harness components from Chapter 3, feedback sediment lands in three layers:
+
+| Layer | Carriers | Typical outcome |
+|-------|----------|-----------------|
+| **Configuration** | AGENTS.md, Rules (.mdc), Skills, Subagent instructions | Turn recurring mistakes into contracts: do-not-touch paths, architecture conventions, domain terms |
+| **Deterministic constraints** | Hooks (hooks.json) | Turn "manual checks" into automatic interception: afterFileEdit runs the formatter, beforeShellExecution blocks dangerous commands, stop triggers repair |
+| **Verification** | Tests / CI / unified verify entry | Turn "remember to self-test this time" into "must always verify": add tests, add CI steps |
+
+<Callout type="info">
+From Configuration to deterministic constraints to verification, enforcement grows stronger but so does cost. Start cheap with rules; escalate to Hooks / verification only when "the rule didn't hold" — this is the declarative-vs-deterministic tradeoff from [Hooks](/en/docs/3-agent-harness/hooks).
+</Callout>
+
+## Common error patterns → landing spots
+
+| Recurring pattern | Recommended landing spot |
+|-------------------|--------------------------|
+| AI keeps touching files/dirs it shouldn't | do-not-touch entry in AGENTS.md (with rationale) |
+| Domain terms drift in naming | Shared vocabulary in AGENTS.md + term entry in Rules |
+| Inconsistent code formatting | afterFileEdit hook runs the formatter and fails the edit |
+| Changes made without running tests | Hooks (stop / verify) enforce it, or gate in CI |
+| Implementation drifts from the plan | [Independent Review](/en/docs/4-workflow/workflow-practice) (fresh-context dual-axis review) |
+| The same class of bug recurs | Diagnostic discipline + test-first (red → green → refactor), see [Chapter 2](/en/docs/2-scaffolding/automated-testing) |
+
+It's worth keeping a **harness iteration log** in the same format as the [improvement tracking table](/en/docs/5-feedback/retrospective-practice): issue / layer / change / verification result.
+
+## Advanced: automating iteration (AHE)
+
+Manual iteration is enough for most teams. If you want to go further, borrow the idea of **Agentic Harness Engineering (AHE)**: observability-driven automatic evolution of the harness — distill each agent run's traces into consumable evidence so the next harness change is data-driven rather than memory-driven.
+
+One study showed 10 rounds of AHE iteration improved Terminal-Bench 2 pass@1 from **69.7% to 77.0%**, and the evolved harness transferred across model families (evidence that the encoded knowledge is general engineering practice, not benchmark overfitting). The team-level takeaway is simple: retrospectives shouldn't be chat only — record "this round's errors → the harness changes they triggered → their effect", so improvement is traceable and replayable.
+
+## Retrospective checks
+
+Add three questions to every retrospective:
+
+- Is the recurring problem a **configuration gap**, **missing deterministic constraint**, or **verification miss**?
+- After the change, does the same kind of task **naturally avoid the mistake**?
+- Is this change worth promoting into a shared Rule / Hook / Skill template for the team?
+
+## Sources
+
+- `materials/01-harness/arxiv-2604-agentic-harness-engineering.md` (AHE data)
+- `materials/06-engineering-loop/hooks-and-repair-loop.md`
+- `materials/03-cursor-official/cursor-blog-agent-best-practices.md` ("update a rule when the agent errs")
+- Chapter 3 · [Verification Loop](/en/docs/3-agent-harness/verify-closed-loop) (repair loop)
+

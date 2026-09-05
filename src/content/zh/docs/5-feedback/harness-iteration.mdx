@@ -1,0 +1,69 @@
+---
+title: "迭代 Harness"
+---
+
+import { Callout } from 'nextra/components'
+
+# 迭代 Harness：让反馈变成进化
+
+> 反馈的落点不是「改 Prompt」，而是迭代 Agent Harness
+
+## 为什么要迭代 Harness
+
+[第 3 章](/zh/docs/3-agent-harness)讲过：**Agent = Model + Harness**。日常反馈里的每一类「AI 犯错」，几乎都是 harness 问题——模型没有变，是它周围的环境（契约、约束、验证）有缺口。因此复盘的落点，是把反馈转成 harness 的**最小改动**，而不是反复调 Prompt 碰运气。
+
+**核心闭环四步：**
+
+1. **记录错误模式**——这个问题出现几次？在什么场景下反复出现？
+2. **归属到 harness 层**——是配置问题、缺少确定性约束，还是验证没兜住？
+3. **做最小改动**——一处规则、一个 Hook、一个验证入口，越小越好。
+4. **验证不再犯**——同类任务下次是否自然规避？
+
+## 三层迭代目标
+
+对应第 3 章的 harness 组件，反馈的沉淀目标有三层：
+
+| 层 | 载体 | 典型落点 |
+|------|------|----------|
+| **Configuration** | AGENTS.md、Rules（.mdc）、Skill、Subagent 指令 | 把反复犯的错写成契约：do-not-touch、架构约定、术语定义 |
+| **确定性约束** | Hooks（hooks.json） | 把「人工检查」变成自动拦截：afterFileEdit 跑 formatter、beforeShellExecution 拦危险命令、stop 触发修复 |
+| **验证** | 测试 / CI / 统一 verify 入口 | 把「这次记得自测」变成「每次必须验证」：补测试、加 CI 步骤 |
+
+<Callout type="info">
+从 Configuration 到确定性约束再到验证，约束强度递增、成本也递增。先低成本地用规则沉淀；发现「规则不顶用」再升级到 Hooks / 验证——这也正是 [Hooks 确定性约束](/zh/docs/3-agent-harness/hooks)里「声明式 vs 确定性」的取舍。
+</Callout>
+
+## 常见错误模式 → 落点
+
+| 反复出现的模式 | 推荐落点 |
+|----------------|----------|
+| AI 反复改动不该动的目录 / 文件 | AGENTS.md 的 do-not-touch（附原因） |
+| 领域术语命名漂移 | AGENTS.md 共享词汇 + Rules 术语条目 |
+| 代码格式不统一 | afterFileEdit Hook 跑 formatter，失败即拦截 |
+| 改了代码不跑测试 | Hooks（stop / verify）强制检查，或 CI 把关 |
+| 实现偏离方案 | 工作流 [独立 Review](/zh/docs/4-workflow/workflow-practice)（新上下文双轴审查） |
+| 同类 bug 反复出现 | 诊断纪律 + 测试先行（红→绿→重构），见[第 2 章](/zh/docs/2-scaffolding/automated-testing) |
+
+建议维护一份 **harness 迭代记录**，格式与[复盘改进追踪表](/zh/docs/5-feedback/retrospective-practice)一致：问题 / 归属层 / 改动 / 验证结果。
+
+## 进阶：让迭代自动化（AHE）
+
+手动迭代对多数团队已经足够。想更进一步，可以借鉴 **Agentic Harness Engineering（AHE）**的思路：用可观测性驱动 harness 的自动进化——把每次 agent 运行的轨迹蒸馏成可消费的证据，让下一轮 harness 改进有数据依据，而不是靠记忆。
+
+相关研究显示，10 轮 AHE 迭代把 Terminal-Bench 2 的 pass@1 从 **69.7% 提到 77.0%**，且进化出的 harness 可以跨模型家族迁移（说明沉淀的是通用工程经验，而非 benchmark 特化）。对团队的落地形态很简单：复盘不只聊天，而是记录「本轮有哪些错误 → 对应哪些 harness 改动 → 效果如何」，让改进可追踪、可回放。
+
+## 复盘检查项
+
+每次复盘多加三问：
+
+- 反复出现的问题，是 **configuration 层没写清楚**、**缺确定性约束**，还是**验证没兜住**？
+- 改完后，同类任务是否**自然不再犯**？
+- 是否值得把这次改动沉淀成团队共有的 Rule / Hook / Skill 模板？
+
+## 参考来源
+
+- `materials/01-harness/arxiv-2604-agentic-harness-engineering.md`（AHE 数据）
+- `materials/06-engineering-loop/hooks-and-repair-loop.md`
+- `materials/03-cursor-official/cursor-blog-agent-best-practices.md`（「Agent 犯错就更新 Rule」）
+- 第 3 章 · [验证闭环](/zh/docs/3-agent-harness/verify-closed-loop)（repair loop）
+
